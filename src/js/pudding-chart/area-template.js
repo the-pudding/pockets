@@ -85,6 +85,8 @@ d3.selection.prototype.areaChart = function init(options) {
 			// update scales and render chart
 			render() {
         const padding = 10
+        const curve = d3.line()
+          .curve(d3.curveCardinal.tension(0.5))
 
         // Draw front pocket
         const frontGroup = $svgFront.select('.g-vis')
@@ -103,13 +105,17 @@ d3.selection.prototype.areaChart = function init(options) {
               "M", [padding, padding],
               // draw a line from initial point straight down the length of the maxHeight
               "l", [0, scale(d.maxHeightFront)],
-              "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
+            //  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
 
               // Add a curve to the other side
-              // "q", [0, scale(d.maxHeightFront)], // control point for curve
-              //   [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
+              "q", [scale(d.maxWidthFront / 2), scale(0.1 * d.maxHeightFront)], // control point for curve
+                [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)], // end point
+              // Draw a line straight up to the min height - rivet height
               "l", [0, -scale(d.minHeightFront - d.rivetHeightFront)],
-              "L", [padding, padding]
+              // Add a curve to the line between rivets
+              "q", [-scale(d.maxWidthFront * 2 / 3), scale(0.1 * d.maxHeightFront)],
+                [-scale(d.maxWidthFront), -scale(d.rivetHeightFront)]
+              //"L", [padding, padding]
             ]
             const numbers = path.filter(d => {
               const remove = ["M", "l", "L", "Q", "q"]

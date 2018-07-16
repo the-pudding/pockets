@@ -1,13 +1,17 @@
 .area
-  .chart
+  &-graphic
     display flex
-    flex-direction column
-    svg
-      width 300px
-      height 300px
-      border 1px solid red
+    flex-wrap wrap
+    .chart
+      display flex
+      flex-direction column
+      margin 1rem
+      svg
+        width 300px
+        height 300px
+        border 1px solid red
 
-      .outline
-        stroke black
-        stroke-width 2px
-        fill none
+        .outline
+          stroke black
+          stroke-width 2px
+          fill none
