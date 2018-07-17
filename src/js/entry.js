@@ -2,6 +2,7 @@
 import debounce from 'lodash.debounce';
 import isMobile from './utils/is-mobile';
 import area from './area';
+import scroll from './scroll'
 
 const $body = d3.select('body');
 let previousWidth = 0;
@@ -12,7 +13,7 @@ function resize() {
 	const width = $body.node().offsetWidth;
 	if (previousWidth !== width) {
 		previousWidth = width;
-		area.resize();
+		//area.resize();
 	}
 }
 
@@ -37,7 +38,8 @@ function init() {
 	// setup sticky header menu
 	setupStickyHeader();
 	// kick off graphic code
-	area.init();
+	//area.init();
+	scroll.init()
 }
 
 init();

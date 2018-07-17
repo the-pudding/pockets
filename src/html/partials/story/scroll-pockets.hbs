@@ -1,0 +1,14 @@
+<section class='scroll'>
+  <div class='scroll-graphic'>
+    <div class='chart'>
+    </div>
+  </div>
+
+  <div class='scroll-text'>
+    {{#each copy.steps}}
+      <div class='step' data-step='{{{step}}}'>
+        <p class='step-prose'>{{{text}}}</p>
+      </div>
+    {{/each}}
+  </div>
+</section>
