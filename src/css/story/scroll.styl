@@ -1,12 +1,23 @@
 .scroll
+  position relative
+
   &-graphic
     display flex
+    position: -webkit-sticky;
+    position: sticky;
+    top 0
+    bottom auto
+    transform translate3d(0, 0, 0)
     flex-wrap wrap
     max-width 640px
     margin 0 auto
+
     svg
       .outline
         stroke black
         stroke-width 2px
         fill none
         stroke-opacity 0.1
+
+  &-text
+    position relative

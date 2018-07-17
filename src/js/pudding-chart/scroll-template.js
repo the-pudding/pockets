@@ -38,7 +38,7 @@ d3.selection.prototype.scrollChart = function init(options) {
         const container = $sel.append('div.container')
 
         // Add svg for front pockets
-				$svgFront = container.append('svg.area-front');
+				$svgFront = container.append('svg.scroll-svg');
 				$gFront = $svgFront.selectAll('.group-mw')
           .data(data)
           .enter()
