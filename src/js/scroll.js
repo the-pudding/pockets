@@ -4,7 +4,7 @@ import './pudding-chart/scroll-template'
 let data = null
 
 // selections
-const $scroll = d3.selectAll('.scroll')
+const $scroll = d3.selectAll('.scroll-graphic')
 
 function setupChart(){
   const $sel = $scroll
@@ -14,12 +14,13 @@ function setupChart(){
     .entries(data)
 
     console.log({nestedData})
+    console.log({data})
 
   const charts = $sel
     //.select('.chart')
-    .datum(nestedData)
-    // .enter()
-    // .append('div.chart')
+    .datum(data)
+    //.enter()
+    //.append('div.chart')
     .scrollChart()
 }
 
