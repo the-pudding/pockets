@@ -13,12 +13,9 @@ function setupChart(){
     .key(d => d.menWomen)
     .entries(data)
 
-    console.log({nestedData})
-    console.log({data})
-
   const charts = $sel
     //.select('.chart')
-    .datum(data)
+    .datum(nestedData)
     //.enter()
     //.append('div.chart')
     .scrollChart()

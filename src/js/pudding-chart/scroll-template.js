@@ -11,6 +11,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
+    console.log({data})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -25,6 +26,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 
 		// dom elements
 		let $svgFront = null;
+    let $gFront = null
 		let $axis = null;
 		let $visFront = null;
 
@@ -37,10 +39,14 @@ d3.selection.prototype.scrollChart = function init(options) {
 
         // Add svg for front pockets
 				$svgFront = container.append('svg.area-front');
-				const $gFront = $svgFront.append('g');
+				$gFront = $svgFront.selectAll('.group-mw')
+          .data(data)
+          .enter()
+          .append('g')
+          .attr('class', d => `group-mw group-${d.key}`)
 
 				// setup viz group
-				$visFront = $gFront.append('g.g-vis');
+				//$visFront = $gFront.append('g.g-vis');
 
 				Chart.resize();
 				Chart.render();
@@ -67,12 +73,16 @@ d3.selection.prototype.scrollChart = function init(options) {
         const padding = 10
 
         // Draw front pocket
-        const frontGroup = $svgFront.select('.g-vis')
+        //const frontGroup = $svgFront.select('.g-vis')
 
         let areaMeasure = null
-        frontGroup
+        console.log($gFront)
+        $gFront
           .selectAll('.outline')
-          .data(data)
+          .data(d => {
+            console.log({d})
+            return d.values
+          })
           .enter()
           .append('path')
           .attr('d', function(d){
