@@ -124,7 +124,48 @@ d3.selection.prototype.scrollChart = function init(options) {
 				$sel.datum(data);
 				Chart.render();
 				return Chart;
-			}
+			},
+      // toggle steps
+      toggle(step){
+        const women = $svgFront.select('.group-women')
+        const men = $svgFront.select('.group-men')
+
+        function step0(){
+          console.log({women})
+          women
+            .transition()
+            .duration(500)
+            .attr('transform', `translate(${-(width / 3)}, 0)`)
+
+          men
+            .transition()
+            .duration(500)
+            .attr('transform', `translate(${width / 3}, 0)`)
+        }
+
+        function step1(){
+          women
+            .transition()
+            .duration(500)
+            .attr('transform', `translate(0, 0)`)
+
+          men
+            .transition()
+            .duration(500)
+            .attr('transform', `translate(0, 0)`)
+        }
+
+        function step2(){
+          women
+        }
+
+        // Run specific function based on step
+        if (step == 0) step0()
+        if (step == 1) step1()
+        if (step == 2) step2()
+        console.log({step})
+
+      }
 		};
 		Chart.init();
 

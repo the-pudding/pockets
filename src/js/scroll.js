@@ -5,6 +5,7 @@ import scrollama from 'scrollama'
 let data = null
 
 const scroller = scrollama()
+let toggle = null
 
 // selections
 const $scroll = d3.selectAll('.scroll-graphic')
@@ -27,6 +28,8 @@ function setupChart(){
     .datum(nestedData)
     .scrollChart()
 
+  toggle = chart.toggle
+
     resize()
     setupScroll(chart)
 }
@@ -48,7 +51,7 @@ function resize(){
 
 function handleStepEnter(response){
   const index = response.index
-  //toggle(index)
+  toggle(index)
 }
 
 function setupScroll(){
