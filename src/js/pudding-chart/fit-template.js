@@ -73,7 +73,7 @@ d3.selection.prototype.fitChart = function init(options) {
 
         scale
           .domain([0, 29])
-          .range([0, 280])
+          .range([0, 225])
 
 				return Chart;
 			},
@@ -118,6 +118,60 @@ d3.selection.prototype.fitChart = function init(options) {
             return joined
           })
           .attr('class', 'outline')
+
+          frontGroup
+            .selectAll('.measure measure-maxHeight')
+            .data(d => [d])
+            .enter()
+            .append('text')
+            .text(d => d.maxHeightFront)
+            .attr('alignment-baseline', 'hanging')
+            .attr('text-anchor', 'end')
+            .attr('transform', d => `translate(${padding/2}, ${scale(d.maxHeightFront / 2)})`)
+            .attr('class', 'tk-atlas measure measure-maxHeight')
+
+            frontGroup
+              .selectAll('.measure measure-minHeight')
+              .data(d => [d])
+              .enter()
+              .append('text')
+              .text(d => d.minHeightFront)
+              .attr('alignment-baseline', 'hanging')
+              .attr('text-anchor', 'start')
+              .attr('transform', d => `translate(${scale(d.maxWidthFront) + (padding * 1.5)}, ${scale(d.rivetHeightFront + ((d.minHeightFront - d.rivetHeightFront ) / 2))})`)
+              .attr('class', 'tk-atlas measure measure-minHeight')
+            frontGroup
+              .selectAll('.measure measure-maxWidth')
+              .data(d => [d])
+              .enter()
+              .append('text')
+              .text(d => d.maxWidthFront)
+              .attr('alignment-baseline', 'hanging')
+              .attr('text-anchor', 'middle')
+              .attr('transform', d => `translate(${scale(d.maxWidthFront / 2) + padding}, ${scale(d.maxHeightFront) + (padding * 2.5)})`)
+              .attr('class', 'tk-atlas measure measure-maxWidth')
+
+            frontGroup
+              .selectAll('.measure measure-minWidth')
+              .data(d => [d])
+              .enter()
+              .append('text')
+              .text(d => d.minWidthFront)
+              .attr('alignment-baseline', 'hanging')
+              .attr('text-anchor', 'middle')
+              .attr('transform', d => `translate(${scale((d.maxWidthFront - d.minWidthFront) + (d.minWidthFront / 2)) + padding}, ${scale(d.rivetHeightFront / 2)})`)
+              .attr('class', 'tk-atlas measure measure-minWidth')
+
+            const groupWidth = frontGroup.node().getBBox().width
+
+            frontGroup
+              .attr('transform', function(d){
+                const boxWidth = this.getBBox().width
+                const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
+                const difWidth = ((width - boxWidth) / 2) + leftBBox//Math.max((width - calcWidth) / 2, 30)
+
+                return `translate(${difWidth}, 0)`
+              })
 
           // const backGroup = $svgBack.select('.g-vis')
           //
