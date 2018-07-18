@@ -47,8 +47,6 @@ function setupChart(){
       })
       .entries(data)
 
-      console.log({nestedData, nest2})
-
   const chart = $sel
     .datum(nest2)
     .scrollChart()

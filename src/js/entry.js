@@ -4,6 +4,7 @@ import isMobile from './utils/is-mobile';
 import area from './area';
 import scroll from './scroll'
 import debunk from './debunking'
+import fit from './fit'
 
 const $body = d3.select('body');
 let previousWidth = 0;
@@ -42,6 +43,7 @@ function init() {
 	//area.init();
 	scroll.init()
 	debunk.init()
+	fit.init()
 }
 
 init();

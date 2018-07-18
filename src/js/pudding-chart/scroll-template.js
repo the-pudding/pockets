@@ -11,7 +11,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
-    console.log({data})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -77,7 +76,6 @@ d3.selection.prototype.scrollChart = function init(options) {
         //const frontGroup = $svgFront.select('.g-vis')
 
         let areaMeasure = null
-        console.log($gFront)
         $gFront
           .selectAll('.outline')
           .data(d => {
@@ -125,8 +123,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 
           $svgFront.select('.group-men')
             .attr('transform', `translate(${width / 3}, 0)`)
-
-				console.log(data);
+            
 				return Chart;
 			},
 			// get / set data
@@ -143,7 +140,6 @@ d3.selection.prototype.scrollChart = function init(options) {
         const men = $svgFront.select('.group-men')
 
         function step0(){
-          console.log({women})
           women
             .transition()
             .duration(500)
@@ -231,7 +227,6 @@ d3.selection.prototype.scrollChart = function init(options) {
         if (step == 0) step0()
         if (step == 1) step1()
         if (step == 2) step2()
-        console.log({step})
 
       }
 		};

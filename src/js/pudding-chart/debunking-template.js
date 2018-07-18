@@ -10,10 +10,8 @@
 d3.selection.prototype.debunkingChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
-    console.log({$sel})
 		let data = $sel.datum()
     let location = $sel.at('data-location')
-    console.log({data, location})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -80,7 +78,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
           frontGroup
             .selectAll('.outline')
             .data(d => {
-              console.log(d)
               return d.values})
             .enter()
             .append('path')
