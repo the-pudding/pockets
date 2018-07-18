@@ -37,6 +37,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 			init() {
         const container = $sel.append('div.container')
 
+
         // Add svg for front pockets
 				$svgFront = container.append('svg.scroll-svg');
 				$gFront = $svgFront.selectAll('.group-mw')
@@ -80,8 +81,7 @@ d3.selection.prototype.scrollChart = function init(options) {
         $gFront
           .selectAll('.outline')
           .data(d => {
-            console.log({d})
-            return d.values
+            return d.value
           })
           .enter()
           .append('path')
@@ -111,7 +111,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             const joined = path.join(" ")
             return joined
           })
-          .attr('class', 'outline')
+          .attr('class', d => d.brand == 'average' ? `outline-average` : `outline`)
 					.attr("transform", "translate(" + (width/2.75) + ",0)")
 
 				console.log(data);

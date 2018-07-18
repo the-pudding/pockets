@@ -24,8 +24,33 @@ function setupChart(){
     .key(d => d.menWomen)
     .entries(data)
 
+    const nest2 = d3.nest()
+      .key(d => d.menWomen)
+      .rollup((leaves, i) => {
+        const average = {
+          brand: 'average',
+          maxHeightFront: d3.round(d3.mean(leaves, d => d.maxHeightFront), 1),
+          minHeightFront: d3.round(d3.mean(leaves, d => d.minHeightFront), 1),
+          rivetHeightFront: d3.round(d3.mean(leaves, d => d.rivetHeightFront), 1),
+          maxWidthFront: d3.round(d3.mean(leaves, d => d.maxWidthFront), 1),
+          minWidthFront: d3.round(d3.mean(leaves, d => d.minWidthFront), 1),
+          maxHeightBack: d3.round(d3.mean(leaves, d => d.maxHeightBack), 1),
+          minHeightBack: d3.round(d3.mean(leaves, d => d.minHeightBack), 1),
+          maxWidthBack: d3.round(d3.mean(leaves, d => d.maxWidthBack), 1),
+          minWidthBack: d3.round(d3.mean(leaves, d => d.minWidthBack), 1),
+        }
+
+        const length = leaves.length
+        leaves[length] = average
+
+        return leaves
+      })
+      .entries(data)
+
+      console.log({nestedData, nest2})
+
   const chart = $sel
-    .datum(nestedData)
+    .datum(nest2)
     .scrollChart()
 
   toggle = chart.toggle
