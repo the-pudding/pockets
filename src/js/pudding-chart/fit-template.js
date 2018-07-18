@@ -27,7 +27,7 @@ d3.selection.prototype.fitChart = function init(options) {
 		let $svg = null;
 		let $axis = null;
 		let $vis = null;
-    let brands = null
+    let display = null
 
 		// helper functions
 
@@ -41,16 +41,26 @@ d3.selection.prototype.fitChart = function init(options) {
         const container = $sel.append('div.container')
 
         // Add svg for front pockets
-				brands = container.selectAll('.fit-brand')
+				let brands = container.selectAll('.fit-brand')
           .data(d => d.values)
           .enter()
           .append('div.area-front')
           .attr('class', 'fit-brand')
 
-        $svg = brands.append('svg.fit-canvas')
-        const text = brands.append('div.text')
+        display = brands.append('div.display')
+        let tooltip = brands.append('div.tooltip')
+
+        $svg = display.append('svg.fit-canvas')
+        const text = display.append('div.text')
         text.append('text.brand.tk-atlas').text(d => d.brand)
         text.append('text.style.tk-atlas').text(d => d.updatedStyle)
+
+        let toolText = tooltip.append('div.tooltip-text')
+        const dollars = d3.format("$.2f")
+
+        toolText.append('text.tk-atlas').text(d => d.name)
+        toolText.append('text.tk-atlas').text(d => `${dollars(d.price)}`)
+        toolText.append('text.tk-atlas').text(d => d.fabric)
 
 				const $g = $svg.append('g');
 
@@ -63,8 +73,9 @@ d3.selection.prototype.fitChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
-				width = brands.node().offsetWidth - marginLeft - marginRight;
-				height = brands.node().offsetHeight - marginTop - marginBottom;
+        console.log({display})
+				width = display.node().offsetWidth - marginLeft - marginRight;
+				height = display.node().offsetHeight - marginTop - marginBottom;
 				$svg.at({
 					width: width + marginLeft + marginRight,
 					height: 300
@@ -84,7 +95,6 @@ d3.selection.prototype.fitChart = function init(options) {
 
         // Draw front pocket
         const frontGroup = $svg.select('.g-vis')
-        console.log({$svg})
 
         let areaMeasure = null
         frontGroup
