@@ -80,6 +80,7 @@ d3.selection.prototype.fitChart = function init(options) {
 			// update scales and render chart
 			render() {
         const padding = 10
+        const inch = 0.393 // conversion factor for cm -> inches
 
         // Draw front pocket
         const frontGroup = $svg.select('.g-vis')
@@ -124,7 +125,7 @@ d3.selection.prototype.fitChart = function init(options) {
             .data(d => [d])
             .enter()
             .append('text')
-            .text(d => d.maxHeightFront)
+            .text(d => `${d3.round(d.maxHeightFront * inch, 1)}"`)
             .attr('alignment-baseline', 'hanging')
             .attr('text-anchor', 'end')
             .attr('transform', d => `translate(${padding/2}, ${scale(d.maxHeightFront / 2)})`)
@@ -135,7 +136,7 @@ d3.selection.prototype.fitChart = function init(options) {
               .data(d => [d])
               .enter()
               .append('text')
-              .text(d => d.minHeightFront)
+              .text(d => `${d3.round(d.minHeightFront * inch, 1)}"`)
               .attr('alignment-baseline', 'hanging')
               .attr('text-anchor', 'start')
               .attr('transform', d => `translate(${scale(d.maxWidthFront) + (padding * 1.5)}, ${scale(d.rivetHeightFront + ((d.minHeightFront - d.rivetHeightFront ) / 2))})`)
@@ -145,7 +146,7 @@ d3.selection.prototype.fitChart = function init(options) {
               .data(d => [d])
               .enter()
               .append('text')
-              .text(d => d.maxWidthFront)
+              .text(d => `${d3.round(d.maxWidthFront * inch, 1)}"`)
               .attr('alignment-baseline', 'hanging')
               .attr('text-anchor', 'middle')
               .attr('transform', d => `translate(${scale(d.maxWidthFront / 2) + padding}, ${scale(d.maxHeightFront) + (padding * 2.5)})`)
@@ -156,7 +157,7 @@ d3.selection.prototype.fitChart = function init(options) {
               .data(d => [d])
               .enter()
               .append('text')
-              .text(d => d.minWidthFront)
+              .text(d => `${d3.round(d.minWidthFront * inch, 1)}"`)
               .attr('alignment-baseline', 'hanging')
               .attr('text-anchor', 'middle')
               .attr('transform', d => `translate(${scale((d.maxWidthFront - d.minWidthFront) + (d.minWidthFront / 2)) + padding}, ${scale(d.rivetHeightFront / 2)})`)
@@ -168,7 +169,7 @@ d3.selection.prototype.fitChart = function init(options) {
               .attr('transform', function(d){
                 const boxWidth = this.getBBox().width
                 const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
-                const difWidth = ((width - boxWidth) / 2) + leftBBox//Math.max((width - calcWidth) / 2, 30)
+                const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)//Math.max((width - calcWidth) / 2, 30)
 
                 return `translate(${difWidth}, 0)`
               })
