@@ -113,6 +113,18 @@ d3.selection.prototype.scrollChart = function init(options) {
           })
           .attr('class', d => d.brand == 'average' ? `outline-average` : `outline`)
 					.attr("transform", "translate(" + (width/2.75) + ",0)")
+          .attr('stroke-dasharray', function(d){
+            return this.getTotalLength()
+          })
+          .attr('stroke-dashoffset', function(d){
+            return this.getTotalLength()
+          })
+
+          $svgFront.select('.group-women')
+            .attr('transform', `translate(${-(width / 3)}, 0)`)
+
+          $svgFront.select('.group-men')
+            .attr('transform', `translate(${width / 3}, 0)`)
 
 				console.log(data);
 				return Chart;
@@ -137,13 +149,63 @@ d3.selection.prototype.scrollChart = function init(options) {
             .duration(500)
             .attr('transform', `translate(${-(width / 3)}, 0)`)
 
+          women.selectAll('.outline')
+            .style('stroke-opacity', 0.1)
+            .transition()
+            .duration(500)
+            .delay((d, i) => i * 100)
+            .attr('stroke-dashoffset', 0)
+
           men
             .transition()
             .duration(500)
             .attr('transform', `translate(${width / 3}, 0)`)
+
+          men.selectAll('.outline')
+            .style('stroke-opacity', 0.1)
+            .transition()
+            .duration(500)
+            .delay((d, i) => i * 100)
+            .attr('stroke-dashoffset', 0)
+
+            women.selectAll('.outline-average')
+              .attr('stroke-dashoffset', function(d){
+                return this.getTotalLength()
+              })
+
+            men.selectAll('.outline-average')
+              .attr('stroke-dashoffset', function(d){
+                return this.getTotalLength()
+              })
         }
 
         function step1(){
+          women.selectAll('.outline-average')
+            .raise()
+            .transition()
+            .duration(500)
+            .delay((d, i) => i * 100)
+            .attr('stroke-dashoffset', 0)
+
+          men.selectAll('.outline-average')
+            .raise()
+            .transition()
+            .duration(500)
+            .delay((d, i) => i * 100)
+            .attr('stroke-dashoffset', 0)
+
+          women.selectAll('.outline')
+            .transition()
+            .duration(800)
+            .style('stroke-opacity', 0.02)
+
+          men.selectAll('.outline')
+            .transition()
+            .duration(800)
+            .style('stroke-opacity', 0.02)
+        }
+
+        function step2(){
           women
             .transition()
             .duration(500)
@@ -153,10 +215,16 @@ d3.selection.prototype.scrollChart = function init(options) {
             .transition()
             .duration(500)
             .attr('transform', `translate(0, 0)`)
-        }
 
-        function step2(){
-          women
+            women.selectAll('.outline')
+              .transition()
+              .duration(800)
+              .style('stroke-opacity', 0)
+
+            men.selectAll('.outline')
+              .transition()
+              .duration(800)
+              .style('stroke-opacity', 0)
         }
 
         // Run specific function based on step
