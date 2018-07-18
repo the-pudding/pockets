@@ -3,6 +3,7 @@ import loadMeasurements from './load-data'
 
 // data
 let data = null
+let selectedObject = null
 
 // selections
 const $fit = d3.selectAll('.fit-table')
@@ -16,11 +17,15 @@ function setupChart(){
     .key(d => d.menWomen)
     .entries(data)
 
+  // temporarily define selected selectedObject
+  selectedObject = 'phone'
+
   const charts = $sel
     .selectAll('.chart')
     .data(nestedData)
     .enter()
     .append('div.chart')
+    .at('data-object', selectedObject)
     .fitChart()
 }
 

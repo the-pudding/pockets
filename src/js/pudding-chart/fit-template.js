@@ -11,6 +11,7 @@ d3.selection.prototype.fitChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
+    let object = $sel.at('data-object')
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -28,8 +29,16 @@ d3.selection.prototype.fitChart = function init(options) {
 		let $axis = null;
 		let $vis = null;
     let display = null
+    let brands = null
 
 		// helper functions
+    const objectSizes = [{
+      object: 'phone',
+      width: 7,
+      height: 14
+    }]
+
+    const objectMap = d3.map(objectSizes, d => d.object)
 
 		const Chart = {
 			// called once at start
@@ -41,7 +50,7 @@ d3.selection.prototype.fitChart = function init(options) {
         const container = $sel.append('div.container')
 
         // Add svg for front pockets
-				let brands = container.selectAll('.fit-brand')
+				brands = container.selectAll('.fit-brand')
           .data(d => d.values)
           .enter()
           .append('div.area-front')
@@ -182,6 +191,17 @@ d3.selection.prototype.fitChart = function init(options) {
                 const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)//Math.max((width - calcWidth) / 2, 30)
 
                 return `translate(${difWidth}, 0)`
+              })
+
+            brands.select('.display')
+              .classed('dimmed', d => {
+                let objectWidth =  objectMap.get(object).width
+                let objectHeight = objectMap.get(object).height
+                const minWidth = d.minWidthFront
+                const minHeight = d.minHeightFront - d.rivetHeightFront
+                console.log({objectWidth, objectHeight, minWidth, minHeight})
+                if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
+                else false
               })
 
           // const backGroup = $svgBack.select('.g-vis')
