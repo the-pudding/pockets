@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import isMobile from './utils/is-mobile';
 import area from './area';
 import scroll from './scroll'
+import debunk from './debunking'
 
 const $body = d3.select('body');
 let previousWidth = 0;
@@ -40,6 +41,7 @@ function init() {
 	// kick off graphic code
 	//area.init();
 	scroll.init()
+	debunk.init()
 }
 
 init();
