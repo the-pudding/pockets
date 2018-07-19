@@ -82,7 +82,7 @@ d3.selection.prototype.fitChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
-        console.log({display})
+        //console.log({display})
 				width = display.node().offsetWidth - marginLeft - marginRight;
 				height = display.node().offsetHeight - marginTop - marginBottom;
 				$svg.at({
@@ -199,7 +199,7 @@ d3.selection.prototype.fitChart = function init(options) {
                 let objectHeight = objectMap.get(object).height
                 const minWidth = d.minWidthFront
                 const minHeight = d.minHeightFront - d.rivetHeightFront
-                console.log({objectWidth, objectHeight, minWidth, minHeight})
+                //console.log({objectWidth, objectHeight, minWidth, minHeight})
                 if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
                 else false
               })
