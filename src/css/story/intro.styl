@@ -1,8 +1,26 @@
 .intro
 	margin 0 auto
-	padding 4rem 1rem 1.5rem 1rem
+	padding 1.5rem
+	background-color $dark-denim
+	width 100%
+	//height 100vh
+
+	.stitching
+		border 1px dashed $gold-stitch
+		padding 2rem
+
+	&__pre-hed
+		text-align center
+		font-weight 200
+		color $gold-stitch
+		set-type-size('large', true)
+		+mq('bp-3')
+			set-type-size('large', true)
+		+mq('bp-5')
+			set-type-size('large', true)
 
 	&__hed
+		display none
 		max-width 60rem
 		margin 0 auto
 		padding-top 5rem
@@ -13,16 +31,21 @@
 			set-type-size('xxx-large', true)
 		+mq('bp-5')
 			set-type-size('xxxx-large', true)
-	
+
 	&__byline
 		max-width $column-width
 		margin 0 auto
-		padding-top 5rem
-		padding-bottom 1.5rem
+		padding 1.5rem 0
 		text-align center
+		color $gold-stitch
 		set-type-size('small', true)
-		
+
+		a
+			color $gold-stitch
+			border-bottom 1px solid $gold-stitch
+
 	&__dek
+		display none
 		max-width $column-width
 		margin 0 auto
 		padding-top 1.5rem

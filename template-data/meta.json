@@ -8,9 +8,14 @@
 		"https://pudding.cool/year/month/name/assets/social/social-facebook.jpg",
 	"imgTwitter":
 		"https://pudding.cool/year/month/name/assets/social/social-twitter.jpg",
-	"author": {
-		"name": "Author Name",
-		"url": "https://twitter.com/puddingviz",
+	"author1": {
+		"name": "Jan Diehm",
+		"url": "https://twitter.com/jadiehm",
 		"twitterHandle": "@puddingviz"
+	},
+	"author2": {
+		"name": "Amber Thomas",
+		"url": "https://twitter.com/ProQuesAsker",
+		"twitterHandle": "@ProQuesAsker"
 	}
 }

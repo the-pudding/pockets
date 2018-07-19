@@ -1,9 +1,17 @@
 <div class='intro'>
-	<h1 class='intro__hed tk-canela'>{{meta.title}}</h1>
-	<p class='intro__dek tk-atlas'>{{meta.description}}</p>
-	<p class='intro__byline tk-atlas'>By
-		<a href='{{meta.author.url}}' target='_blank'>
-			<strong>{{meta.author.name}}</strong>
-		</a>
-	</p>
+	<div class='stitching'>
+		<p class='intro__pre-hed tk-atlas'>Someone clever once said<br>Women were not allowed</p>
+		@@include('pocket-stitch-text-01.svg')
+		<h1 class='intro__hed tk-canela'>{{meta.title}}</h1>
+		<p class='intro__dek tk-atlas'>{{meta.description}}</p>
+		<p class='intro__byline tk-atlas'>By
+			<a href='{{meta.author1.url}}' target='_blank'>
+				<strong>{{meta.author1.name}}</strong>
+			</a>
+			&
+			<a href='{{meta.author2.url}}' target='_blank'>
+				<strong>{{meta.author2.name}}</strong>
+			</a>
+		</p>
+	</div>
 </div>

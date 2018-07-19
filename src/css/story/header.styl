@@ -1,8 +1,8 @@
 header
 	z-index set-index('overlay')
 	position absolute
-	top 0
-	left 0
+	top 3rem
+	right 0
 	width 100%
 	background-color $white
 
@@ -16,34 +16,36 @@ header
 			fill $off-black
 			display block
 			width 100%
-	
+
 header.is-sticky
 	position fixed
-	transform translate3d(0,0,0)
+	transform translate3d(100,0,0)
 	background-color $white
-	box-shadow 0 0 7px 1px $gray-light
-	
+	height 155px
+	//box-shadow 0 0 7px 1px $gray-light
+
 	a.logo
-		margin 0 auto
-	
+		margin 2rem auto 0 auto
+
 	.header__toggle
-		position fixed
+		width 100%
+		position absolute
 		transform translate3d(0,0,0)
 		top 0
-		right 0
-		padding 0.75rem
+		left 8px
+		padding-top 0.3rem
 		cursor pointer
 		line-height 1
-		z-index set-index(overlay)
+		z-index 9999
 		svg
-			stroke $off-black
-		
+			stroke $white
+
 		span
 			&:first-of-type
 				display block
 			&:last-of-type
 				display none
-		
+
 		&.is-visible span
 			&:first-of-type
 				display none
@@ -101,29 +103,33 @@ header.is-sticky
 
 // dark color version
 header.is-sticky.is-dark
-	background-color $off-black
-	box-shadow 0 0 7px 1px $gray-dark
+	background-color $deep-red
+	width 40px
+	padding 0.25rem
+	//box-shadow 0 0 7px 1px $gray-dark
 
 	svg
-		fill $off-white
+		fill $white
 
 	.header__menu
-		background-color $white
+		background-color $off-white
 		color $off-black
 		+mq('bp-3')
 			border-left 1px solid $gray-light
 
 	a
 		color $off-black
-		border-bottom 1px solid $off-black
+		transform rotate(90deg)
+		//border-bottom 1px solid $off-black
 		&:hover
 			color $gray-dark
+		svg
+			width 300%
 
 	.header__toggle
 		svg
 			stroke $off-white
-		
+
 		&.is-visible span
 			svg
 				stroke $off-black
-				
