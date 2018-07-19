@@ -6,6 +6,7 @@
  4a. const charts = d3.selectAll('.thing').data(data).puddingChartLine();
  4b. const chart = d3.select('.thing').datum(datum).puddingChartLine();
 */
+//import d3plus from 'd3plus-shape'
 
 d3.selection.prototype.fitChart = function init(options) {
 	function createChart(el) {
@@ -37,6 +38,8 @@ d3.selection.prototype.fitChart = function init(options) {
       width: 7,
       height: 14
     }]
+
+
 
     const objectMap = d3.map(objectSizes, d => d.object)
 
@@ -106,6 +109,8 @@ d3.selection.prototype.fitChart = function init(options) {
         const frontGroup = $svg.select('.g-vis')
 
         let areaMeasure = null
+        let rect = []
+        let numbers = null
         frontGroup
           .selectAll('.outline')
           .data(d => [d])
@@ -129,15 +134,57 @@ d3.selection.prototype.fitChart = function init(options) {
               "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
               ////"L", [padding, padding]
             ]
-            const numbers = path.filter(d => {
+            numbers = path.filter(d => {
               const remove = ["M", "l", "L", "Q", "q"]
               return !remove.includes(d)
             })
+
+            rect.push(d3plus.largestRect(numbers))
+            let brandPrint = d.brand
             areaMeasure = d3.polygonArea(numbers)
             const joined = path.join(" ")
             return joined
           })
           .attr('class', 'outline')
+          //
+          // new d3plus.Rect()
+          //   .data([rect])
+          //   .render()
+
+          const rectAppend = frontGroup
+            .selectAll('.rectangle')
+            .data(rect)
+            .enter()
+            .append('rect')
+            .attr('x', d => d.cx)
+            .attr('y', d => d.cy)
+            .attr('width', d => d.width)
+            .attr('height', d => d.height)
+            .attr('transform', d => `translate(0, 150) rotate(${d.angle})`)
+            .attr('class', 'rectangle')
+
+            // new d3plus.Path()
+            //   .container(frontGroup)
+            //   .data(numbers)
+            //   .render()
+
+              const line = d3.line()
+                .x(d => d[0])
+                .y(d => d[1])
+
+            //     console.log(numbers)
+            // const rectAppend = frontGroup
+            //   .selectAll('.testPath')
+            //   .data(numbers)
+            //   .enter()
+            //   .append('line', d => {
+            //     console.log("running")
+            //     return line(d)})
+            //   .attr('testPath')
+
+
+
+          //  console.log({rectAppend, frontGroup})
 
           frontGroup
             .selectAll('.measure measure-maxHeight')
@@ -193,17 +240,6 @@ d3.selection.prototype.fitChart = function init(options) {
                 return `translate(${difWidth}, 0)`
               })
 
-            brands.select('.display')
-              .classed('dimmed', d => {
-                let objectWidth =  objectMap.get(object).width
-                let objectHeight = objectMap.get(object).height
-                const minWidth = d.minWidthFront
-                const minHeight = d.minHeightFront - d.rivetHeightFront
-                //console.log({objectWidth, objectHeight, minWidth, minHeight})
-                if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
-                else false
-              })
-
 				return Chart;
 			},
 			// get / set data
@@ -221,6 +257,24 @@ d3.selection.prototype.fitChart = function init(options) {
 
             if ((d.brand == brand || brand == 'All') && (d.style == style || style == 'All') && (d.priceGroup == price || price == 'All')) return true
             else return false
+          })
+        return Chart
+      },
+      dim(){
+        brands
+          .select('.display')
+          .classed('dimmed', function(d){
+            let objectWidth =  objectMap.get(object).width
+            let objectHeight = objectMap.get(object).height
+            const path = d3.select(this).select('.outline').at('d')
+            console.log(path)
+            const test = d3plus.path2polygon(path, [20])
+            console.log({test})
+            const minWidth = d.minWidthFront
+            const minHeight = d.minHeightFront - d.rivetHeightFront
+            //console.log({objectWidth, objectHeight, minWidth, minHeight})
+            if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
+            else false
           })
         return Chart
       }

@@ -1,12 +1,15 @@
 import './pudding-chart/fit-template'
 import loadMeasurements from './load-data'
 
+
 // data
 let data = null
 let sortedData = null
 let selectedObject = null
 let toggleW = null
 let toggleM = null
+let dimW = null
+let dimM = null
 
 let selectedBrand = 'All'
 let selectedStyle = 'All'
@@ -46,6 +49,9 @@ function setupChart(){
   toggleW = charts[0].toggle
   toggleM = charts[1].toggle
 
+  dimW = charts[0].dim
+  dimM = charts[0].dim
+
   setupDropdowns(brand, 'brand')
   setupDropdowns(style, 'updatedStyle')
   setupDropdowns(price, 'priceGroup')
@@ -83,6 +89,10 @@ function updateSelection(){
 
   toggleW(selectedBrand, selectedPrice, selectedStyle)
   toggleM(selectedBrand, selectedPrice, selectedStyle)
+
+  // This needs to be connected to drag & drop
+  dimW()
+  dimM()
 }
 
 function init(){
