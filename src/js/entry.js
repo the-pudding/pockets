@@ -5,6 +5,7 @@ import area from './area';
 import scroll from './scroll'
 import debunk from './debunking'
 import fit from './fit'
+import enterView from 'enter-view';
 
 const $body = d3.select('body');
 let previousWidth = 0;
@@ -31,6 +32,42 @@ function setupStickyHeader() {
 		});
 	}
 }
+function smallMenuToggle() {
+	enterView({
+		selector: '.scroll',
+		offset: 0.5,
+		enter: function(el) {
+			let logo = d3.select('.logo');
+			let jeanLabel = d3.select('.is-sticky');
+
+			logo
+				.transition()
+				.duration(300)
+				.style('display', 'none')
+				.style('opacity', '0');
+
+			jeanLabel
+				.transition()
+				.duration(200)
+				.style('height', '35px');
+		},
+		exit: function(el) {
+			let logo = d3.select('.logo');
+			let jeanLabel = d3.select('.is-sticky');
+
+			jeanLabel
+				.transition()
+				.duration(200)
+				.style('height', '155px');
+
+			logo
+				.transition()
+				.duration(300)
+				.style('display', 'block')
+				.style('opacity', '1');	
+		}
+	});
+}
 
 function init() {
 	// add mobile class to body tag
@@ -39,6 +76,7 @@ function init() {
 	window.addEventListener('resize', debounce(resize, 150));
 	// setup sticky header menu
 	setupStickyHeader();
+	smallMenuToggle();
 	// kick off graphic code
 	//area.init();
 	scroll.init()
