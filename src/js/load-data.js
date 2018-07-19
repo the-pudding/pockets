@@ -19,7 +19,8 @@ function cleanData(arr){
       maxWidthBack: +d.maxWidthBack,
       minWidthBack: +d.minWidthBack,
       updatedStyle: updateStyle(d.style),
-      group: `${d.menWomen} - ${updateStyle(d.style)}`
+      group: `${d.menWomen} - ${updateStyle(d.style)}`,
+      priceGroup: definePrice(+d.price)
     }
   })
 }
@@ -29,6 +30,13 @@ function updateStyle(style){
   else if (style == "regular") return "straight"
   else if(style == "slim") return "skinny"
   else return style
+}
+
+function definePrice(price){
+  if (price < 50) return '< $50'
+  else if (price >= 50 && price < 100) return '$50 - $99'
+  else if (price >= 100 && price < 150) return '$100 - $149'
+  else return '$150+'
 }
 
 function loadMeasurements(cb) {

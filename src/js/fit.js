@@ -9,6 +9,9 @@ let selectedObject = null
 // selections
 const container = d3.selectAll('.fit-container')
 const $fit = container.selectAll('.fit-table')
+const brand = container.select('.ui-brand')
+const style = container.select('.ui-style')
+const price = container.select('.ui-price')
 
 function resize(){}
 
@@ -34,21 +37,23 @@ function setupChart(){
     .at('data-object', selectedObject)
     .fitChart()
 
-  setupDropdowns()
+  setupDropdowns(brand, 'brand')
+  setupDropdowns(style, 'updatedStyle')
+  setupDropdowns(price, 'priceGroup')
 }
 
-function setupDropdowns(){
-  const brand = container.select('.ui-brand')
-  const style = container.select('.ui-style')
-  const price = container.select('.ui-price')
+function setupDropdowns(selection, options){
+console.log({selection})
 
-  brand
+  selection
     .selectAll('option')
     .data(d => {
         const nestBrands = d3.nest()
-          .key(d => d.brand)
+          .key(d => d[options])
           .entries(sortedData)
           .map(e => e.key)
+
+        nestBrands.unshift('All')
 
         return nestBrands
     })
@@ -56,7 +61,6 @@ function setupDropdowns(){
     .append('option')
     .attr('value', d => d)
     .text(d => d)
-
 }
 
 function init(){
