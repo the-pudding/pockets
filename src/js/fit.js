@@ -5,6 +5,12 @@ import loadMeasurements from './load-data'
 let data = null
 let sortedData = null
 let selectedObject = null
+let toggleW = null
+let toggleM = null
+
+let selectedBrand = 'All'
+let selectedStyle = 'All'
+let selectedPrice = 'All'
 
 // selections
 const container = d3.selectAll('.fit-container')
@@ -37,13 +43,15 @@ function setupChart(){
     .at('data-object', selectedObject)
     .fitChart()
 
+  toggleW = charts[0].toggle
+  toggleM = charts[1].toggle
+
   setupDropdowns(brand, 'brand')
   setupDropdowns(style, 'updatedStyle')
   setupDropdowns(price, 'priceGroup')
 }
 
 function setupDropdowns(selection, options){
-console.log({selection})
 
   selection
     .selectAll('option')
@@ -61,6 +69,20 @@ console.log({selection})
     .append('option')
     .attr('value', d => d)
     .text(d => d)
+
+    selection.on('change', updateSelection)
+}
+
+function updateSelection(){
+  const dropdown = d3.select(this).at('data-dropdown')
+  const selection = this.value
+
+  if (dropdown == 'price') selectedPrice = selection
+  if (dropdown == 'brand') selectedBrand = selection
+  if (dropdown == 'style') selectedStyle = selection
+
+  toggleW(selectedBrand, selectedPrice, selectedStyle)
+  toggleM(selectedBrand, selectedPrice, selectedStyle)
 }
 
 function init(){
