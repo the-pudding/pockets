@@ -41,7 +41,6 @@ d3.selection.prototype.fitChart = function init(options) {
 
 		function drawPocket(d){
 			const g = d3.select(this)
-			console.log({g})
 			const padding = 10
 			const point1 = [padding, padding]
 			const point2 = [padding, padding + scale(d.maxHeightFront)]
@@ -72,13 +71,6 @@ d3.selection.prototype.fitChart = function init(options) {
 
 			const joined = path.join(" ")
 
-
-			const numbers = path.filter(d => {
-				const remove = ["M", "l", "L", "Q", "q"]
-				return !remove.includes(d)
-			})
-
-
 			//const polygon = d3plus.path2polygon(testPath, {segmentLength: 20})
 
 			const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
@@ -89,7 +81,7 @@ d3.selection.prototype.fitChart = function init(options) {
 
 			const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
 
-			const largestRect = d3plus.largestRect(fullPath, {nTries: 50})
+			const largestRect = d3plus.largestRect(fullPath, {nTries: 50, aspectRatio: 0.6})
 			console.log({largestRect})
 
 			const drawnPocket = g
