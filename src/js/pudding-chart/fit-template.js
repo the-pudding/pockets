@@ -39,6 +39,116 @@ d3.selection.prototype.fitChart = function init(options) {
       height: 14
     }]
 
+		function drawPocket(d){
+			const g = d3.select(this)
+			console.log({g})
+			const padding = 10
+			const point1 = [padding, padding]
+			const point2 = [padding, padding + scale(d.maxHeightFront)]
+			const curve1Control = [padding + scale(d.maxWidthFront / 2), scale(d.maxHeightFront + 2) + padding]
+			const curve1End = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
+			const point3 = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
+			const curve2Control = [padding + scale(d.minWidthFront / 2), scale(0.4 * d.maxWidthFront) + padding]
+			const curve2End = [padding + scale(d.maxWidthFront - d.minWidthFront), padding]
+
+			const path = [
+				// move to the right padding amount and down padding amount
+				"M", point1,
+				// draw a line from initial point straight down the length of the maxHeight
+				"L", point2,
+				////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
+				// Add a curve to the other side
+				"Q", curve1Control, // control point for curve
+					curve1End, // end point
+				// Draw a line straight up to the min height - rivet height
+				"L", point3,
+				// Add a curve to the line between rivets
+				"Q", curve2Control, curve2End
+				 	,
+				"L", point1
+				// "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
+				////"L", [padding, padding]
+			]
+
+			const joined = path.join(" ")
+
+
+			const numbers = path.filter(d => {
+				const remove = ["M", "l", "L", "Q", "q"]
+				return !remove.includes(d)
+			})
+
+
+			//const polygon = d3plus.path2polygon(testPath, {segmentLength: 20})
+
+			const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
+			const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+
+			const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+			const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+
+			const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
+
+			const largestRect = d3plus.largestRect(fullPath, {nTries: 50})
+			console.log({largestRect})
+
+			const drawnPocket = g
+				.append('path.outline')
+				.attr('d', joined)
+
+			g
+				.append('path.largestRect')
+				.attr('d', d => {
+					const path = [
+						"M", largestRect.points[0],
+						"L", largestRect.points[1],
+						"L", largestRect.points[2],
+						"L", largestRect.points[3],
+						"L", largestRect.points[4]
+					]
+					const joined = path.join(" ")
+					return joined
+				})
+
+			// g
+			// 	.append('rect.largestRect')
+			// 	// .attr('x', largestRect.cx)
+			// 	// .attr('y', largestRect.cy)
+			// 	.attr('width', largestRect.width)
+			// 	.attr('height', largestRect.height)
+			// 	.attr('transform', `translate(${largestRect.cx}, ${largestRect.cy}) rotate(${largestRect.angle})`)
+			// 	.attr('class', 'rectangle')
+				//.attr('opacity', 0)
+		}
+
+		// Quadratic interpolators from this block https://bl.ocks.org/pbeshai/72c446033a98f99ce1e1371c6eee9644
+
+		function interpolateQuadraticBezier(start, control, end) {
+			// 0 <= t <= 1
+			return function interpolator(t) {
+				return [
+					(Math.pow(1 - t, 2) * start[0]) +
+		      (2 * (1 - t) * t * control[0]) +
+		      (Math.pow(t, 2) * end[0]),
+		      (Math.pow(1 - t, 2) * start[1]) +
+		      (2 * (1 - t) * t * control[1]) +
+		      (Math.pow(t, 2) * end[1]),
+				];
+			};
+		}
+
+		function interpolateQuadraticBezierAngle(start, control, end) {
+			// 0 <= t <= 1
+			return function interpolator(t) {
+				const tangentX = (2 * (1 - t) * (control[0] - start[0])) +
+												 (2 * t * (end[0] - control[0]));
+				const tangentY = (2 * (1 - t) * (control[1] - start[1])) +
+												 (2 * t * (end[1] - control[1]));
+
+				return Math.atan2(tangentY, tangentX) * (180 / Math.PI);
+			}
+		}
+
 
 
     const objectMap = d3.map(objectSizes, d => d.object)
@@ -107,70 +217,23 @@ d3.selection.prototype.fitChart = function init(options) {
 
         // Draw front pocket
         const frontGroup = $svg.select('.g-vis')
-
-        let areaMeasure = null
-        let rect = []
-        let numbers = null
+				//
+        // let areaMeasure = null
+        // let rect = []
+        // let numbers = null
         frontGroup
           .selectAll('.outline')
           .data(d => [d])
           .enter()
-          .append('path')
-          .attr('d', function(d){
-            const path = [
-              // move to the right padding amount and down padding amount
-              "M", [padding, padding],
-              // draw a line from initial point straight down the length of the maxHeight
-              "l", [0, scale(d.maxHeightFront)],
-              ////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
-              // Add a curve to the other side
-              "q", [scale(d.maxWidthFront / 2), scale(0.1 * d.maxHeightFront)], // control point for curve
-                [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)], // end point
-              // Draw a line straight up to the min height - rivet height
-              "l", [0, -scale(d.minHeightFront - d.rivetHeightFront)],
-              // Add a curve to the line between rivets
-              "q", [-scale(d.minWidthFront * 2 / 3), scale(0.1 * d.maxHeightFront)],
-                [-scale(d.minWidthFront), -scale(d.rivetHeightFront)],
-              "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
-              ////"L", [padding, padding]
-            ]
-            numbers = path.filter(d => {
-              const remove = ["M", "l", "L", "Q", "q"]
-              return !remove.includes(d)
-            })
+          .append('g')
+					.each(drawPocket)
 
-            rect.push(d3plus.largestRect(numbers))
-            let brandPrint = d.brand
-            areaMeasure = d3.polygonArea(numbers)
-            const joined = path.join(" ")
-            return joined
-          })
-          .attr('class', 'outline')
-          //
-          // new d3plus.Rect()
-          //   .data([rect])
-          //   .render()
 
-          const rectAppend = frontGroup
-            .selectAll('.rectangle')
-            .data(rect)
-            .enter()
-            .append('rect')
-            .attr('x', d => d.cx)
-            .attr('y', d => d.cy)
-            .attr('width', d => d.width)
-            .attr('height', d => d.height)
-            .attr('transform', d => `translate(0, 150) rotate(${d.angle})`)
-            .attr('class', 'rectangle')
 
             // new d3plus.Path()
             //   .container(frontGroup)
             //   .data(numbers)
             //   .render()
-
-              const line = d3.line()
-                .x(d => d[0])
-                .y(d => d[1])
 
             //     console.log(numbers)
             // const rectAppend = frontGroup
@@ -231,14 +294,14 @@ d3.selection.prototype.fitChart = function init(options) {
 
             const groupWidth = frontGroup.node().getBBox().width
 
-            frontGroup
-              .attr('transform', function(d){
-                const boxWidth = this.getBBox().width
-                const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
-                const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)//Math.max((width - calcWidth) / 2, 30)
-
-                return `translate(${difWidth}, 0)`
-              })
+            // frontGroup
+            //   .attr('transform', function(d){
+            //     const boxWidth = this.getBBox().width
+            //     const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
+            //     const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)//Math.max((width - calcWidth) / 2, 30)
+						//
+            //     return `translate(${difWidth}, 0)`
+            //   })
 
 				return Chart;
 			},
