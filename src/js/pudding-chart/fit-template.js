@@ -39,6 +39,8 @@ d3.selection.prototype.fitChart = function init(options) {
       height: 14
     }]
 
+		const rectData = []
+
 		function drawPocket(d){
 			const g = d3.select(this)
 			const padding = 10
@@ -82,7 +84,17 @@ d3.selection.prototype.fitChart = function init(options) {
 			const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
 
 			const largestRect = d3plus.largestRect(fullPath, {nTries: 50, aspectRatio: 0.6})
-			console.log({largestRect})
+
+			const thisData = d
+			const withRect = [thisData].map(d => {
+				return{
+					...d,
+					rectangle: largestRect
+				}
+			})
+
+			rectData.push(withRect[0])
+			console.log({withRect})
 
 			const drawnPocket = g
 				.append('path.outline')
@@ -220,7 +232,7 @@ d3.selection.prototype.fitChart = function init(options) {
           .append('g')
 					.each(drawPocket)
 
-
+					console.log({rectData})
 
             // new d3plus.Path()
             //   .container(frontGroup)
