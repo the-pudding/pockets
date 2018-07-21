@@ -94,7 +94,6 @@ d3.selection.prototype.fitChart = function init(options) {
 			})
 
 			rectData.push(withRect[0])
-			console.log({withRect})
 
 			const drawnPocket = g
 				.append('path.outline')
@@ -199,7 +198,6 @@ d3.selection.prototype.fitChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
-        //console.log({display})
 				width = display.node().offsetWidth - marginLeft - marginRight;
 				height = display.node().offsetHeight - marginTop - marginBottom;
 				$svg.at({
@@ -231,27 +229,6 @@ d3.selection.prototype.fitChart = function init(options) {
           .enter()
           .append('g')
 					.each(drawPocket)
-
-					console.log({rectData})
-
-            // new d3plus.Path()
-            //   .container(frontGroup)
-            //   .data(numbers)
-            //   .render()
-
-            //     console.log(numbers)
-            // const rectAppend = frontGroup
-            //   .selectAll('.testPath')
-            //   .data(numbers)
-            //   .enter()
-            //   .append('line', d => {
-            //     console.log("running")
-            //     return line(d)})
-            //   .attr('testPath')
-
-
-
-          //  console.log({rectAppend, frontGroup})
 
           frontGroup
             .selectAll('.measure measure-maxHeight')
@@ -298,14 +275,14 @@ d3.selection.prototype.fitChart = function init(options) {
 
             const groupWidth = frontGroup.node().getBBox().width
 
-            // frontGroup
-            //   .attr('transform', function(d){
-            //     const boxWidth = this.getBBox().width
-            //     const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
-            //     const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)//Math.max((width - calcWidth) / 2, 30)
-						//
-            //     return `translate(${difWidth}, 0)`
-            //   })
+            frontGroup
+              .attr('transform', function(d){
+                const boxWidth = this.getBBox().width
+                const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
+                const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)
+
+                return `translate(${difWidth}, 0)`
+              })
 
 				return Chart;
 			},
@@ -334,12 +311,10 @@ d3.selection.prototype.fitChart = function init(options) {
             let objectWidth =  objectMap.get(object).width
             let objectHeight = objectMap.get(object).height
             const path = d3.select(this).select('.outline').at('d')
-            console.log(path)
             const test = d3plus.path2polygon(path, [20])
-            console.log({test})
             const minWidth = d.minWidthFront
             const minHeight = d.minHeightFront - d.rivetHeightFront
-            //console.log({objectWidth, objectHeight, minWidth, minHeight})
+
             if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
             else false
           })
