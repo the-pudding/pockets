@@ -55,6 +55,7 @@ function setupChart(){
   setupDropdowns(brand, 'brand')
   setupDropdowns(style, 'updatedStyle')
   setupDropdowns(price, 'priceGroup')
+  setupObjectSelect()
 }
 
 function setupDropdowns(selection, options){
@@ -90,9 +91,22 @@ function updateSelection(){
   toggleW(selectedBrand, selectedPrice, selectedStyle)
   toggleM(selectedBrand, selectedPrice, selectedStyle)
 
+
+}
+
+function setupObjectSelect(){
+  const dragSection = d3.select('.drag')
+  const items = dragSection.selectAll('.click-item')
+    .on('click', handleObjectClick)
+}
+
+function handleObjectClick(){
+  const item = d3.select(this)
+  const name = item.at('data-type')
+  selectedObject = name
   // This needs to be connected to drag & drop
-  dimW()
-  dimM()
+  dimW(selectedObject)
+  dimM(selectedObject)
 }
 
 function init(){

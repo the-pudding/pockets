@@ -13,6 +13,7 @@ d3.selection.prototype.fitChart = function init(options) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
     let object = $sel.at('data-object')
+    console.log({object})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -255,8 +256,7 @@ d3.selection.prototype.fitChart = function init(options) {
           })
         return Chart
       },
-      dim(){
-        console.log({data})
+      dim(object){
         brands
           .select('.display')
           .classed('dimmed', function(d){
@@ -272,23 +272,26 @@ d3.selection.prototype.fitChart = function init(options) {
             const rectWidth = largestRect.width
             const opening = scale(d.minWidthFront)
             const rectHeight = largestRect.height
-            console.log({objectWidth, opening, rectWidth, objectHeight, rectHeight, largestRect})
 
             if (objectWidth > scale(d.minWidthFront) || objectWidth > largestRect.width || objectHeight > largestRect.height){
               const opening = d.minWidthFront
-              console.log({objectWidth, opening, d})
               return true
             }
             else return false
-
-            // const path = d3.select(this).select('.outline').at('d')
-            // const test = d3plus.path2polygon(path, [20])
-            // const minWidth = d.minWidthFront
-            // const minHeight = d.minHeightFront - d.rivetHeightFront
-            //
-            // if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
-            // else false
           })
+
+        const allDimmed = $sel.selectAll('.dimmed').size()
+        const allPockets = $sel.selectAll('.display').size()
+
+        if(data.key == 'women'){
+          d3.select('.stat-women')
+            .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
+        }
+        else if(data.key == 'men'){
+          d3.select('.stat-men')
+            .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
+        }
+        console.log({allDimmed})
         return Chart
       }
 
