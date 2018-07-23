@@ -83,13 +83,34 @@ d3.selection.prototype.fitChart = function init(options) {
 
 			const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
 
-			const largestRect = d3plus.largestRect(fullPath, {nTries: 50, aspectRatio: 0.6})
+			// function findLargestRect(aspectRatio){
+			// 	const largestRect = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: aspectRatio, cache: false})
+			// 	return largestRect
+			// }
+			//
+			// const withRect = [d].map(d => {
+			// 	return{
+			// 		...d,
+			// 		rectanglePhone: findLargestRect(0.5),
+			// 		rectanglePen: findLargestRect(0.05),
+			// 		rectangleWallet: findLargestRect(0.8)
+			// 	}
+			// })
+			//
+			// console.log({withRect})
+
+			//
+			const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
+			const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.05, cache: false})
+			const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
 
 			const thisData = d
 			const withRect = [thisData].map(d => {
 				return{
 					...d,
-					rectangle: largestRect
+					rectanglePhone: largestRectPhone,
+					rectanglePen: largestRectPen,
+					rectangleWallet: largestRectWallet
 				}
 			})
 
@@ -103,11 +124,11 @@ d3.selection.prototype.fitChart = function init(options) {
 				.append('path.largestRect')
 				.attr('d', d => {
 					const path = [
-						"M", largestRect.points[0],
-						"L", largestRect.points[1],
-						"L", largestRect.points[2],
-						"L", largestRect.points[3],
-						"L", largestRect.points[4]
+						"M", largestRectWallet.points[0],
+						"L", largestRectWallet.points[1],
+						"L", largestRectWallet.points[2],
+						"L", largestRectWallet.points[3],
+						"L", largestRectWallet.points[4]
 					]
 					const joined = path.join(" ")
 					return joined
