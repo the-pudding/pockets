@@ -36,7 +36,7 @@ function setupChart(){
     .entries(sortedData)
 
   // temporarily define selected selectedObject
-  selectedObject = 'phone'
+  selectedObject = 'pen'
 
   const charts = $sel
     .selectAll('.chart')
@@ -50,7 +50,7 @@ function setupChart(){
   toggleM = charts[1].toggle
 
   dimW = charts[0].dim
-  dimM = charts[0].dim
+  dimM = charts[1].dim
 
   setupDropdowns(brand, 'brand')
   setupDropdowns(style, 'updatedStyle')

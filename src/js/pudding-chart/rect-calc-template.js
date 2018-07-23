@@ -8,7 +8,7 @@
 */
 //import d3plus from 'd3plus-shape'
 
-d3.selection.prototype.fitChart = function init(options) {
+d3.selection.prototype.rectChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
@@ -37,18 +37,6 @@ d3.selection.prototype.fitChart = function init(options) {
       object: 'phone',
       width: 7,
       height: 14
-    }, {
-      object: 'wallet',
-      width: 8.4,
-      height: 10.4
-    }, {
-      object: 'pen',
-      width: 0.8,
-      height: 14.5
-    }, {
-      object: 'hand',
-      width: 7.4,
-      height: 17.2
     }]
 
 		const rectData = []
@@ -85,25 +73,95 @@ d3.selection.prototype.fitChart = function init(options) {
 
 			const joined = path.join(" ")
 
+			//const polygon = d3plus.path2polygon(testPath, {segmentLength: 20})
+
+			const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
+			const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+
+			const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+			const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+
+			const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
+
+			// function findLargestRect(aspectRatio){
+			// 	const largestRect = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: aspectRatio, cache: false})
+			// 	return largestRect
+			// }
+			//
+			// const withRect = [d].map(d => {
+			// 	return{
+			// 		...d,
+			// 		rectanglePhone: findLargestRect(0.5),
+			// 		rectanglePen: findLargestRect(0.05),
+			// 		rectangleWallet: findLargestRect(0.8)
+			// 	}
+			// })
+			//
+			// console.log({withRect})
+
+			//
+			const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
+			const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.05, cache: false})
+			const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
+
+			const thisData = d
+			const withRect = [thisData].map(d => {
+				return{
+					...d,
+					rectanglePhone: largestRectPhone,
+					rectanglePen: largestRectPen,
+					rectangleWallet: largestRectWallet
+				}
+			})
+
+			rectData.push(withRect[0])
+
 			const drawnPocket = g
 				.append('path.outline')
 				.attr('d', joined)
 
-        // g
-  			// 	.append('path.largestRect')
-  			// 	.attr('d', d => {
-  			// 		const path = [
-  			// 			"M", d.rectangleWallet.points[0],
-  			// 			"L", d.rectangleWallet.points[1],
-  			// 			"L", d.rectangleWallet.points[2],
-  			// 			"L", d.rectangleWallet.points[3],
-  			// 			"L", d.rectangleWallet.points[4]
-  			// 		]
-  			// 		const joined = path.join(" ")
-  			// 		return joined
-  			// 	})
+			g
+				.append('path.largestRect')
+				.attr('d', d => {
+					const path = [
+						"M", largestRectWallet.points[0],
+						"L", largestRectWallet.points[1],
+						"L", largestRectWallet.points[2],
+						"L", largestRectWallet.points[3],
+						"L", largestRectWallet.points[4]
+					]
+					const joined = path.join(" ")
+					return joined
+				})
 		}
 
+		// Quadratic interpolators from this block https://bl.ocks.org/pbeshai/72c446033a98f99ce1e1371c6eee9644
+
+		function interpolateQuadraticBezier(start, control, end) {
+			// 0 <= t <= 1
+			return function interpolator(t) {
+				return [
+					(Math.pow(1 - t, 2) * start[0]) +
+		      (2 * (1 - t) * t * control[0]) +
+		      (Math.pow(t, 2) * end[0]),
+		      (Math.pow(1 - t, 2) * start[1]) +
+		      (2 * (1 - t) * t * control[1]) +
+		      (Math.pow(t, 2) * end[1]),
+				];
+			};
+		}
+
+		function interpolateQuadraticBezierAngle(start, control, end) {
+			// 0 <= t <= 1
+			return function interpolator(t) {
+				const tangentX = (2 * (1 - t) * (control[0] - start[0])) +
+												 (2 * t * (end[0] - control[0]));
+				const tangentY = (2 * (1 - t) * (control[1] - start[1])) +
+												 (2 * t * (end[1] - control[1]));
+
+				return Math.atan2(tangentY, tangentX) * (180 / Math.PI);
+			}
+		}
 
     const objectMap = d3.map(objectSizes, d => d.object)
 
@@ -181,6 +239,14 @@ d3.selection.prototype.fitChart = function init(options) {
           .append('g')
 					.each(drawPocket)
 
+				// Export data
+				if(data.key == 'women') window.outputW = JSON.stringify(rectData)
+				if(data.key == 'men') window.outputM = JSON.stringify(rectData)
+
+				// Then run copy(window.outputW) and copy(window.outputM) in the console window
+				// Paste results into measurementsRectangles.json
+				// Where the two arrays meet, delete the ] and [ symbols so that they become one large array
+
           frontGroup
             .selectAll('.measure measure-maxHeight')
             .data(d => [d])
@@ -256,38 +322,18 @@ d3.selection.prototype.fitChart = function init(options) {
         return Chart
       },
       dim(){
-        console.log({data})
         brands
           .select('.display')
           .classed('dimmed', function(d){
-            let rectArea = null
-            if (object == 'phone' || object == 'hand') rectArea = 'rectanglePhone'
-            if (object == 'pen') rectArea = 'rectanglePen'
-            if (object == 'wallet') rectArea = 'rectangleWallet'
+            let objectWidth =  objectMap.get(object).width
+            let objectHeight = objectMap.get(object).height
+            const path = d3.select(this).select('.outline').at('d')
+            const test = d3plus.path2polygon(path, [20])
+            const minWidth = d.minWidthFront
+            const minHeight = d.minHeightFront - d.rivetHeightFront
 
-            let objectWidth =  scale(objectMap.get(object).width)
-            let objectHeight = scale(objectMap.get(object).height)
-
-            const largestRect = d[rectArea]
-            const rectWidth = largestRect.width
-            const opening = scale(d.minWidthFront)
-            const rectHeight = largestRect.height
-            console.log({objectWidth, opening, rectWidth, objectHeight, rectHeight, largestRect})
-
-            if (objectWidth > scale(d.minWidthFront) || objectWidth > largestRect.width || objectHeight > largestRect.height){
-              const opening = d.minWidthFront
-              console.log({objectWidth, opening, d})
-              return true
-            }
-            else return false
-
-            // const path = d3.select(this).select('.outline').at('d')
-            // const test = d3plus.path2polygon(path, [20])
-            // const minWidth = d.minWidthFront
-            // const minHeight = d.minHeightFront - d.rivetHeightFront
-            //
-            // if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
-            // else false
+            if (d.minWidthFront < objectWidth || (d.maxHeightFront) < objectHeight) return true
+            else false
           })
         return Chart
       }

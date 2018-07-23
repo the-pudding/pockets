@@ -6,6 +6,8 @@ import scroll from './scroll'
 import debunk from './debunking'
 import fit from './fit'
 import enterView from 'enter-view';
+// only for rectangle calculations
+import rectCalc from './rect-calc'
 
 const $body = d3.select('body');
 let previousWidth = 0;
@@ -64,7 +66,7 @@ function smallMenuToggle() {
 				.transition()
 				.duration(300)
 				.style('display', 'block')
-				.style('opacity', '1');	
+				.style('opacity', '1');
 		}
 	});
 }
@@ -82,6 +84,7 @@ function init() {
 	scroll.init()
 	debunk.init()
 	fit.init()
+	//rectCalc.init()
 }
 
 init();

@@ -2,7 +2,7 @@
 let data = null
 let cleanedData = null
 
-
+// Use for original data
 function cleanData(arr){
   return arr.map((d, i) => {
     return {
@@ -25,6 +25,26 @@ function cleanData(arr){
   })
 }
 
+// Use for data that has rectangle calculations
+function cleanDataRect(arr){
+  return arr.map((d, i) => {
+    return {
+      ...d,
+      waistSize: +d.waistSize,
+      price: +d.price,
+      maxHeightFront: +d.maxHeightFront,
+      minHeightFront: +d.minHeightFront,
+      rivetHeightFront: +d.rivetHeightFront,
+      maxWidthFront: +d.maxWidthFront,
+      minWidthFront: +d.minWidthFront,
+      maxHeightBack: +d.maxHeightBack,
+      minHeightBack: +d.minHeightBack,
+      maxWidthBack: +d.maxWidthBack,
+      minWidthBack: +d.minWidthBack
+    }
+  })
+}
+
 function updateStyle(style){
   if (style == "boot-cut") return "straight"
   else if (style == "regular") return "straight"
@@ -40,9 +60,11 @@ function definePrice(price){
 }
 
 function loadMeasurements(cb) {
-	d3.loadData('assets/data/measurements.csv',
+	d3.loadData(//'assets/data/measurements.csv',
+    'assets/data/measurementsRectangles.json',
 		(err, response) => {
-			let data = cleanData(response[0])
+			//let data = cleanData(response[0])
+      let data = cleanDataRect(response[0])
 			cb (err, data)
 		})
 }
