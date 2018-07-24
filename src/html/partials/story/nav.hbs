@@ -1,0 +1,12 @@
+<nav class='tk-atlas small'>
+  <ul>
+    {{#each copy.nav}}
+      <li class='{{object}}' data-type='{{object}}'>
+        <div class='object-image'>
+          <!-- <div class='image' style='background-image: url(assets/images/{{id}}.png)'</div> -->
+          <img class='image' src='assets/images/{{id}}.png'>
+          <p class='object-name small'>{{name}}</p>
+        </div>
+    {{/each}}
+  </ul>
+</nav>

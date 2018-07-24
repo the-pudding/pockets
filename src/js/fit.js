@@ -21,6 +21,17 @@ const $fit = container.selectAll('.fit-table')
 const brand = container.select('.ui-brand')
 const style = container.select('.ui-style')
 const price = container.select('.ui-price')
+const $nav = d3.select('nav')
+const $navUl = $nav.select('nav ul')
+const $navLi = $navUl.selectAll('li')
+
+// for nav
+let dragPosX = 0
+const navCount = $navLi.size()
+const navSize = $navLi.node().offsetWidth
+const totalW = navCount * navSize
+const dragMax = totalW - navSize
+const dragOffset = 0
 
 function resize(){}
 
@@ -101,6 +112,7 @@ function setupObjectSelect(){
 }
 
 function handleObjectClick(){
+  console.log("clicked")
   const item = d3.select(this)
   const name = item.at('data-type')
   selectedObject = name
@@ -109,11 +121,84 @@ function handleObjectClick(){
   dimM(selectedObject)
 }
 
+function prefix(prop) {
+	return [prop, `webkit-${prop}`, `ms-${prop}`];
+}
+
+function handleDrag() {
+	const { x } = d3.event;
+	const diff = dragPosX - x;
+	dragPosX = x;
+
+	const prev = +$navUl.at('data-x');
+	const cur = Math.max(0, Math.min(prev + diff, dragMax));
+
+	const index = Math.min(
+		Math.max(0, Math.floor(cur / dragMax * navCount)),
+		navCount - 1
+	);
+	const trans = (cur - dragOffset) * -1;
+
+	$navLi.classed('is-current', (d, i) => i === index);
+	$navUl.at('data-x', cur);
+
+	const prefixes = prefix('transform');
+	prefixes.forEach(pre => {
+		const transform = `translateX(${trans}px)`;
+		$navUl.node().style[pre] = transform;
+	});
+}
+
+function handleDragStart() {
+	const { x } = d3.event;
+	dragPosX = x;
+	$navUl.classed('is-dragend', false);
+	$nav.classed('is-drag', true);
+}
+
+function handleDragEnd() {
+	const cur = +$navUl.at('data-x');
+	const index = Math.min(
+		Math.max(0, Math.floor(cur / dragMax * navCount)),
+		navCount - 1
+	);
+	const x = index * navSize;
+	const trans = (x - dragOffset) * -1;
+
+	$navUl.at('data-x', x);
+
+	const prefixes = prefix('transform');
+	prefixes.forEach(pre => {
+		const transform = `translateX(${trans}px)`;
+		$navUl.node().style[pre] = transform;
+	});
+
+	$navUl.classed('is-dragend', true);
+	$nav.classed('is-drag', false);
+}
+
+function handleNavClick(){
+
+}
+
+function setupNav() {
+	const drag = d3.drag();
+	$navUl.call(
+		d3
+			.drag()
+			.on('drag', handleDrag)
+			.on('start', handleDragStart)
+			.on('end', handleDragEnd)
+	);
+  $navLi.on('click', handleObjectClick)
+}
+
 function init(){
   Promise.all([loadMeasurements()])
     .then((results) => {
       data = results[0]
       setupChart()
+      setupNav()
     })
     .catch(err => console.log(err))
 }

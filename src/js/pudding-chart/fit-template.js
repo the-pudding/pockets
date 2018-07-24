@@ -90,6 +90,31 @@ d3.selection.prototype.fitChart = function init(options) {
 				.append('path.outline')
 				.attr('d', joined)
 
+        // let rectArea = null
+        // if (object == 'phone' || object == 'hand') rectArea = 'rectanglePhone'
+        // if (object == 'pen') rectArea = 'rectanglePen'
+        // if (object == 'wallet') rectArea = 'rectangleWallet'
+        //
+        // // draw object
+        // const display = g//$svg.selectAll('.g-vis')
+        //   .append('rect.object')
+        //   .attr('width', d => d[rectArea].width)
+        //   .attr('height', d => d[rectArea].height)
+        //   .attr('transform', `rotate(${d[rectArea].angle})`)
+        //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+
+        	// .attr('d', d => {
+        	// 	const path = [
+        	// 		"M", d.rectangleWallet.points[0],
+        	// 		"L", d.rectangleWallet.points[1],
+        	// 		"L", d.rectangleWallet.points[2],
+        	// 		"L", d.rectangleWallet.points[3],
+        	// 		"L", d.rectangleWallet.points[4]
+        	// 	]
+        	// 	const joined = path.join(" ")
+        	// 	return joined
+        	// })
+
         // g
   			// 	.append('path.largestRect')
   			// 	.attr('d', d => {
@@ -291,7 +316,9 @@ d3.selection.prototype.fitChart = function init(options) {
           d3.select('.stat-men')
             .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
         }
-        console.log({allDimmed})
+
+
+
         return Chart
       }
 
