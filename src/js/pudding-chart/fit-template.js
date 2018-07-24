@@ -130,6 +130,30 @@ d3.selection.prototype.fitChart = function init(options) {
   			// 	})
 		}
 
+    function drawObject(d, selObject, group){
+      const g = group
+      let rectArea = null
+      if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
+      if (selObject == 'pen') rectArea = 'rectanglePen'
+      if (selObject == 'wallet') rectArea = 'rectangleWallet'
+
+      // draw object
+      const display = g//$svg.selectAll('.g-vis')
+      let objectWidth =  scale(objectMap.get(selObject).width)
+      let objectHeight = scale(objectMap.get(selObject).height)
+
+      display
+        .append('rect.object')
+        .attr('width', objectWidth)
+        .attr('height', objectHeight)
+        .attr('transform-origin', `top left`)
+        .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+        // .attr('transform', `rotate(${d[rectArea].angle})`)
+        // .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+
+
+    }
+
 
     const objectMap = d3.map(objectSizes, d => d.object)
 
@@ -281,17 +305,18 @@ d3.selection.prototype.fitChart = function init(options) {
           })
         return Chart
       },
-      dim(object){
+      dim(selObject){
+
         brands
           .select('.display')
           .classed('dimmed', function(d){
             let rectArea = null
-            if (object == 'phone' || object == 'hand') rectArea = 'rectanglePhone'
-            if (object == 'pen') rectArea = 'rectanglePen'
-            if (object == 'wallet') rectArea = 'rectangleWallet'
+            if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
+            if (selObject == 'pen') rectArea = 'rectanglePen'
+            if (selObject == 'wallet') rectArea = 'rectangleWallet'
 
-            let objectWidth =  scale(objectMap.get(object).width)
-            let objectHeight = scale(objectMap.get(object).height)
+            let objectWidth =  scale(objectMap.get(selObject).width)
+            let objectHeight = scale(objectMap.get(selObject).height)
 
             const largestRect = d[rectArea]
             const rectWidth = largestRect.width
@@ -316,6 +341,18 @@ d3.selection.prototype.fitChart = function init(options) {
           d3.select('.stat-men')
             .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
         }
+
+        // draw selected object
+        const frontGroup = $svg.select('.g-vis')
+
+        frontGroup
+          .selectAll('.outline-object')
+          .data(d => [d])
+          .enter()
+          .append('g')
+          .each(function(d){
+            const g = d3.select(this)
+            drawObject(d, selObject, g)})
 
 
 
