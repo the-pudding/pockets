@@ -116,9 +116,10 @@ function handleObjectClick(){
   const item = d3.select(this)
   const name = item.at('data-type')
   selectedObject = name
+  const id = item.at('data-id')
   // This needs to be connected to drag & drop
-  dimW(selectedObject)
-  dimM(selectedObject)
+  dimW(selectedObject, id)
+  dimM(selectedObject, id)
 }
 
 function prefix(prop) {

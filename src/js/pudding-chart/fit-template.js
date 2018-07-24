@@ -130,8 +130,15 @@ d3.selection.prototype.fitChart = function init(options) {
   			// 	})
 		}
 
-    function drawObject(d, selObject, group){
+    function drawObject(d, selObject, group, id){
+      // d3.selectAll('rect')
+      //   .transition()
+      //   .duration(300)
+      //   .opacity(0)
+      //   .remove()
+
       const g = group
+
       let rectArea = null
       if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
       if (selObject == 'pen') rectArea = 'rectanglePen'
@@ -142,15 +149,31 @@ d3.selection.prototype.fitChart = function init(options) {
       let objectWidth =  scale(objectMap.get(selObject).width)
       let objectHeight = scale(objectMap.get(selObject).height)
 
-      display
+      const drawnObject = display
         .append('rect.object')
         .attr('width', objectWidth)
         .attr('height', objectHeight)
         .attr('transform-origin', `top left`)
         .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
         // .attr('transform', `rotate(${d[rectArea].angle})`)
-        // .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+        .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+        .style('fill', 'none')
+        .style('stroke', '#fff')
+        .style('stroke-width', '1px')
 
+        const objectID = id
+        console.log({g})
+
+        display
+          .append('svg:image')
+          // .attr('x', -9)
+          // .attr('y', -12)
+          .attr('width', objectWidth)
+          .attr('height', objectHeight)
+          .attr("xlink:href", `assets/images/${id}.png`)
+          .attr('transform-origin', `top left`)
+          .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+          .attr('class', 'pocket-object')
 
     }
 
@@ -305,7 +328,7 @@ d3.selection.prototype.fitChart = function init(options) {
           })
         return Chart
       },
-      dim(selObject){
+      dim(selObject, id){
 
         brands
           .select('.display')
@@ -344,6 +367,7 @@ d3.selection.prototype.fitChart = function init(options) {
 
         // draw selected object
         const frontGroup = $svg.select('.g-vis')
+        frontGroup.selectAll('.pocket-object').remove()
 
         frontGroup
           .selectAll('.outline-object')
@@ -352,7 +376,7 @@ d3.selection.prototype.fitChart = function init(options) {
           .append('g')
           .each(function(d){
             const g = d3.select(this)
-            drawObject(d, selObject, g)})
+            drawObject(d, selObject, g, id)})
 
 
 
