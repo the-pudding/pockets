@@ -32,12 +32,14 @@ nav
   ul
     display flex
     flex-direction row
+    height 8rem
     li
       display flex
       flex-direction column
-      max-width 5rem
-      height 5rem
+      max-width 6rem
+      height auto
       align-items: center
+      margin 0 0.5rem
 
       .image
         //position absolute
@@ -52,3 +54,4 @@ nav
         // transform translate(-50%, 0)
       .object-name
         text-align: center
+        set-type-size('small', true)

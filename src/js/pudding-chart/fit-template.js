@@ -36,21 +36,34 @@ d3.selection.prototype.fitChart = function init(options) {
 		// helper functions
     const objectSizes = [{
       object: 'phone',
+			id: 'iphone',
       width: 7,
       height: 14
     }, {
       object: 'wallet',
+			id: 'frontWallet',
       width: 8.4,
       height: 10.4
     }, {
       object: 'pen',
+			id: 'pen',
       width: 0.8,
       height: 14.5
     }, {
       object: 'hand',
       width: 7.4,
       height: 17.2
-    }]
+    }, {
+			object: 'phone',
+			id: 'galaxy',
+			width: 6.9,
+			height: 14.7,
+		}, {
+			object: 'phone',
+			id: 'pixel',
+			width: 7.6,
+			height: 15.7
+		}]
 
 		const rectData = []
 
@@ -177,20 +190,20 @@ d3.selection.prototype.fitChart = function init(options) {
 
       // draw object
       const display = g//$svg.selectAll('.g-vis')
-      let objectWidth =  scale(objectMap.get(selObject).width)
-      let objectHeight = scale(objectMap.get(selObject).height)
+      let objectWidth =  scale(objectMap.get(id).width)
+      let objectHeight = scale(objectMap.get(id).height)
 
-      const drawnObject = display
-        .append('rect.object')
-        .attr('width', objectWidth)
-        .attr('height', objectHeight)
-        .attr('transform-origin', `top left`)
-        .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
-        // .attr('transform', `rotate(${d[rectArea].angle})`)
-        .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
-        .style('fill', 'none')
-        .style('stroke', '#fff')
-        .style('stroke-width', '1px')
+      // const drawnObject = display
+      //   .append('rect.object')
+      //   .attr('width', objectWidth)
+      //   .attr('height', objectHeight)
+      //   .attr('transform-origin', `top left`)
+      //   .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+      //   // .attr('transform', `rotate(${d[rectArea].angle})`)
+      //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+      //   .style('fill', 'none')
+      //   .style('stroke', '#fff')
+      //   .style('stroke-width', '1px')
 
         const objectID = id
 
@@ -208,7 +221,7 @@ d3.selection.prototype.fitChart = function init(options) {
     }
 
 
-    const objectMap = d3.map(objectSizes, d => d.object)
+    const objectMap = d3.map(objectSizes, d => d.id)
 
 		const Chart = {
 			// called once at start
@@ -368,8 +381,8 @@ d3.selection.prototype.fitChart = function init(options) {
             if (selObject == 'pen') rectArea = 'rectanglePen'
             if (selObject == 'wallet') rectArea = 'rectangleWallet'
 
-            let objectWidth =  scale(objectMap.get(selObject).width)
-            let objectHeight = scale(objectMap.get(selObject).height)
+            let objectWidth =  scale(objectMap.get(id).width)
+            let objectHeight = scale(objectMap.get(id).height)
 
             const largestRect = d[rectArea]
             const rectWidth = largestRect.width

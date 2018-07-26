@@ -46,15 +46,12 @@ function setupChart(){
     .key(d => d.menWomen)
     .entries(sortedData)
 
-  // temporarily define selected selectedObject
-  selectedObject = 'pen'
-
   const charts = $sel
     .selectAll('.chart')
     .data(nestedData)
     .enter()
     .append('div.chart')
-    .at('data-object', selectedObject)
+    //.at('data-object', selectedObject)
     .fitChart()
 
   toggleW = charts[0].toggle
