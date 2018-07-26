@@ -59,13 +59,44 @@ d3.selection.prototype.fitChart = function init(options) {
 			const padding = 10
 			const point1 = [padding, padding]
 			const point2 = [padding, padding + scale(d.maxHeightFront)]
+
 			const curve1Control = [padding + scale(d.maxWidthFront / 2), scale(d.maxHeightFront + 2) + padding]
+			const curve1ControlCutout = [padding + scale(d.maxWidthFront * 0.8), scale(d.maxHeightFront * 0.8) + padding]
 			const curve1End = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
+			const curve1EndCutout = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
+			const cutoutPoint = [padding + scale(d.maxWidthFront - 3), scale(d.maxHeightFront) + padding]
+
+			const point3Cutout = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
 			const point3 = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
 			const curve2Control = [padding + scale(d.minWidthFront / 2), scale(0.4 * d.maxWidthFront) + padding]
 			const curve2End = [padding + scale(d.maxWidthFront - d.minWidthFront), padding]
 
-			const path = [
+			let path = null
+
+			if(d.cutout == 'TRUE'){
+				path = [
+					// move to the right padding amount and down padding amount
+					"M", point1,
+					// draw a line from initial point straight down the length of the maxHeight
+					"L", point2,
+					////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
+					"L", cutoutPoint,
+					// Add a curve to the other side
+					"Q", curve1ControlCutout, // control point for curve
+						curve1EndCutout, // end point
+					// // Draw a line straight up to the min height - rivet height
+					"L", point3Cutout,
+					// // Add a curve to the line between rivets
+					"Q", curve2Control, curve2End,
+					//  	,
+					"L", point1
+					// "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
+					////"L", [padding, padding]
+				]
+			}
+			else {
+
+			path = [
 				// move to the right padding amount and down padding amount
 				"M", point1,
 				// draw a line from initial point straight down the length of the maxHeight
@@ -83,7 +114,7 @@ d3.selection.prototype.fitChart = function init(options) {
 				// "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
 				////"L", [padding, padding]
 			]
-
+		}
 			const joined = path.join(" ")
 
 			const drawnPocket = g
@@ -162,7 +193,6 @@ d3.selection.prototype.fitChart = function init(options) {
         .style('stroke-width', '1px')
 
         const objectID = id
-        console.log({g})
 
         display
           .append('svg:image')
@@ -174,7 +204,6 @@ d3.selection.prototype.fitChart = function init(options) {
           .attr('transform-origin', `top left`)
           .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
           .attr('class', 'pocket-object')
-          .attr('preserveAspectRatio', 'false')
 
     }
 
