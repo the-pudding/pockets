@@ -174,6 +174,7 @@ d3.selection.prototype.fitChart = function init(options) {
           .attr('transform-origin', `top left`)
           .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
           .attr('class', 'pocket-object')
+          .attr('preserveAspectRatio', 'false')
 
     }
 
