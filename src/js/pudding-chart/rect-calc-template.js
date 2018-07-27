@@ -46,13 +46,57 @@ d3.selection.prototype.rectChart = function init(options) {
 			const padding = 10
 			const point1 = [padding, padding]
 			const point2 = [padding, padding + scale(d.maxHeightFront)]
+
 			const curve1Control = [padding + scale(d.maxWidthFront / 2), scale(d.maxHeightFront + 2) + padding]
+			const curve1ControlCutout = [padding + scale(d.maxWidthFront * 0.8), scale(d.maxHeightFront * 0.8) + padding]
 			const curve1End = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
+			const curve1EndCutout = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
+			const cutoutPoint = [padding + scale(d.maxWidthFront - 3), scale(d.maxHeightFront) + padding]
+
+			const point3Cutout = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
 			const point3 = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
 			const curve2Control = [padding + scale(d.minWidthFront / 2), scale(0.4 * d.maxWidthFront) + padding]
 			const curve2End = [padding + scale(d.maxWidthFront - d.minWidthFront), padding]
 
-			const path = [
+			let joined = null
+			let path = null
+			let fullPath = null
+
+			if(d.cutout == 'TRUE'){
+				path = [
+					// move to the right padding amount and down padding amount
+					"M", point1,
+					// draw a line from initial point straight down the length of the maxHeight
+					"L", point2,
+					////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
+					"L", cutoutPoint,
+					// Add a curve to the other side
+					"Q", curve1ControlCutout, // control point for curve
+						curve1EndCutout, // end point
+					// // Draw a line straight up to the min height - rivet height
+					"L", point3Cutout,
+					// // Add a curve to the line between rivets
+					"Q", curve2Control, curve2End,
+					//  	,
+					"L", point1
+					// "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
+					////"L", [padding, padding]
+				]
+				joined = path.join(" ")
+
+				const quadraticInterpolator1 = interpolateQuadraticBezier(cutoutPoint, curve1ControlCutout, curve1EndCutout);
+				const quadraticInterpolator2 = interpolateQuadraticBezier(point3Cutout, curve2Control, curve2End);
+
+				const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+
+				//const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+				const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+
+				fullPath = [point1, point2].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])
+			}
+			else {
+
+			path = [
 				// move to the right padding amount and down padding amount
 				"M", point1,
 				// draw a line from initial point straight down the length of the maxHeight
@@ -71,17 +115,28 @@ d3.selection.prototype.rectChart = function init(options) {
 				////"L", [padding, padding]
 			]
 
-			const joined = path.join(" ")
+			joined = path.join(" ")
+
+			const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
+			const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+
+			const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+
+			//const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+			const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+
+			fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])
+		}
 
 			//const polygon = d3plus.path2polygon(testPath, {segmentLength: 20})
 
-			const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
-			const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
-
-			const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
-			const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
-
-			const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
+			//const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
+			// const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+			//
+			// //const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+			// const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+			//
+			// const fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])// interpolatedPoints1, point3, interpolatedPoints2, point1]
 
 			// function findLargestRect(aspectRatio){
 			// 	const largestRect = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: aspectRatio, cache: false})
@@ -101,7 +156,7 @@ d3.selection.prototype.rectChart = function init(options) {
 
 			//
 			const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
-			const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.05, cache: false})
+			const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})
 			const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
 
 			const thisData = d

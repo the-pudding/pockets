@@ -47,7 +47,7 @@ d3.selection.prototype.fitChart = function init(options) {
     }, {
       object: 'pen',
 			id: 'pen',
-      width: 0.8,
+      width: 1.5,
       height: 14.5
     }, {
       object: 'hand',
@@ -193,17 +193,17 @@ d3.selection.prototype.fitChart = function init(options) {
       let objectWidth =  scale(objectMap.get(id).width)
       let objectHeight = scale(objectMap.get(id).height)
 
-      // const drawnObject = display
-      //   .append('rect.object')
-      //   .attr('width', objectWidth)
-      //   .attr('height', objectHeight)
-      //   .attr('transform-origin', `top left`)
-      //   .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
-      //   // .attr('transform', `rotate(${d[rectArea].angle})`)
-      //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
-      //   .style('fill', 'none')
-      //   .style('stroke', '#fff')
-      //   .style('stroke-width', '1px')
+      const drawnObject = display
+        .append('rect.object')
+        .attr('width', objectWidth)
+        .attr('height', objectHeight)
+        .attr('transform-origin', `top left`)
+        .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+        // .attr('transform', `rotate(${d[rectArea].angle})`)
+        .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+        .style('fill', 'none')
+        .style('stroke', '#fff')
+        .style('stroke-width', '1px')
 
         const objectID = id
 
