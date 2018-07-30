@@ -57,6 +57,16 @@ d3.selection.prototype.animateChart = function init(options) {
 			id: 'pixel',
 			width: 7.6,
 			height: 15.7
+		}, {
+			object: 'hand',
+			id: 'menHand',
+			width: 8.4,
+			height: 18.9
+		}, {
+			object: 'hand',
+			id: 'womenHand',
+			width: 7.4,
+			height: 17.2
 		}]
 
 		const rectData = []
@@ -148,9 +158,13 @@ d3.selection.prototype.animateChart = function init(options) {
 			fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])
 		}
 
+		const handAngles = d3.range(125, 160, 5)
+		console.log({handAngles})
+
 		const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
 		const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})
 		const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
+		const largestRectHand = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.44, cache: false, angle: handAngles})
 
 		const thisData = d
 		const withRect = [thisData].map(d => {
@@ -158,11 +172,14 @@ d3.selection.prototype.animateChart = function init(options) {
 				...d,
 				rectanglePhone: largestRectPhone,
 				rectanglePen: largestRectPen,
-				rectangleWallet: largestRectWallet
+				rectangleWallet: largestRectWallet,
+				rectangleHand: largestRectHand
 			}
 		})
 
 		rectData.push(withRect[0])
+
+		console.log({withRect})
 
 		const drawnPocket = g
 			.append('path.outline')
@@ -172,11 +189,11 @@ d3.selection.prototype.animateChart = function init(options) {
 		// 	.append('path.largestRect')
 		// 	.attr('d', d => {
 		// 		const path = [
-		// 			"M", largestRectWallet.points[0],
-		// 			"L", largestRectWallet.points[1],
-		// 			"L", largestRectWallet.points[2],
-		// 			"L", largestRectWallet.points[3],
-		// 			"L", largestRectWallet.points[4]
+		// 			"M", largestRectHand.points[0],
+		// 			"L", largestRectHand.points[1],
+		// 			"L", largestRectHand.points[2],
+		// 			"L", largestRectHand.points[3],
+		// 			"L", largestRectHand.points[4]
 		// 		]
 		// 		const joined = path.join(" ")
 		// 		return joined
@@ -216,9 +233,10 @@ d3.selection.prototype.animateChart = function init(options) {
 			const g = group
 		console.log({rectData})
 			let rectArea = null
-			if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
+			if (selObject == 'phone') rectArea = 'rectanglePhone'
 			if (selObject == 'pen') rectArea = 'rectanglePen'
 			if (selObject == 'wallet') rectArea = 'rectangleWallet'
+			if (selObject == 'hand') rectArea = 'rectangleHand'
 
 			// draw object
 			const display = g//$svg.selectAll('.g-vis')
@@ -239,7 +257,7 @@ d3.selection.prototype.animateChart = function init(options) {
 			//   .style('stroke-width', '1px')
 
 			const test = rectData[0][rectArea]
-			console.log({test})
+			console.log({objectWidth, objectHeight})
 
 				const objectID = id
 

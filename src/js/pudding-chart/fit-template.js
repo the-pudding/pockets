@@ -63,6 +63,16 @@ d3.selection.prototype.fitChart = function init(options) {
 			id: 'pixel',
 			width: 7.6,
 			height: 15.7
+		}, {
+			object: 'hand',
+			id: 'menHand',
+			width: 8.4,
+			height: 18.9
+		}, {
+			object: 'hand',
+			id: 'womenHand',
+			width: 7.4,
+			height: 17.2
 		}]
 
 		const rectData = []
@@ -149,6 +159,7 @@ d3.selection.prototype.fitChart = function init(options) {
       if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
       if (selObject == 'pen') rectArea = 'rectanglePen'
       if (selObject == 'wallet') rectArea = 'rectangleWallet'
+			//if (selObject == 'hand') rectArea = 'rectangleHand'
 
       // draw object
       const display = g//$svg.selectAll('.g-vis')
