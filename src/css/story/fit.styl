@@ -1,7 +1,43 @@
 .fit
+
+  .toggle-table
+    text-align center
+    margin-top 1rem
+    .btn
+      background-color transparent
+      color $fg
+      border 1px solid $fg
+      padding 0.25em 0.5em
+      width 7rem
+      text-transform uppercase
+      font-weight 600
+      transition background-color 250ms
+      &:hover
+      	background-color rgba($mid-denim, 0.2)
+
+  .show-more
+    position absolute
+    width 100%
+    height 5rem
+    background linear-gradient(rgba($bg-denim, 0), $bg-denim)
+    bottom 0
+    visibility hidden
+    pointer-events none
+    &.is-visible
+    	visibility visible
   &-container
     max-width 1020px
     margin 0 auto
+
+  figure
+    min-height 320px
+    position relative
+    &.is-truncated
+      max-height 46rem
+      overflow hidden
+
+
+
   .fit-table
     display flex
     flex-direction row

@@ -18,6 +18,7 @@ let selectedPrice = 'All'
 
 // selections
 const section = d3.select('.fit')
+const figure = section.select('figure')
 const container = section.selectAll('.fit-container')
 const $fit = container.selectAll('.fit-table')
 const brand = container.select('.ui-brand')
@@ -26,6 +27,7 @@ const price = container.select('.ui-price')
 const $nav = d3.select('nav')
 const $navUl = $nav.select('nav ul')
 const $navLi = $navUl.selectAll('li')
+const $btn = section.select('.btn');
 
 // animation selections
 const $animation = section.selectAll('.drag-animation')
@@ -65,6 +67,8 @@ function setupAnimateChart(){
         return average
       })
       .entries(data)
+
+  console.log({nest2})
 
   const $sel = d3.select(this)
 
@@ -238,6 +242,23 @@ function setupNav() {
   $navLi.on('click', handleObjectClick)
 }
 
+function setupExpand(){
+  $btn.on('click', () => {
+		const truncated = figure.classed('is-truncated');
+		const text = truncated ? 'Show Fewer' : 'Show All';
+		$btn.text(text);
+		figure.classed('is-truncated', !truncated);
+
+		if (!truncated) {
+			const y = +$btn.at('data-y');
+			window.scrollTo(0, y);
+		}
+
+		$btn.at('data-y', window.scrollY);
+		figure.select('.show-more').classed('is-visible', !truncated);
+	});
+}
+
 function init(){
   Promise.all([loadMeasurements()])
     .then((results) => {
@@ -245,6 +266,7 @@ function init(){
       setupAnimateChart()
       setupFitChart()
       setupNav()
+      setupExpand()
     })
     .catch(err => console.log(err))
 }
