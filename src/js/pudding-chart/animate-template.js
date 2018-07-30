@@ -21,8 +21,7 @@ d3.selection.prototype.animateChart = function init(options) {
 		const marginRight = 0;
 
 		// scales
-		const scaleX = null;
-		const scaleY = null;
+		const scale = d3.scaleLinear()
 
 		// dom elements
 		let $svg = null;
@@ -66,20 +65,22 @@ d3.selection.prototype.animateChart = function init(options) {
 			const g = d3.select(this)
 			const padding = 10
 			const point1 = [padding, padding]
-			const point2 = [padding, padding + scale(d.maxHeightFront)]
+			const point2 = [padding, padding + scale(d.value.maxHeightFront)]
 
-			const curve1Control = [padding + scale(d.maxWidthFront / 2), scale(d.maxHeightFront + 2) + padding]
-			const curve1ControlCutout = [padding + scale(d.maxWidthFront * 0.8), scale(d.maxHeightFront * 0.8) + padding]
-			const curve1End = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
-			const curve1EndCutout = [padding + scale(d.maxWidthFront), scale(d.minHeightFront) + padding]
-			const cutoutPoint = [padding + scale(d.maxWidthFront - 3), scale(d.maxHeightFront) + padding]
+			const curve1Control = [padding + scale(d.value.maxWidthFront / 2), scale(d.value.maxHeightFront + 2) + padding]
+			const curve1ControlCutout = [padding + scale(d.value.maxWidthFront * 0.8), scale(d.value.maxHeightFront * 0.8) + padding]
+			const curve1End = [padding + scale(d.value.maxWidthFront), scale(d.value.minHeightFront) + padding]
+			const curve1EndCutout = [padding + scale(d.maxWidthFront), scale(d.value.minHeightFront) + padding]
+			const cutoutPoint = [padding + scale(d.value.maxWidthFront - 3), scale(d.value.maxHeightFront) + padding]
 
-			const point3Cutout = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
-			const point3 = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
-			const curve2Control = [padding + scale(d.minWidthFront / 2), scale(0.4 * d.maxWidthFront) + padding]
-			const curve2End = [padding + scale(d.maxWidthFront - d.minWidthFront), padding]
+			const point3Cutout = [padding + scale(d.value.maxWidthFront), scale(d.value.rivetHeightFront) + padding]
+			const point3 = [padding + scale(d.value.maxWidthFront), scale(d.value.rivetHeightFront) + padding]
+			const curve2Control = [padding + scale(d.value.minWidthFront / 2), scale(0.4 * d.value.maxWidthFront) + padding]
+			const curve2End = [padding + scale(d.value.maxWidthFront - d.value.minWidthFront), padding]
 
+			let joined = null
 			let path = null
+			let fullPath = null
 
 			if(d.cutout == 'TRUE'){
 				path = [
@@ -87,6 +88,7 @@ d3.selection.prototype.animateChart = function init(options) {
 					"M", point1,
 					// draw a line from initial point straight down the length of the maxHeight
 					"L", point2,
+					////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
 					"L", cutoutPoint,
 					// Add a curve to the other side
 					"Q", curve1ControlCutout, // control point for curve
@@ -95,8 +97,22 @@ d3.selection.prototype.animateChart = function init(options) {
 					"L", point3Cutout,
 					// // Add a curve to the line between rivets
 					"Q", curve2Control, curve2End,
+					//  	,
 					"L", point1
+					// "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
+					////"L", [padding, padding]
 				]
+				joined = path.join(" ")
+
+				const quadraticInterpolator1 = interpolateQuadraticBezier(cutoutPoint, curve1ControlCutout, curve1EndCutout);
+				const quadraticInterpolator2 = interpolateQuadraticBezier(point3Cutout, curve2Control, curve2End);
+
+				const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+
+				//const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+				const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+
+				fullPath = [point1, point2].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])
 			}
 			else {
 
@@ -105,27 +121,100 @@ d3.selection.prototype.animateChart = function init(options) {
 				"M", point1,
 				// draw a line from initial point straight down the length of the maxHeight
 				"L", point2,
+				////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
 				// Add a curve to the other side
 				"Q", curve1Control, // control point for curve
 					curve1End, // end point
 				// Draw a line straight up to the min height - rivet height
 				"L", point3,
 				// Add a curve to the line between rivets
-				"Q", curve2Control, curve2End,
+				"Q", curve2Control, curve2End
+				 	,
 				"L", point1
+				// "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
+				////"L", [padding, padding]
 			]
-		}
-			const joined = path.join(" ")
 
-			const drawnPocket = g
-				.append('path.outline')
-				.attr('d', joined)
+			joined = path.join(" ")
+
+			const quadraticInterpolator1 = interpolateQuadraticBezier(point2, curve1Control, curve1End);
+			const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+
+			const interpolatedPoints1 = d3.range(10).map((d, i, a) => quadraticInterpolator1(d / (a.length - 1)));
+
+			//const quadraticInterpolator2 = interpolateQuadraticBezier(point3, curve2Control, curve2End);
+			const interpolatedPoints2 = d3.range(10).map((d, i, a) => quadraticInterpolator2(d / (a.length - 1)));
+
+			fullPath = [point1].concat(interpolatedPoints1).concat(interpolatedPoints2).concat([point1])
+		}
+
+		const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
+		const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})
+		const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
+
+		const thisData = d
+		const withRect = [thisData].map(d => {
+			return{
+				...d,
+				rectanglePhone: largestRectPhone,
+				rectanglePen: largestRectPen,
+				rectangleWallet: largestRectWallet
+			}
+		})
+
+		rectData.push(withRect[0])
+
+		const drawnPocket = g
+			.append('path.outline')
+			.attr('d', joined)
+
+		// g
+		// 	.append('path.largestRect')
+		// 	.attr('d', d => {
+		// 		const path = [
+		// 			"M", largestRectWallet.points[0],
+		// 			"L", largestRectWallet.points[1],
+		// 			"L", largestRectWallet.points[2],
+		// 			"L", largestRectWallet.points[3],
+		// 			"L", largestRectWallet.points[4]
+		// 		]
+		// 		const joined = path.join(" ")
+		// 		return joined
+		// 	})
+		}
+
+		// Quadratic interpolators from this block https://bl.ocks.org/pbeshai/72c446033a98f99ce1e1371c6eee9644
+
+		function interpolateQuadraticBezier(start, control, end) {
+			// 0 <= t <= 1
+			return function interpolator(t) {
+				return [
+					(Math.pow(1 - t, 2) * start[0]) +
+		      (2 * (1 - t) * t * control[0]) +
+		      (Math.pow(t, 2) * end[0]),
+		      (Math.pow(1 - t, 2) * start[1]) +
+		      (2 * (1 - t) * t * control[1]) +
+		      (Math.pow(t, 2) * end[1]),
+				];
+			};
+		}
+
+		function interpolateQuadraticBezierAngle(start, control, end) {
+			// 0 <= t <= 1
+			return function interpolator(t) {
+				const tangentX = (2 * (1 - t) * (control[0] - start[0])) +
+												 (2 * t * (end[0] - control[0]));
+				const tangentY = (2 * (1 - t) * (control[1] - start[1])) +
+												 (2 * t * (end[1] - control[1]));
+
+				return Math.atan2(tangentY, tangentX) * (180 / Math.PI);
+			}
 		}
 
 		function drawObject(d, selObject, group, id){
 
 			const g = group
-
+		console.log({rectData})
 			let rectArea = null
 			if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
 			if (selObject == 'pen') rectArea = 'rectanglePen'
@@ -135,6 +224,7 @@ d3.selection.prototype.animateChart = function init(options) {
 			const display = g//$svg.selectAll('.g-vis')
 			let objectWidth =  scale(objectMap.get(id).width)
 			let objectHeight = scale(objectMap.get(id).height)
+			console.log({rectArea})
 
 			// const drawnObject = display
 			//   .append('rect.object')
@@ -148,6 +238,9 @@ d3.selection.prototype.animateChart = function init(options) {
 			//   .style('stroke', '#fff')
 			//   .style('stroke-width', '1px')
 
+			const test = rectData[0][rectArea]
+			console.log({test})
+
 				const objectID = id
 
 				display
@@ -157,8 +250,13 @@ d3.selection.prototype.animateChart = function init(options) {
 					.attr('width', objectWidth)
 					.attr('height', objectHeight)
 					.attr("xlink:href", `assets/images/${id}.png`)
+
+				display
+					.attr('transform', `translate(${width * 0.75}, ${-height})`)
+					.transition()
+					.duration(500)
 					.attr('transform-origin', `top left`)
-					.attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+					.attr('transform', `translate(${rectData[0][rectArea].points[0][0]}, ${rectData[0][rectArea].points[0][1]})rotate(${rectData[0][rectArea].angle})`)
 					.attr('class', 'pocket-object')
 
 		}
@@ -170,7 +268,9 @@ d3.selection.prototype.animateChart = function init(options) {
 			// called once at start
 			init() {
 
-				$svg = $sel.append('svg.pudding-chart');
+				$svg = $sel.append('svg');
+
+				$svg.attr('class', d => `animate-chart animate-chart-${d.key}`)
 				const $g = $svg.append('g');
 
 				// offset chart for margins
@@ -188,16 +288,40 @@ d3.selection.prototype.animateChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
+				console.log({$vis})
 				width = $sel.node().offsetWidth - marginLeft - marginRight;
 				height = $sel.node().offsetHeight - marginTop - marginBottom;
+
 				$svg.at({
 					width: width + marginLeft + marginRight,
-					height: height + marginTop + marginBottom
+					height: 300
 				});
+
+
+        scale
+          .domain([0, 29])
+          .range([0, 225])
+
 				return Chart;
 			},
 			// update scales and render chart
 			render() {
+				const padding = 10
+        const inch = 0.393 // conversion factor for cm -> inches
+
+        // Draw front pocket
+        const frontGroup = $svg.select('.g-vis')
+				//
+        // let areaMeasure = null
+        // let rect = []
+        // let numbers = null
+        frontGroup
+          .selectAll('.outline')
+          .data(d => [d])
+          .enter()
+          .append('g')
+					.each(drawPocket)
+
 				return Chart;
 			},
 			// get / set data
@@ -207,6 +331,22 @@ d3.selection.prototype.animateChart = function init(options) {
 				$sel.datum(data);
 				Chart.render();
 				return Chart;
+			},
+			animate(selObject, id){
+				const frontGroup = $svg.select('.g-vis')
+        frontGroup.selectAll('.pocket-object').remove()
+
+        frontGroup
+          .selectAll('.outline-object')
+          .data(d => [d])
+          .enter()
+          .append('g')
+          .each(function(d){
+            const g = d3.select(this)
+            drawObject(d, selObject, g, id)})
+
+				return Chart
+
 			}
 		};
 		Chart.init();

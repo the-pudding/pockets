@@ -134,44 +134,6 @@ d3.selection.prototype.fitChart = function init(options) {
 				.append('path.outline')
 				.attr('d', joined)
 
-        // let rectArea = null
-        // if (object == 'phone' || object == 'hand') rectArea = 'rectanglePhone'
-        // if (object == 'pen') rectArea = 'rectanglePen'
-        // if (object == 'wallet') rectArea = 'rectangleWallet'
-        //
-        // // draw object
-        // const display = g//$svg.selectAll('.g-vis')
-        //   .append('rect.object')
-        //   .attr('width', d => d[rectArea].width)
-        //   .attr('height', d => d[rectArea].height)
-        //   .attr('transform', `rotate(${d[rectArea].angle})`)
-        //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
-
-        	// .attr('d', d => {
-        	// 	const path = [
-        	// 		"M", d.rectangleWallet.points[0],
-        	// 		"L", d.rectangleWallet.points[1],
-        	// 		"L", d.rectangleWallet.points[2],
-        	// 		"L", d.rectangleWallet.points[3],
-        	// 		"L", d.rectangleWallet.points[4]
-        	// 	]
-        	// 	const joined = path.join(" ")
-        	// 	return joined
-        	// })
-
-        // g
-  			// 	.append('path.largestRect')
-  			// 	.attr('d', d => {
-  			// 		const path = [
-  			// 			"M", d.rectangleWallet.points[0],
-  			// 			"L", d.rectangleWallet.points[1],
-  			// 			"L", d.rectangleWallet.points[2],
-  			// 			"L", d.rectangleWallet.points[3],
-  			// 			"L", d.rectangleWallet.points[4]
-  			// 		]
-  			// 		const joined = path.join(" ")
-  			// 		return joined
-  			// 	})
 		}
 
     function drawObject(d, selObject, group, id){
@@ -237,18 +199,15 @@ d3.selection.prototype.fitChart = function init(options) {
           .data(d => d.values)
           .enter()
           .append('div.area-front')
-          .attr('class', d => 'fit-brand visible ' + d.menWomen)
+          .attr('class', 'fit-brand visible')
 
         display = brands.append('div.display')
         let tooltip = brands.append('div.tooltip')
 
         $svg = display.append('svg.fit-canvas')
         const text = display.append('div.text')
-				const leftText = text.append('div.leftText')
-				const rightText = text.append('div.rightText')
-        leftText.append('text.style.tk-atlas').text(d => d.updatedStyle)
-				leftText.append('text.brand.tk-atlas').text(d => d.brand)
-				rightText.append('text.tag.tk-atlas').text(d => (d.menWomen).substring(0, 1))
+        text.append('text.brand.tk-atlas').text(d => d.brand)
+        text.append('text.style.tk-atlas').text(d => d.updatedStyle)
 
         let toolText = tooltip.append('div.tooltip-text')
         const dollars = d3.format("$.2f")

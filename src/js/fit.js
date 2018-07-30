@@ -28,7 +28,9 @@ const $navUl = $nav.select('nav ul')
 const $navLi = $navUl.selectAll('li')
 
 // animation selections
-const $animate = section.selectAll('.drag')
+const $animation = section.selectAll('.drag-animation')
+let animateW = null
+let animateM = null
 
 // for nav
 let dragPosX = 0
@@ -66,13 +68,16 @@ function setupAnimateChart(){
 
   const $sel = d3.select(this)
 
-  const charts = $animate
+  const charts = $animation
     .selectAll('.chart')
     .data(nest2)
     .enter()
     .append('div.chart')
     //.at('data-object', selectedObject)
     .animateChart()
+
+  animateW = charts[1].animate
+  animateM = charts[0].animate
 }
 
 function setupFitChart(){
@@ -157,6 +162,8 @@ function handleObjectClick(){
   // This needs to be connected to drag & drop
   dimW(selectedObject, id)
   dimM(selectedObject, id)
+  animateW(selectedObject, id)
+  animateM(selectedObject, id)
 }
 
 function prefix(prop) {
