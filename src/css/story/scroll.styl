@@ -14,16 +14,38 @@
 
     svg
       .outline
-        stroke black
+        stroke $dark-denim
         stroke-width 2px
         fill none
         stroke-opacity 0.1
 
-      .outline-average
-        stroke red
-        stroke-width 4px
-        fill none
-        stroke-opacity 1
+      .group-men
+        .outline-average
+          stroke $gold-stitch
+          stroke-width 4px
+          fill none
+          stroke-opacity 1
+
+      .group-women
+        .outline-average
+          stroke $tag-red
+          stroke-width 4px
+          fill none
+          stroke-opacity 1
 
   &-text
     position relative
+    width 50%
+    margin 0 auto
+    padding 1rem
+
+    .denim
+      background-color rgba(152,189,228, 0.9)
+      padding 1rem
+
+    .stitching
+      padding 1rem
+      border 1px dashed $dark-denim
+
+      .step-prose
+        margin 0

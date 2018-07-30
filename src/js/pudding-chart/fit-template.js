@@ -237,15 +237,18 @@ d3.selection.prototype.fitChart = function init(options) {
           .data(d => d.values)
           .enter()
           .append('div.area-front')
-          .attr('class', 'fit-brand visible')
+          .attr('class', d => 'fit-brand visible ' + d.menWomen)
 
         display = brands.append('div.display')
         let tooltip = brands.append('div.tooltip')
 
         $svg = display.append('svg.fit-canvas')
         const text = display.append('div.text')
-        text.append('text.brand.tk-atlas').text(d => d.brand)
-        text.append('text.style.tk-atlas').text(d => d.updatedStyle)
+				const leftText = text.append('div.leftText')
+				const rightText = text.append('div.rightText')
+        leftText.append('text.style.tk-atlas').text(d => d.updatedStyle)
+				leftText.append('text.brand.tk-atlas').text(d => d.brand)
+				rightText.append('text.tag.tk-atlas').text(d => (d.menWomen).substring(0, 1))
 
         let toolText = tooltip.append('div.tooltip-text')
         const dollars = d3.format("$.2f")

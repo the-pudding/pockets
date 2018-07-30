@@ -36,7 +36,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 			init() {
         // Add label
         $sel.append('text')
-          .text(d => `${d.key}`)
+          .text(d => `${d.key}`.split(' ')[0] + `'s ` + `${d.key}`.split(' ')[2]).attr('class', 'chart-label')
 
         const container = $sel.append('div.container')
 

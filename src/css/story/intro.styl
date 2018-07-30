@@ -1,18 +1,29 @@
+body
+	background-color $bg-denim
+
 .intro
 	margin 0 auto
-	padding 1.5rem
-	background-color $dark-denim
 	width 100%
 	//height 100vh
 
-	.stitching
-		border 1px dashed $gold-stitch
-		padding 2rem
+	.pocket-bg
+		background-color $light-denim
+		padding 1.5rem
+		height 75vh
+		display flex
+
+		.stitching
+			border 1px dashed $dark-denim
+			padding 2rem 4rem
+			width 100%
+			height 100%
+			align-items center
+			justify-content center
 
 	&__pre-hed
 		text-align center
 		font-weight 200
-		color $gold-stitch
+		color $dark-denim
 		set-type-size('large', true)
 		+mq('bp-3')
 			set-type-size('large', true)
@@ -37,12 +48,12 @@
 		margin 0 auto
 		padding 1.5rem 0
 		text-align center
-		color $gold-stitch
+		//color $gold-stitch
 		set-type-size('small', true)
 
 		a
-			color $gold-stitch
-			border-bottom 1px solid $gold-stitch
+			//color $gold-stitch
+			border-bottom 1px solid $off-black
 
 	&__dek
 		display none

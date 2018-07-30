@@ -31,6 +31,32 @@
           &.visible
             display block
 
+          &.men
+            .tag
+              background-color $gold-stitch
+              color $bg-denim
+              padding 0.5rem
+              text-transform uppercase
+              font-weight 600
+
+          &.women
+            .tag
+              background-color $tag-red
+              color $bg-denim
+              padding 0.5rem
+              text-transform uppercase
+              font-weight 600
+
+          .text
+            display flex
+
+          .leftText
+            justify-content space-between
+
+          .rightText
+            justify-content space-between
+            margin-top 0.5rem
+
           .tooltip
             background-color: $dark-denim
             position absolute
@@ -56,7 +82,7 @@
           .display
             display flex
             flex-direction column
-            border 1px solid black
+            border 1px solid $dark-denim
             position absolute
             width 225px
             height 325px
@@ -65,29 +91,29 @@
             &.dimmed
               opacity 0.2
 
-
             .text
               order 0
-              display flex
-              justify-content: space-between;
               margin 0.75rem 0 1.5rem 0
+              justify-content space-between
 
               .brand
-                margin-left 0.75rem
+                margin 0 0 0 0.75rem
                 text-transform: uppercase;
                 font-weight 600
+                display block
 
               .style
-                margin-right 0.75rem
-                text-align right
+                margin 0 0 0 0.75rem
                 set-type-size('small', true)
+                display block
+
             svg
               order 1
 
               .outline
                 stroke $dark-denim
                 stroke-width 1px
-                fill rgba($dark-denim, .2)
+                fill rgba($light-denim, .2)
                 stroke-dasharray 5,5
 
               .largestRect
@@ -97,15 +123,22 @@
                 stroke-dasharray 5,5
 
               .measure
+                fill $mid-denim
                 set-type-size('x-small')
   .drag
     margin 0 auto
     width 30rem
     font-weight 600
     text-align center
-    span
-      background-color $dark-denim
-      padding 0.1rem 0.25rem
-      color $gold-stitch
-      border 1px dashed $gold-stitch
+    .stat-women
+      background-color $tag-red
+      padding 0.25rem 0.5rem
+      color $dark-denim
+      //border 1px dashed $gold-stitch
+      set-type-size('large', true)
+    .stat-men
+      background-color $gold-stitch
+      padding 0.25rem 0.5rem
+      color $dark-denim
+      //border 1px dashed $gold-stitch
       set-type-size('large', true)
