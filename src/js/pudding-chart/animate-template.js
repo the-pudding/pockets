@@ -60,13 +60,17 @@ d3.selection.prototype.animateChart = function init(options) {
 		}, {
 			object: 'hand',
 			id: 'menHand',
-			width: 8.4,
-			height: 18.9
+			width: 7.7,
+			height: 13.4,
+			fingerHeight: 18.9,
+			fingerWidth: 9.8
 		}, {
 			object: 'hand',
 			id: 'womenHand',
-			width: 7.4,
-			height: 17.2
+			width: 7,
+			height: 12.0,
+			fingerHeight: 17.2,
+			fingerWidth: 8.9
 		}]
 
 		const rectData = []
@@ -163,7 +167,7 @@ d3.selection.prototype.animateChart = function init(options) {
 		const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
 		const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})
 		const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
-		const largestRectHand = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.44, cache: false, angle: handAngles})
+		const largestRectHand = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.57, cache: false, angle: handAngles})
 
 		const thisData = d
 		const withRect = [thisData].map(d => {
@@ -260,6 +264,8 @@ d3.selection.prototype.animateChart = function init(options) {
 
 				const objectID = id
 
+			if(selObject != 'hand'){
+
 				display
 					.append('svg:image')
 					// .attr('x', -9)
@@ -275,6 +281,24 @@ d3.selection.prototype.animateChart = function init(options) {
 					.attr('transform-origin', `top left`)
 					.attr('transform', `translate(${rectData[0][rectArea].points[0][0]}, ${rectData[0][rectArea].points[0][1]})rotate(${rectData[0][rectArea].angle})`)
 					.attr('class', 'pocket-object')
+			}
+			else {
+				display
+					.append('svg:image')
+					// .attr('x', -9)
+					// .attr('y', -12)
+					.attr('width', scale(objectMap.get(id).fingerWidth))
+					.attr('height', scale(objectMap.get(id).fingerHeight))
+					.attr("xlink:href", `assets/images/${id}.png`)
+
+				display
+					.attr('transform', `translate(${width * 0.75}, ${-height})`)
+					.transition()
+					.duration(500)
+					.attr('transform-origin', `top left`)
+					.attr('transform', `translate(${rectData[0][rectArea].points[0][0] + ((scale(objectMap.get(id).fingerWidth) - objectWidth) / 2)}, ${rectData[0][rectArea].points[0][1]})rotate(${rectData[0][rectArea].angle})`)
+					.attr('class', 'pocket-object')
+			}
 
 		}
 

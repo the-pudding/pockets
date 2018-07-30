@@ -155,12 +155,12 @@ d3.selection.prototype.rectChart = function init(options) {
 			// console.log({withRect})
 
 			//
-			const handAngles = d3.range(125, 160, 5)
+			const handAngles = d3.range(150, 180, 5)
 
 			const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
 			const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})
 			const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
-			const largestRectHand = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.44, cache: false, angle: handAngles})
+			const largestRectHand = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.57, cache: false, angle: handAngles})
 
 			const thisData = d
 			const withRect = [thisData].map(d => {

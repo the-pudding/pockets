@@ -12,8 +12,6 @@ d3.selection.prototype.fitChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
-    let object = $sel.at('data-object')
-    console.log({object})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -66,13 +64,17 @@ d3.selection.prototype.fitChart = function init(options) {
 		}, {
 			object: 'hand',
 			id: 'menHand',
-			width: 9.8,
-			height: 18.9
+			width: 7.7,
+			height: 13.4,
+			fingerHeight: 18.9,
+			fingerWidth: 9.8
 		}, {
 			object: 'hand',
 			id: 'womenHand',
-			width: 8.9,
-			height: 17.2
+			width: 7,
+			height: 12.0,
+			fingerHeight: 17.2,
+			fingerWidth: 8.9
 		}]
 
 		const rectData = []
@@ -144,6 +146,22 @@ d3.selection.prototype.fitChart = function init(options) {
 				.append('path.outline')
 				.attr('d', joined)
 
+			const largestRectHand = d.rectangleHand
+
+				// g
+				// 	.append('path.largestRect')
+				// 	.attr('d', d => {
+				// 		const path = [
+				// 			"M", largestRectHand.points[0],
+				// 			"L", largestRectHand.points[1],
+				// 			"L", largestRectHand.points[2],
+				// 			"L", largestRectHand.points[3],
+				// 			"L", largestRectHand.points[4]
+				// 		]
+				// 		const joined = path.join(" ")
+				// 		return joined
+				// 	})
+
 		}
 
     function drawObject(d, selObject, group, id){
@@ -166,30 +184,47 @@ d3.selection.prototype.fitChart = function init(options) {
       let objectWidth =  scale(objectMap.get(id).width)
       let objectHeight = scale(objectMap.get(id).height)
 
-      const drawnObject = display
-        .append('rect.object')
-        .attr('width', objectWidth)
-        .attr('height', objectHeight)
-        .attr('transform-origin', `top left`)
-        .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
-        // .attr('transform', `rotate(${d[rectArea].angle})`)
-        .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
-        .style('fill', 'none')
-        .style('stroke', '#fff')
-        .style('stroke-width', '1px')
+      // const drawnObject = display
+      //   .append('rect.object')
+			// 	.attr('width', scale(objectMap.get(id).fingerWidth))
+			// 	.attr('height', scale(objectMap.get(id).fingerHeight))
+      //   .attr('transform-origin', `top left`)
+      //   .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+      //   // .attr('transform', `rotate(${d[rectArea].angle})`)
+      //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+      //   .style('fill', 'none')
+      //   .style('stroke', '#fff')
+      //   .style('stroke-width', '1px')
 
         const objectID = id
 
-        display
-          .append('svg:image')
-          // .attr('x', -9)
-          // .attr('y', -12)
-          .attr('width', objectWidth)
-          .attr('height', objectHeight)
-          .attr("xlink:href", `assets/images/${id}.png`)
-          .attr('transform-origin', `top left`)
-          .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
-          .attr('class', 'pocket-object')
+				if (selObject != 'hand'){
+					display
+						.append('svg:image')
+						// .attr('x', -9)
+						// .attr('y', -12)
+						.attr('width', objectWidth)
+						.attr('height', objectHeight)
+						.attr("xlink:href", `assets/images/${id}.png`)
+						.attr('transform-origin', `top left`)
+						.attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+						.attr('class', 'pocket-object')
+				}
+
+				else {
+					display
+						.append('svg:image')
+						// .attr('x', -9)
+						// .attr('y', -12)
+						.attr('width', scale(objectMap.get(id).fingerWidth))
+						.attr('height', scale(objectMap.get(id).fingerHeight))
+						.attr("xlink:href", `assets/images/${id}.png`)
+						.attr('transform-origin', `top left`)
+						.attr('transform', `translate(${d[rectArea].points[0][0] + ((scale(objectMap.get(id).fingerWidth) - objectWidth) / 2)}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+						.attr('class', 'pocket-object')
+				}
+
+
 
     }
 
@@ -355,9 +390,10 @@ d3.selection.prototype.fitChart = function init(options) {
           .select('.display')
           .classed('dimmed', function(d){
             let rectArea = null
-            if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
+            if (selObject == 'phone') rectArea = 'rectanglePhone'
             if (selObject == 'pen') rectArea = 'rectanglePen'
             if (selObject == 'wallet') rectArea = 'rectangleWallet'
+						if (selObject == 'hand') rectArea = 'rectangleHand'
 
             let objectWidth =  scale(objectMap.get(id).width)
             let objectHeight = scale(objectMap.get(id).height)

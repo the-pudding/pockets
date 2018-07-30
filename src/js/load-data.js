@@ -60,13 +60,19 @@ function definePrice(price){
 }
 
 function loadMeasurements(cb) {
-	d3.loadData(//'assets/data/measurements.csv',
-    'assets/data/measurementsRectangles.json',
-		(err, response) => {
-			//let data = cleanData(response[0])
-      let data = cleanDataRect(response[0])
-			cb (err, data)
-		})
+  // Run to calculate rectangles
+	// d3.loadData('assets/data/measurements.csv',
+	// 	(err, response) => {
+	// 		let data = cleanData(response[0])
+	// 		cb (err, data)
+	// 	})
+
+    // Run once rectangles have been calculated
+    d3.loadData('assets/data/measurementsRectangles.json',
+  		(err, response) => {
+        let data = cleanDataRect(response[0])
+  			cb (err, data)
+  		})
 }
 
 function init() {
