@@ -159,7 +159,6 @@ d3.selection.prototype.animateChart = function init(options) {
 		}
 
 		const handAngles = d3.range(125, 160, 5)
-		console.log({handAngles})
 
 		const largestRectPhone = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.5, cache: false})
 		const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})

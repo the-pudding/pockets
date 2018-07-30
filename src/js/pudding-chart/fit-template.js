@@ -66,12 +66,12 @@ d3.selection.prototype.fitChart = function init(options) {
 		}, {
 			object: 'hand',
 			id: 'menHand',
-			width: 8.4,
+			width: 9.8,
 			height: 18.9
 		}, {
 			object: 'hand',
 			id: 'womenHand',
-			width: 7.4,
+			width: 8.9,
 			height: 17.2
 		}]
 
@@ -156,27 +156,27 @@ d3.selection.prototype.fitChart = function init(options) {
       const g = group
 
       let rectArea = null
-      if (selObject == 'phone' || selObject == 'hand') rectArea = 'rectanglePhone'
+      if (selObject == 'phone') rectArea = 'rectanglePhone'
       if (selObject == 'pen') rectArea = 'rectanglePen'
       if (selObject == 'wallet') rectArea = 'rectangleWallet'
-			//if (selObject == 'hand') rectArea = 'rectangleHand'
+			if (selObject == 'hand') rectArea = 'rectangleHand'
 
       // draw object
       const display = g//$svg.selectAll('.g-vis')
       let objectWidth =  scale(objectMap.get(id).width)
       let objectHeight = scale(objectMap.get(id).height)
 
-      // const drawnObject = display
-      //   .append('rect.object')
-      //   .attr('width', objectWidth)
-      //   .attr('height', objectHeight)
-      //   .attr('transform-origin', `top left`)
-      //   .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
-      //   // .attr('transform', `rotate(${d[rectArea].angle})`)
-      //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
-      //   .style('fill', 'none')
-      //   .style('stroke', '#fff')
-      //   .style('stroke-width', '1px')
+      const drawnObject = display
+        .append('rect.object')
+        .attr('width', objectWidth)
+        .attr('height', objectHeight)
+        .attr('transform-origin', `top left`)
+        .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+        // .attr('transform', `rotate(${d[rectArea].angle})`)
+        .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+        .style('fill', 'none')
+        .style('stroke', '#fff')
+        .style('stroke-width', '1px')
 
         const objectID = id
 
@@ -210,15 +210,20 @@ d3.selection.prototype.fitChart = function init(options) {
           .data(d => d.values)
           .enter()
           .append('div.area-front')
-          .attr('class', 'fit-brand visible')
+          .attr('class', d => `fit-brand visible ${d.menWomen}`)
 
         display = brands.append('div.display')
         let tooltip = brands.append('div.tooltip')
 
         $svg = display.append('svg.fit-canvas')
         const text = display.append('div.text')
-        text.append('text.brand.tk-atlas').text(d => d.brand)
-        text.append('text.style.tk-atlas').text(d => d.updatedStyle)
+				const leftText = text.append('div.leftText')
+					//text.append('text.style.tk-atlas').text(d => d.updatedStyle)
+
+				const rightText = text.append('div.rightText')
+        leftText.append('text.style.tk-atlas').text(d => d.updatedStyle)
+				leftText.append('text.brand.tk-atlas').text(d => d.brand)
+				rightText.append('text.tag.tk-atlas').text(d => (d.menWomen).substring(0, 1))
 
         let toolText = tooltip.append('div.tooltip-text')
         const dollars = d3.format("$.2f")
