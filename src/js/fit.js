@@ -1,4 +1,5 @@
 import './pudding-chart/fit-template'
+import './pudding-chart/animate-template'
 import loadMeasurements from './load-data'
 
 
@@ -16,7 +17,8 @@ let selectedStyle = 'All'
 let selectedPrice = 'All'
 
 // selections
-const container = d3.selectAll('.fit-container')
+const section = d3.select('.fit')
+const container = section.selectAll('.fit-container')
 const $fit = container.selectAll('.fit-table')
 const brand = container.select('.ui-brand')
 const style = container.select('.ui-style')
@@ -24,6 +26,9 @@ const price = container.select('.ui-price')
 const $nav = d3.select('nav')
 const $navUl = $nav.select('nav ul')
 const $navLi = $navUl.selectAll('li')
+
+// animation selections
+const $animate = section.selectAll('.drag')
 
 // for nav
 let dragPosX = 0
@@ -35,7 +40,42 @@ const dragOffset = 0
 
 function resize(){}
 
-function setupChart(){
+function setupAnimateChart(){
+  const nestedData = d3.nest()
+    .key(d => d.menWomen)
+    .entries(data)
+
+    const nest2 = d3.nest()
+      .key(d => d.menWomen)
+      .rollup((leaves, i) => {
+        const average = {
+          brand: 'average',
+          maxHeightFront: d3.round(d3.mean(leaves, d => d.maxHeightFront), 1),
+          minHeightFront: d3.round(d3.mean(leaves, d => d.minHeightFront), 1),
+          rivetHeightFront: d3.round(d3.mean(leaves, d => d.rivetHeightFront), 1),
+          maxWidthFront: d3.round(d3.mean(leaves, d => d.maxWidthFront), 1),
+          minWidthFront: d3.round(d3.mean(leaves, d => d.minWidthFront), 1),
+          maxHeightBack: d3.round(d3.mean(leaves, d => d.maxHeightBack), 1),
+          minHeightBack: d3.round(d3.mean(leaves, d => d.minHeightBack), 1),
+          maxWidthBack: d3.round(d3.mean(leaves, d => d.maxWidthBack), 1),
+          minWidthBack: d3.round(d3.mean(leaves, d => d.minWidthBack), 1),
+        }
+        return average
+      })
+      .entries(data)
+
+  const $sel = d3.select(this)
+
+  const charts = $animate
+    .selectAll('.chart')
+    .data(nest2)
+    .enter()
+    .append('div.chart')
+    //.at('data-object', selectedObject)
+    .animateChart()
+}
+
+function setupFitChart(){
   const $sel = $fit
 
   sortedData = data.sort((a, b) => {
@@ -195,7 +235,8 @@ function init(){
   Promise.all([loadMeasurements()])
     .then((results) => {
       data = results[0]
-      setupChart()
+      setupAnimateChart()
+      setupFitChart()
       setupNav()
     })
     .catch(err => console.log(err))
