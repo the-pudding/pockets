@@ -14,10 +14,11 @@ d3.selection.prototype.scrollChart = function init(options) {
 		// dimension stuff
 		let width = 0;
 		let height = 0;
-		const marginTop = 0;
+		const marginTop = 40;
 		const marginBottom = 0;
 		const marginLeft = 0;
 		const marginRight = 0;
+		const fontSize = 12
 
 		// scales
 		const scale = d3.scaleLinear()
@@ -56,7 +57,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 				// defaults to grabbing dimensions from container element
 				width = $sel.node().offsetWidth - marginLeft - marginRight;
 				//height = $sel.node().offsetHeight - marginTop - marginBottom;
-				height = 300 - marginTop - marginBottom;
+				height = 400 - marginTop - marginBottom;
 				$svgFront.at({
 					width: width + marginLeft + marginRight,
 					height: height + marginTop + marginBottom
@@ -64,7 +65,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 
         scale
           .domain([0, 29])
-          .range([0, 280])
+          .range([0, height - marginTop])
 
 				return Chart;
 			},
@@ -110,7 +111,8 @@ d3.selection.prototype.scrollChart = function init(options) {
             return joined
           })
           .attr('class', d => d.brand == 'average' ? `outline-average` : `outline`)
-					.attr("transform", "translate(" + (width/2.75) + ",0)")
+					//.attr("transform", "translate(" + (width/2.75) + ",0)")
+					.attr('transform', `translate(${width / 2.75}, ${marginTop})`)
           .attr('stroke-dasharray', function(d){
             return this.getTotalLength()
           })
@@ -118,12 +120,24 @@ d3.selection.prototype.scrollChart = function init(options) {
             return this.getTotalLength()
           })
 
-          $svgFront.select('.group-women')
-            .attr('transform', `translate(${-(width / 3)}, 0)`)
+					const label = $gFront
+						.selectAll('.label')
+						.data(d => [d])
+						.enter()
+						.append('text')
+						.text(d => {console.log(d)
+							return d.key})
+						.attr('class', 'label tk-atlas')
+						.attr('transform', `translate(${(width / 2.75) + padding}, ${fontSize})`)
+
+          const groupW = $svgFront.select('.group-women')
+            .attr('transform', `translate(${-(width / 3)}, ${fontSize})`)
+
+
 
           $svgFront.select('.group-men')
-            .attr('transform', `translate(${width / 3}, 0)`)
-            
+            .attr('transform', `translate(${width / 3}, ${fontSize})`)
+
 				return Chart;
 			},
 			// get / set data
@@ -138,12 +152,13 @@ d3.selection.prototype.scrollChart = function init(options) {
       toggle(step){
         const women = $svgFront.select('.group-women')
         const men = $svgFront.select('.group-men')
+				const label = $svgFront.selectAll('.label')
 
         function step0(){
           women
             .transition()
             .duration(500)
-            .attr('transform', `translate(${-(width / 3)}, 0)`)
+            .attr('transform', `translate(${-(width / 3)}, ${fontSize})`)
 
           women.selectAll('.outline')
             .style('stroke-opacity', 0.1)
@@ -155,7 +170,7 @@ d3.selection.prototype.scrollChart = function init(options) {
           men
             .transition()
             .duration(500)
-            .attr('transform', `translate(${width / 3}, 0)`)
+            .attr('transform', `translate(${width / 3}, ${fontSize})`)
 
           men.selectAll('.outline')
             .style('stroke-opacity', 0.1)
@@ -173,9 +188,22 @@ d3.selection.prototype.scrollChart = function init(options) {
               .attr('stroke-dashoffset', function(d){
                 return this.getTotalLength()
               })
+
+						label
+							.attr('opacity', 1)
         }
 
         function step1(){
+					women
+						.transition()
+						.duration(500)
+						.attr('transform', `translate(${-(width / 3)}, ${fontSize})`)
+
+					men
+						.transition()
+						.duration(500)
+						.attr('transform', `translate(${width / 3}, ${fontSize})`)
+
           women.selectAll('.outline-average')
             .raise()
             .transition()
@@ -193,24 +221,27 @@ d3.selection.prototype.scrollChart = function init(options) {
           women.selectAll('.outline')
             .transition()
             .duration(800)
-            .style('stroke-opacity', 0.02)
+            .style('stroke-opacity', 0.05)
 
           men.selectAll('.outline')
             .transition()
             .duration(800)
-            .style('stroke-opacity', 0.02)
+            .style('stroke-opacity', 0.05)
+
+					label
+						.attr('opacity', 1)
         }
 
         function step2(){
           women
             .transition()
             .duration(500)
-            .attr('transform', `translate(0, 0)`)
+            .attr('transform', `translate(0, ${fontSize})`)
 
           men
             .transition()
             .duration(500)
-            .attr('transform', `translate(0, 0)`)
+            .attr('transform', `translate(0, ${fontSize})`)
 
             women.selectAll('.outline')
               .transition()
@@ -221,6 +252,11 @@ d3.selection.prototype.scrollChart = function init(options) {
               .transition()
               .duration(800)
               .style('stroke-opacity', 0)
+
+						label
+							.transition()
+							.duration(800)
+							.attr('opacity', 0)
         }
 
         // Run specific function based on step
