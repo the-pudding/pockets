@@ -59,7 +59,8 @@ function setupChart(){
 
 function resize(){
   const pageWidth = window.innerWidth
-  const stepHeight = Math.floor(window.innerHeight * 0.8)
+  const stepHeight = Math.floor(window.innerHeight)
+  console.log({stepHeight})
 
   step
     .style('height', `${stepHeight}px`)
