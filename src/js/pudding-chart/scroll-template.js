@@ -144,6 +144,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 					const measurements = $gFront
 						.append('g')
 						.attr('class', 'g-measurements')
+						.attr('opacity', 0)
 						// .attr('transform', `translate(${(width / 2.75) + padding}, ${fontSize})`)
 
 
@@ -399,11 +400,13 @@ d3.selection.prototype.scrollChart = function init(options) {
               .attr('stroke-dashoffset', function(d){
                 return this.getTotalLength()
               })
+							.attr('opacity', 0)
 
             men.selectAll('.outline-average')
               .attr('stroke-dashoffset', function(d){
                 return this.getTotalLength()
               })
+							.attr('opacity', 0)
 
 						label
 							.attr('opacity', 1)
@@ -429,6 +432,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             .duration(500)
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
+						.attr('opacity', 1)
 
           men.selectAll('.outline-average')
             .raise()
@@ -436,6 +440,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             .duration(500)
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
+						.attr('opacity', 1)
 
           women.selectAll('.outline')
 						.style('stroke-opacity', 0.1)
@@ -477,6 +482,12 @@ d3.selection.prototype.scrollChart = function init(options) {
               .transition()
               .duration(800)
               .style('stroke-opacity', 0)
+
+						women.selectAll('.outline-average')
+							.attr('opacity', 1)
+
+						men.selectAll('.outline-average')
+							.attr('opacity', 1)
 
 						label
 							.transition()

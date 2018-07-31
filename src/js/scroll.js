@@ -84,7 +84,8 @@ function setupScroll(){
     graphic: '.scroll-graphic',
     text: '.scroll-text',
     step: '.step',
-    debug: false
+    debug: false,
+    offset: 0.85
   })
   .onStepEnter(handleStepEnter)
 }
