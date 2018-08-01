@@ -22,6 +22,11 @@ d3.selection.prototype.scrollChart = function init(options) {
 		const fontSize = 16
 		const padding = 10
 
+		// colors
+		let transparency = 0.2
+		let red = `rgba(231, 80, 63, ${transparency})`
+		let gold = `rgba(246, 194, 47, ${transparency})`
+
 		// scales
 		const scale = d3.scaleLinear()
 		//const scaleY = null;
@@ -130,6 +135,7 @@ d3.selection.prototype.scrollChart = function init(options) {
           .attr('stroke-dashoffset', function(d){
             return this.getTotalLength()
           })
+					.style('fill', 'none')
 
 					const label = $gFront
 						.selectAll('.label')
@@ -401,12 +407,14 @@ d3.selection.prototype.scrollChart = function init(options) {
                 return this.getTotalLength()
               })
 							.attr('opacity', 0)
+							.style('fill', 'none')
 
             men.selectAll('.outline-average')
               .attr('stroke-dashoffset', function(d){
                 return this.getTotalLength()
               })
 							.attr('opacity', 0)
+							.style('fill', 'none')
 
 						label
 							.attr('opacity', 1)
@@ -433,6 +441,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
 						.attr('opacity', 1)
+						.style('fill', red)
 
           men.selectAll('.outline-average')
             .raise()
@@ -441,6 +450,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
 						.attr('opacity', 1)
+						.style('fill', gold)
 
           women.selectAll('.outline')
 						.style('stroke-opacity', 0.1)
@@ -485,9 +495,11 @@ d3.selection.prototype.scrollChart = function init(options) {
 
 						women.selectAll('.outline-average')
 							.attr('opacity', 1)
+							.style('fill', red)
 
 						men.selectAll('.outline-average')
 							.attr('opacity', 1)
+							.style('fill', gold)
 
 						label
 							.transition()
