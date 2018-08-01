@@ -1,7 +1,11 @@
 <section class='debunk'>
+  {{#each copy.debunk-intro}}
+    <p class='prose'>{{{value}}}</p>
+  {{/each}}
+
   {{#each copy.debunk}}
     <div class='debunk-wrapper'>
-      <h2 class='section-hed tk-atlas'>{{title}}</h2>
+      <h3 class='section-hed tk-atlas'>{{title}}</h2>
       <p class='prose'>{{text}}</p>
       <figure class='debunk-graphic' data-location='{{location}}'></figure>
     </div>
