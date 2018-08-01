@@ -158,8 +158,20 @@ function setupObjectSelect(){
 }
 
 function handleObjectClick(){
-  console.log("clicked")
+  const clickSentence = section.select('.click-sentence')
+  const statSentence = section.select('.stat-sentence')
+  if (clickSentence.classed('is-visible')) {
+    clickSentence.classed('is-visible', false)
+    statSentence.classed('is-visible', true)
+  }
+
+
+  $navLi.classed('is-active', false)
   const item = d3.select(this)
+
+
+
+  item.classed('is-active', true)
   const name = item.at('data-type')
   selectedObject = name
   const id = item.at('data-id')
@@ -226,9 +238,6 @@ function handleDragEnd() {
 	$nav.classed('is-drag', false);
 }
 
-function handleNavClick(){
-
-}
 
 function setupNav() {
 	const drag = d3.drag();

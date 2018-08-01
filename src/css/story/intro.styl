@@ -6,6 +6,18 @@ body
 	width 100%
 	//height 100vh
 
+	&-details
+		width $column-width
+		margin 0 auto
+		display flex
+		flex-direction column
+		align-items center
+
+		.intro__date
+			set-type-size('small')
+			color lighten($mid-denim, 10)
+			margin 0
+
 	.pocket-bg
 		background-color $light-denim
 		padding 1.5rem
@@ -44,11 +56,12 @@ body
 			set-type-size('xxxx-large', true)
 
 	&__byline
-		max-width $column-width
-		margin 0 auto
-		padding 1.5rem 0
-		text-align center
+		// max-width $column-width
+		// margin 0 auto
+		// padding 1.5rem 0
+		// text-align center
 		//color $gold-stitch
+		margin-bottom 0.5rem
 		set-type-size('small', true)
 
 		a

@@ -6,8 +6,30 @@
   display flex
   flex-direction column
 
-  .stat-sentence
+  &-sentences
+    position relative
+    height 7rem
     order 1
+    margin 0 auto
+    width 35rem
+
+  .click-sentence
+    opacity 0
+    position absolute
+    transition 300ms
+    padding 0 1rem
+
+    &.is-visible
+      opacity 1
+      transition 300ms
+
+  .stat-sentence
+    opacity 0
+    position absolute
+    transition 300ms
+    padding 0 1rem
+    line-height 2
+    text-align: center
 
     .stat-women
       background-color $tag-red
@@ -21,6 +43,10 @@
       color $bg-denim
       //border 1px dashed $gold-stitch
       set-type-size('large', true)
+
+    &.is-visible
+      opacity 1
+      transition 300ms
 
   &-animation
     display flex

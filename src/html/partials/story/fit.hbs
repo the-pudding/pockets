@@ -3,10 +3,13 @@
   {{#each copy.fit-text}}
     <p class='prose'>{{{value}}}</p>
   {{/each}}
-  
+
   {{> story/nav }}
   <div class='drag'>
-    <p class='stat-sentence tk-atlas'><span class='stat-women'></span> of women's front pockets and <span class='stat-men'></span> of men's front pockets can fit this item.</p>
+    <div class='drag-sentences'>
+      <p class='click-sentence tk-atlas is-visible'>{{copy.test-fit}}</p>
+      <p class='stat-sentence tk-atlas'><span class='stat-women'></span> of women's front pockets and <span class='stat-men'></span> of men's front pockets can fit this item.</p>
+    </div>
     <div class='drag-animation'></div>
   </div>
 

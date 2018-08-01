@@ -8,7 +8,7 @@
 		</div>
 	</div>
 
-	<div class='intro-prose'>
+	<div class='intro-details'>
 		<p class='intro__byline tk-atlas'>By
 			<a href='{{meta.author1.url}}' target='_blank'>
 				<strong>{{meta.author1.name}}</strong>
@@ -18,6 +18,10 @@
 				<strong>{{meta.author2.name}}</strong>
 			</a>
 		</p>
+		<p class='intro__date tk-atlas'>{{{copy.date}}}</p>
+	</div>
+
+	<div class='intro-prose'>
 		{{#each copy.intro}}
 			<p class='prose'>{{{value}}}</p>
 		{{/each}}
