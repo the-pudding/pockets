@@ -6,6 +6,7 @@ let data = null
 
 const scroller = scrollama()
 let toggle = null
+let templateResize = null
 
 // selections
 const $scroll = d3.selectAll('.scroll-graphic')
@@ -52,6 +53,7 @@ function setupChart(){
     .scrollChart()
 
   toggle = chart.toggle
+  templateResize = chart.resize
 
     resize()
     setupScroll(chart)
@@ -60,7 +62,6 @@ function setupChart(){
 function resize(){
   const pageWidth = window.innerWidth
   const stepHeight = Math.floor(window.innerHeight)
-  console.log({stepHeight})
 
   step
     .style('height', `${stepHeight}px`)
@@ -71,6 +72,7 @@ function resize(){
     .style('width', `${containerWidth}px`)
 
   scroller.resize()
+  templateResize()
 }
 
 function handleStepEnter(response){

@@ -29,6 +29,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 
 		// scales
 		const scale = d3.scaleLinear()
+		const inch = 0.393 // conversion factor for cm -> inches
 		//const scaleY = null;
 
 		// dom elements
@@ -82,16 +83,19 @@ d3.selection.prototype.scrollChart = function init(options) {
 
 				scaledMaxWidth = scale(maxWidths)
 
+				// if pockets are drawn on page resize, resize them too
+				const outlines = $sel.selectAll('.outline, .outline-average')
+
+				if (outlines.size() > 0){
+					console.log("Updating!")
+					Chart.update()
+				}
+
 				return Chart;
 			},
 			// update scales and render chart
 			render() {
-				const inch = 0.393 // conversion factor for cm -> inches
-
         // Draw front pocket
-        //const frontGroup = $svgFront.select('.g-vis')
-
-        let areaMeasure = null
         $gFront
           .selectAll('.outline')
           .data(d => {
@@ -100,35 +104,7 @@ d3.selection.prototype.scrollChart = function init(options) {
           })
           .enter()
           .append('path')
-          .attr('d', function(d){
-            const path = [
-              // move to the right padding amount and down padding amount
-              "M", [padding, padding],
-              // draw a line from initial point straight down the length of the maxHeight
-              "l", [0, scale(d.maxHeightFront)],
-              ////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
-              // Add a curve to the other side
-              "q", [scale(d.maxWidthFront / 2), scale(0.1 * d.maxHeightFront)], // control point for curve
-                [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)], // end point
-              // Draw a line straight up to the min height - rivet height
-              "l", [0, -scale(d.minHeightFront - d.rivetHeightFront)],
-              // Add a curve to the line between rivets
-              "q", [-scale(d.minWidthFront * 2 / 3), scale(0.1 * d.maxHeightFront)],
-                [-scale(d.minWidthFront), -scale(d.rivetHeightFront)],
-              "l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
-              ////"L", [padding, padding]
-            ]
-            const numbers = path.filter(d => {
-              const remove = ["M", "l", "L", "Q", "q"]
-              return !remove.includes(d)
-            })
-            areaMeasure = d3.polygonArea(numbers)
-            const joined = path.join(" ")
-            return joined
-          })
           .attr('class', d => d.brand == 'average' ? `outline-average` : `outline`)
-					//.attr("transform", "translate(" + (width/2.75) + ",0)")
-					//.attr('transform', `translate(${width / 2.75}, ${marginTop})`)
           .attr('stroke-dasharray', function(d){
             return this.getTotalLength()
           })
@@ -142,110 +118,45 @@ d3.selection.prototype.scrollChart = function init(options) {
 						.data(d => [d])
 						.enter()
 						.append('text')
-						.text(d => {console.log(d)
-							return d.key})
+						.text(d => d.key)
 						.attr('class', 'label tk-atlas')
-						//.attr('transform', `translate(${(width / 2.75) + padding}, ${fontSize})`)
 
 					const measurements = $gFront
 						.append('g')
 						.attr('class', 'g-measurements')
 						.attr('opacity', 0)
-						// .attr('transform', `translate(${(width / 2.75) + padding}, ${fontSize})`)
 
+					measurements
+						.selectAll('.measure-line-maxHeight')
+						.data((d, i) => {
+							const brand = d.value
+							const length = brand.length
+							const average = brand[length - 1]
+							return [average]})
+						.enter()
+						.append('path')
+						.attr('class', d => {
+							if (d.maxHeightFront < 20){
+								return 'measure-line measure-line-maxHeight measure-line-woman'
+							}
+							else return 'measure-line measure-line-maxHeight measure-line-man'
+						})
 
-						measurements
-							.selectAll('.measure-line-maxHeight')
-							.data((d, i) => {
-								const brand = d.value
-								const length = brand.length
-								const average = brand[length - 1]
-								return [average]})
-							.enter()
-							.append('path')
-							.attr('d', d => {
-								console.log({d})
-								let path = null
-								if (d.maxHeightFront < 20){
-									console.log("woman")
-									path = [
-										// move to the right padding amount and down padding amount
-										"M", [padding, padding],
-										// draw a line from initial point straight down the length of the maxHeight
-										"l", [-(marginLeft / 2), 0],
-										"l", [0, scale(d.maxHeightFront)],
-										"l", [padding, 0]
-									]
-								}
-								else {
-									console.log("man")
-									path = [
-										// move to the right padding amount and down padding amount
-										"M", [padding, padding],
-										// draw a line from initial point straight down the length of the maxHeight
-										"l", [-(marginLeft * 1.2), 0],
-										"l", [0, scale(d.maxHeightFront)],
-										"l", [(marginLeft * 1.2), 0]
-									]
-								}
-								const joined = path.join(" ")
-								return joined
-							})
-							.attr('class', d => {
-								if (d.maxHeightFront < 20){
-									return 'measure-line measure-line-maxHeight measure-line-woman'
-								}
-								else return 'measure-line measure-line-maxHeight measure-line-man'
-							})
-
-							measurements
-								.selectAll('.measure-line-maxWidth')
-								.data((d, i) => {
-									const brand = d.value
-									const length = brand.length
-									const average = brand[length - 1]
-									return [average]})
-								.enter()
-								.append('path')
-								.attr('d', d => {
-									console.log({d})
-									let path = null
-									if (d.maxHeightFront < 20){
-										console.log("woman")
-										path = [
-											// move to the right padding amount and down padding amount
-											"M", [padding, padding],
-											// draw a line from initial point straight down the length of the maxHeight
-											"l", [0, -(marginLeft / 2)],
-											"l", [scale(d.maxWidthFront), 0],
-											"l", [0, scale(d.minHeightFront - d.rivetHeightFront)]
-										]
-									}
-									else {
-										console.log("man")
-										path = [
-											// move to the right padding amount and down padding amount
-											"M", [padding, padding],
-											// draw a line from initial point straight down the length of the maxHeight
-											"l", [0, -(marginLeft * 1.2)],
-											"l", [scale(d.maxWidthFront), 0],
-											"l", [0, scale(d.minHeightFront - d.rivetHeightFront)]
-										]
-									}
-									const joined = path.join(" ")
-									return joined
-								})
-								.attr('class', d => {
-									if (d.maxHeightFront < 20){
-										return 'measure-line measure-line-maxHeight measure-line-woman'
-									}
-									else return 'measure-line measure-line-maxHeight measure-line-man'
-								})
-
-
-
-
-
+					measurements
+						.selectAll('.measure-line-maxWidth')
+						.data((d, i) => {
+							const brand = d.value
+							const length = brand.length
+							const average = brand[length - 1]
+							return [average]})
+						.enter()
+						.append('path')
+						.attr('class', d => {
+							if (d.maxHeightFront < 20){
+								return 'measure-line measure-line-maxWidth measure-line-woman'
+							}
+							else return 'measure-line measure-line-maxWidth measure-line-man'
+						})
 
 						measurements
 							.selectAll('.measure-maxHeight-bg')
@@ -260,15 +171,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 								return `${d3.round(d.maxHeightFront * inch, 1)}"`})
 							.attr('alignment-baseline', 'hanging')
 							.attr('text-anchor', 'middle')
-							.attr('transform', d => {
-								if (d.maxHeightFront < 20){
-									return `translate(${(-marginLeft / 2) + padding}, ${scale(d.maxHeightFront / 2)})`
-								}
-								else return `translate(${(-marginLeft * 1.2) + padding}, ${scale(d.maxHeightFront / 2)})`
-							})
 							.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
-
-
 
 						measurements
 	            .selectAll('.measure measure-maxHeight')
@@ -283,12 +186,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 								return `${d3.round(d.maxHeightFront * inch, 1)}"`})
 	            .attr('alignment-baseline', 'hanging')
 	            .attr('text-anchor', 'middle')
-	            .attr('transform', d => {
-								if (d.maxHeightFront < 20){
-									return `translate(${(-marginLeft / 2) + padding}, ${scale(d.maxHeightFront / 2)})`
-								}
-								else return `translate(${(-marginLeft * 1.2) + padding}, ${scale(d.maxHeightFront / 2)})`
-							})
 	            .attr('class', 'tk-atlas measure measure-maxHeight')
 
 							measurements
@@ -303,12 +200,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 								.text(d => `${d3.round(d.maxWidthFront * inch, 1)}"`)
 								.attr('alignment-baseline', 'hanging')
 								.attr('text-anchor', 'middle')
-								.attr('transform', d => {
-									if (d.maxHeightFront < 20){
-										return `translate(${scale(d.maxWidthFront / 2) + padding}, ${-marginLeft / 2})`
-									}
-									else return `translate(${scale(d.maxWidthFront / 2) + padding}, ${- marginLeft * 1.2})`
-								})
 								.attr('class', 'tk-atlas measure-bg measure-maxWidth-bg')
 
 
@@ -324,43 +215,127 @@ d3.selection.prototype.scrollChart = function init(options) {
 							.text(d => `${d3.round(d.maxWidthFront * inch, 1)}"`)
 							.attr('alignment-baseline', 'hanging')
 							.attr('text-anchor', 'middle')
+							.attr('class', 'tk-atlas measure measure-maxWidth')
+
+				Chart.update()
+
+				return Chart;
+			},
+			// update paths on resize
+			update(){
+				// update size of outlined pockets
+				$gFront
+					.selectAll('.outline, .outline-average')
+					.attr('d', function(d){
+						const path = [
+							// move to the right padding amount and down padding amount
+							"M", [padding, padding],
+							// draw a line from initial point straight down the length of the maxHeight
+							"l", [0, scale(d.maxHeightFront)],
+							////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
+							// Add a curve to the other side
+							"q", [scale(d.maxWidthFront / 2), scale(0.1 * d.maxHeightFront)], // control point for curve
+								[scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)], // end point
+							// Draw a line straight up to the min height - rivet height
+							"l", [0, -scale(d.minHeightFront - d.rivetHeightFront)],
+							// Add a curve to the line between rivets
+							"q", [-scale(d.minWidthFront * 2 / 3), scale(0.1 * d.maxHeightFront)],
+								[-scale(d.minWidthFront), -scale(d.rivetHeightFront)],
+							"l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
+							////"L", [padding, padding]
+						]
+						const joined = path.join(" ")
+						return joined
+					})
+
+
+					// Update measurements and dimension placement
+					const measurements = $gFront.selectAll('.g-measurements')
+
+					measurements
+						.selectAll('.measure-line-maxHeight')
+						.attr('d', d => {
+							let path = null
+							if (d.maxHeightFront < 20){
+								path = [
+									// move to the right padding amount and down padding amount
+									"M", [padding, padding],
+									// draw a line from initial point straight down the length of the maxHeight
+									"l", [-(marginLeft / 2), 0],
+									"l", [0, scale(d.maxHeightFront)],
+									"l", [padding, 0]
+								]
+							}
+							else {
+								path = [
+									// move to the right padding amount and down padding amount
+									"M", [padding, padding],
+									// draw a line from initial point straight down the length of the maxHeight
+									"l", [-(marginLeft * 1.2), 0],
+									"l", [0, scale(d.maxHeightFront)],
+									"l", [(marginLeft * 1.2), 0]
+								]
+							}
+							const joined = path.join(" ")
+							return joined
+						})
+
+					measurements
+						.selectAll('.measure-line-maxWidth')
+						.attr('d', d => {
+							let path = null
+							if (d.maxHeightFront < 20){
+																	console.log("woman width")
+								path = [
+									// move to the right padding amount and down padding amount
+									"M", [padding, padding],
+									// draw a line from initial point straight down the length of the maxHeight
+									"l", [0, -(marginLeft / 2)],
+									"l", [scale(d.maxWidthFront), 0],
+									"l", [0, scale(d.minHeightFront - d.rivetHeightFront)]
+								]
+							}
+							else {
+								console.log("man width")
+								path = [
+									// move to the right padding amount and down padding amount
+									"M", [padding, padding],
+									// draw a line from initial point straight down the length of the maxHeight
+									"l", [0, -(marginLeft * 1.2)],
+									"l", [scale(d.maxWidthFront), 0],
+									"l", [0, scale(d.minHeightFront - d.rivetHeightFront)]
+								]
+							}
+							const joined = path.join(" ")
+							return joined
+						})
+
+						measurements
+							.selectAll('.measure-maxHeight-bg, .measure-maxHeight')
+							.attr('transform', d => {
+								if (d.maxHeightFront < 20){
+									return `translate(${(-marginLeft / 2) + padding}, ${scale(d.maxHeightFront / 2)})`
+								}
+								else return `translate(${(-marginLeft * 1.2) + padding}, ${scale(d.maxHeightFront / 2)})`
+							})
+
+						measurements
+							.selectAll('.measure-maxWidth-bg, .measure-maxWidth')
 							.attr('transform', d => {
 								if (d.maxHeightFront < 20){
 									return `translate(${scale(d.maxWidthFront / 2) + padding}, ${-marginLeft / 2})`
 								}
 								else return `translate(${scale(d.maxWidthFront / 2) + padding}, ${- marginLeft * 1.2})`
 							})
-							.attr('class', 'tk-atlas measure measure-maxWidth')
 
+					// Move groups
+					const wGroup = $svgFront.select('.group-women')
+						.attr('transform', `translate(${marginLeft}, ${marginTop})`)
 
+					const mGroup = $svgFront.select('.group-men')
+						.attr('transform', `translate(${fullWidth - scaledMaxWidth - padding}, ${marginTop})`)
 
-								// $svgFront.selectAll('.group-mw')
-								// 	.attr('transform', `translate(${(width / 2.75) + padding}, ${fontSize})`)
-
-								const wGroup = $svgFront.select('.group-women')
-									.attr('transform', `translate(${marginLeft}, ${marginTop})`)
-
-								const mGroup = $svgFront.select('.group-men')
-									.attr('transform', `translate(${fullWidth - scaledMaxWidth - padding}, ${marginTop})`)
-
-	            // $gFront
-	            //   .selectAll('.measure measure-minWidth')
-							// 	.data((d, i) => {
-							// 		const brand = d[i].value
-							// 		const length = brand.length
-							// 		const average = brand[length - 1]
-							// 		return [average]})
-	            //   .enter()
-	            //   .append('text')
-	            //   .text(d => `${d3.round(d.minWidthFront * inch, 1)}"`)
-	            //   .attr('alignment-baseline', 'hanging')
-	            //   .attr('text-anchor', 'middle')
-	            //   .attr('transform', d => `translate(${scale((d.maxWidthFront - d.minWidthFront) + (d.minWidthFront / 2)) + padding}, ${scale(d.rivetHeightFront / 2)})`)
-	            //   .attr('class', 'tk-atlas measure measure-minWidth')
-
-
-
-				return Chart;
+				return Chart
 			},
 			// get / set data
 			data(val) {
