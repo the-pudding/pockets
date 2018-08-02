@@ -69,8 +69,9 @@ d3.selection.prototype.scrollChart = function init(options) {
 			resize() {
 				// defaults to grabbing dimensions from container element
 				width = $sel.node().offsetWidth - marginLeft - marginRight;
+				console.log({width})
 				//height = $sel.node().offsetHeight - marginTop - marginBottom;
-				height = 400 - marginTop - marginBottom;
+				height = width * 0.6
 				$svgFront.at({
 					width: width + marginLeft + marginRight,
 					height: height + marginTop + marginBottom
@@ -79,7 +80,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 
         scale
           .domain([0, 29])
-          .range([0, height])
+          .range([0, width * 0.55])
 
 				scaledMaxWidth = scale(maxWidths)
 
@@ -333,7 +334,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 						.attr('transform', `translate(${marginLeft}, ${marginTop})`)
 
 					const mGroup = $svgFront.select('.group-men')
-						.attr('transform', `translate(${fullWidth - scaledMaxWidth - padding}, ${marginTop})`)
+						.attr('transform', `translate(${fullWidth - scaledMaxWidth - marginLeft}, ${marginTop})`)
 
 				return Chart
 			},
@@ -368,7 +369,7 @@ d3.selection.prototype.scrollChart = function init(options) {
           men
             .transition()
             .duration(500)
-						.attr('transform', `translate(${fullWidth - scaledMaxWidth - padding}, ${marginTop})`)
+						.attr('transform', `translate(${fullWidth - scaledMaxWidth - marginLeft}, ${marginTop})`)
 
           men.selectAll('.outline')
             .style('stroke-opacity', 0.1)
@@ -407,7 +408,7 @@ d3.selection.prototype.scrollChart = function init(options) {
 					men
 						.transition()
 						.duration(500)
-						.attr('transform', `translate(${fullWidth - scaledMaxWidth - padding}, ${marginTop})`)
+						.attr('transform', `translate(${fullWidth - scaledMaxWidth - marginLeft}, ${marginTop})`)
 
           women.selectAll('.outline-average')
             .raise()
