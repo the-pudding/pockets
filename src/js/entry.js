@@ -18,6 +18,7 @@ function resize() {
 	const width = $body.node().offsetWidth;
 	if (previousWidth !== width) {
 		previousWidth = width;
+		scroll.resize()
 		//area.resize();
 	}
 }
