@@ -3,11 +3,16 @@ import loadMeasurements from './load-data'
 
 // data
 let data = null
+let allCharts = []
 
 // selections
 const $debunk = d3.selectAll('.debunk-graphic')
 
-function resize(){}
+function resize(){
+  allCharts.forEach( chart => {
+    chart.resize()
+  })
+}
 
 function setupChart(){
   const $sel = d3.select(this)
@@ -25,6 +30,9 @@ function setupChart(){
     .append('div.chart')
     .attr('data-location', location)
     .debunkingChart()
+
+  allCharts = allCharts.concat(charts).filter(d => d)
+  resize()
 }
 
 function init(){

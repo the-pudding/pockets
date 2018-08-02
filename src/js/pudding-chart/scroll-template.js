@@ -69,7 +69,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 			resize() {
 				// defaults to grabbing dimensions from container element
 				width = $sel.node().offsetWidth - marginLeft - marginRight;
-				console.log({width})
 				//height = $sel.node().offsetHeight - marginTop - marginBottom;
 				height = width * 0.6
 				$svgFront.at({
@@ -88,7 +87,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 				const outlines = $sel.selectAll('.outline, .outline-average')
 
 				if (outlines.size() > 0){
-					console.log("Updating!")
 					Chart.update()
 				}
 
@@ -100,7 +98,6 @@ d3.selection.prototype.scrollChart = function init(options) {
         $gFront
           .selectAll('.outline')
           .data(d => {
-						console.log({d})
             return d.value
           })
           .enter()
@@ -286,7 +283,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 						.attr('d', d => {
 							let path = null
 							if (d.maxHeightFront < 20){
-																	console.log("woman width")
 								path = [
 									// move to the right padding amount and down padding amount
 									"M", [padding, padding],
@@ -297,7 +293,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 								]
 							}
 							else {
-								console.log("man width")
 								path = [
 									// move to the right padding amount and down padding amount
 									"M", [padding, padding],

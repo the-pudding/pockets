@@ -19,6 +19,7 @@ function resize() {
 	if (previousWidth !== width) {
 		previousWidth = width;
 		scroll.resize()
+		debunk.resize()
 		//area.resize();
 	}
 }
