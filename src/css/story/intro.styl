@@ -32,6 +32,56 @@ body
 			align-items center
 			justify-content center
 
+			.svg-wrapper
+				width 100%
+				display flex
+
+				.p-wrapper
+					width 13.5%
+
+				.pocket-wrapper
+					width 15%
+					position relative
+
+					.pocket-container
+						position absolute
+						top 0
+						left 50%
+						margin-left -50%
+						width 100%
+
+					.pocket-text-wrapper
+						background-color #ffffff
+						position absolute
+						top 10px
+						left 85%
+						margin-left -70%
+						padding 0.5rem
+						width 70%
+						height 5rem
+						overflow hidden
+						transform rotate(-2deg)
+						//animation 1s popout infinite
+
+						@keyframes popout {
+						  100% {
+								width 100%
+								transform rotate(0deg)
+								transform scale(5)
+								overflow hidden
+								height auto
+						    z-index 0
+						  }
+						}
+
+					.pocket-text
+						margin 0
+						padding 0
+						font-size .25rem
+
+				.CKET-wrapper
+					width 71.5%
+
 	&__pre-hed
 		text-align center
 		font-weight 200
