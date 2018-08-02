@@ -1,6 +1,7 @@
 import loadMeasurements from './load-data'
 import './pudding-chart/scroll-template'
 import scrollama from 'scrollama'
+import intersectionObserver from 'intersection-observer'
 
 let data = null
 
