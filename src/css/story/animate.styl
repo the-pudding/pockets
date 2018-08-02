@@ -1,6 +1,6 @@
 .drag
   margin 0 auto
-  width $column-width
+  max-width $column-width
   font-weight 600
   text-align left
   display flex
@@ -11,7 +11,8 @@
     height 7rem
     order 1
     margin 0 auto
-    width 35rem
+    max-width 35rem
+    min-width 20rem
 
   .click-sentence
     opacity 0
@@ -28,8 +29,10 @@
     position absolute
     transition 300ms
     padding 0 1rem
-    line-height 2
+    line-height 3
     text-align: center
+    +mq('bp-4')
+      line-height 2.5
 
     .stat-women
       background-color $tag-red
@@ -55,8 +58,8 @@
     margin 2rem auto
 
     .animate-chart
-      width 225px
-      height 200px
+      // max-width 200px
+      // height 200px
 
       .outline
         stroke $dark-denim

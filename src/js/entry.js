@@ -20,6 +20,7 @@ function resize() {
 		previousWidth = width;
 		scroll.resize()
 		debunk.resize()
+		fit.resize()
 		//area.resize();
 	}
 }

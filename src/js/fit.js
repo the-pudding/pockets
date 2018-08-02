@@ -34,6 +34,8 @@ const $animation = section.selectAll('.drag-animation')
 let animateW = null
 let animateM = null
 
+let allAnimation = []
+
 // for nav
 let dragPosX = 0
 const navCount = $navLi.size()
@@ -42,7 +44,11 @@ const totalW = navCount * navSize
 const dragMax = totalW - navSize
 const dragOffset = 0
 
-function resize(){}
+function resize(){
+  allAnimation.forEach( chart => {
+    chart.resize()
+  })
+}
 
 function setupAnimateChart(){
   const nestedData = d3.nest()
@@ -68,8 +74,6 @@ function setupAnimateChart(){
       })
       .entries(data)
 
-  console.log({nest2})
-
   const $sel = d3.select(this)
 
   const charts = $animation
@@ -79,6 +83,8 @@ function setupAnimateChart(){
     .append('div.chart')
     //.at('data-object', selectedObject)
     .animateChart()
+
+  allAnimation = allAnimation.concat(charts).filter(d => d)
 
   animateW = charts[1].animate
   animateM = charts[0].animate
@@ -276,6 +282,7 @@ function init(){
       setupFitChart()
       setupNav()
       setupExpand()
+      resize()
     })
     .catch(err => console.log(err))
 }

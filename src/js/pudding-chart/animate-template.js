@@ -11,7 +11,6 @@ d3.selection.prototype.animateChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
-		console.log({data})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -19,6 +18,8 @@ d3.selection.prototype.animateChart = function init(options) {
 		const marginBottom = 0;
 		const marginLeft = 0;
 		const marginRight = 0;
+		let userObject = null
+		let userID = null
 
 		// scales
 		const scale = d3.scaleLinear()
@@ -73,10 +74,11 @@ d3.selection.prototype.animateChart = function init(options) {
 			fingerWidth: 8.9
 		}]
 
-		const rectData = []
+		let rectData = null
 
-		function drawPocket(d){
-			const g = d3.select(this)
+		function pocketShape(sel, newData){
+			let d = newData
+			const g = sel
 			const padding = 10
 			const point1 = [padding, padding]
 			const point2 = [padding, padding + scale(d.value.maxHeightFront)]
@@ -180,9 +182,16 @@ d3.selection.prototype.animateChart = function init(options) {
 			}
 		})
 
-		rectData.push(withRect[0])
+		//rectData.push(withRect[0])
+		rectData = withRect[0]
 
-		console.log({withRect})
+		return joined
+
+		}
+
+		function drawPocket(d){
+		let g = d3.select(this)
+		let joined = pocketShape(g, d)
 
 		const drawnPocket = g
 			.append('path.outline')
@@ -234,7 +243,6 @@ d3.selection.prototype.animateChart = function init(options) {
 		function drawObject(d, selObject, group, id){
 
 			const g = group
-		console.log({rectData})
 			let rectArea = null
 			if (selObject == 'phone') rectArea = 'rectanglePhone'
 			if (selObject == 'pen') rectArea = 'rectanglePen'
@@ -245,7 +253,6 @@ d3.selection.prototype.animateChart = function init(options) {
 			const display = g//$svg.selectAll('.g-vis')
 			let objectWidth =  scale(objectMap.get(id).width)
 			let objectHeight = scale(objectMap.get(id).height)
-			console.log({rectArea})
 
 			// const drawnObject = display
 			//   .append('rect.object')
@@ -259,17 +266,12 @@ d3.selection.prototype.animateChart = function init(options) {
 			//   .style('stroke', '#fff')
 			//   .style('stroke-width', '1px')
 
-			const test = rectData[0][rectArea]
-			console.log({objectWidth, objectHeight})
-
-				const objectID = id
+			// const objectID = id
 
 			if(selObject != 'hand'){
 
 				display
 					.append('svg:image')
-					// .attr('x', -9)
-					// .attr('y', -12)
 					.attr('width', objectWidth)
 					.attr('height', objectHeight)
 					.attr("xlink:href", `assets/images/${id}.png`)
@@ -279,14 +281,12 @@ d3.selection.prototype.animateChart = function init(options) {
 					.transition()
 					.duration(500)
 					.attr('transform-origin', `top left`)
-					.attr('transform', `translate(${rectData[0][rectArea].points[0][0]}, ${rectData[0][rectArea].points[0][1]})rotate(${rectData[0][rectArea].angle})`)
+					.attr('transform', `translate(${rectData[rectArea].points[0][0]}, ${rectData[rectArea].points[0][1]})rotate(${rectData[rectArea].angle})`)
 					.attr('class', 'pocket-object')
 			}
 			else {
 				display
 					.append('svg:image')
-					// .attr('x', -9)
-					// .attr('y', -12)
 					.attr('width', scale(objectMap.get(id).fingerWidth))
 					.attr('height', scale(objectMap.get(id).fingerHeight))
 					.attr("xlink:href", `assets/images/${id}.png`)
@@ -296,7 +296,7 @@ d3.selection.prototype.animateChart = function init(options) {
 					.transition()
 					.duration(500)
 					.attr('transform-origin', `top left`)
-					.attr('transform', `translate(${rectData[0][rectArea].points[0][0] + ((scale(objectMap.get(id).fingerWidth) - objectWidth) / 2)}, ${rectData[0][rectArea].points[0][1]})rotate(${rectData[0][rectArea].angle})`)
+					.attr('transform', `translate(${rectData[rectArea].points[0][0] + ((scale(objectMap.get(id).fingerWidth) - objectWidth) / 2)}, ${rectData[rectArea].points[0][1]})rotate(${rectData[rectArea].angle})`)
 					.attr('class', 'pocket-object')
 			}
 
@@ -329,19 +329,32 @@ d3.selection.prototype.animateChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
-				console.log({$vis})
+
+				const innerWidth = window.innerWidth
+				let chartWidth = null
+				if (innerWidth >= 900) chartWidth = 200
+				else if (innerWidth < 900) chartWidth = Math.max(innerWidth / 4, 150)
+
+				$sel.st('width', chartWidth).st('height', chartWidth * 1.25)
+
 				width = $sel.node().offsetWidth - marginLeft - marginRight;
-				height = $sel.node().offsetHeight - marginTop - marginBottom;
+				height = (width * 1.25) - marginTop - marginBottom//$sel.node().offsetHeight - marginTop - marginBottom;
 
 				$svg.at({
 					width: width + marginLeft + marginRight,
-					height: 300
+					height: height + marginTop + marginBottom
 				});
-
 
         scale
           .domain([0, 29])
-          .range([0, 225])
+          .range([0, height])
+
+				// if pockets are drawn on page resize, resize them too
+				const outlines = $sel.selectAll('.outline')
+
+				if (outlines.size() > 0){
+					Chart.update()
+				}
 
 				return Chart;
 			},
@@ -374,6 +387,8 @@ d3.selection.prototype.animateChart = function init(options) {
 				return Chart;
 			},
 			animate(selObject, id){
+				userObject = selObject
+				userID = id
 				const frontGroup = $svg.select('.g-vis')
         frontGroup.selectAll('.pocket-object').remove()
 
@@ -388,7 +403,21 @@ d3.selection.prototype.animateChart = function init(options) {
 
 				return Chart
 
-			}
+			},
+			update(){
+				// Update pocket size
+				$svg.selectAll('.outline')
+					.attr('d', function(d) {
+						let g = d3.select(this)
+						let joined = pocketShape(g, d)
+						console.log({joined})
+						return joined
+					})
+
+				const objects = $svg.selectAll('.pocket-object').remove()
+
+			return Chart
+		}
 		};
 		Chart.init();
 
