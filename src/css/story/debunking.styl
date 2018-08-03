@@ -1,5 +1,28 @@
 .debunk
-  .debunk-graphic
+  &-ui
+    display flex
+    flex-direction row
+    justify-content flex-start
+    align-items: baseline;
+    max-width $column-width
+    margin 0 auto
+    padding 0 1rem
+    span
+      set-type-size('small', true)
+      color $mid-denim
+
+    .btn
+      padding 0.5rem
+      margin 0 0.5rem
+      background-color rgba($light-denim, .2)
+      border 1px dashed $mid-denim
+
+      &.is-active
+        background-color rgba($light-denim, .8)
+        border 1px dashed $dark-denim
+        font-weight 600
+
+  &-graphic
     display flex
     flex-wrap wrap
     max-width 900px
