@@ -22,6 +22,8 @@ d3.selection.prototype.fitChart = function init(options) {
 
 		// scales
 		const scale = d3.scaleLinear()
+		const padding = 10
+		const inch = 0.393 // conversion factor for cm -> inches
 		//const scaleY = null;
 
 		// dom elements
@@ -79,8 +81,9 @@ d3.selection.prototype.fitChart = function init(options) {
 
 		const rectData = []
 
-		function drawPocket(d){
-			const g = d3.select(this)
+		function pocketShape(sel, newData){
+			let d = newData
+			const g = sel
 			const padding = 10
 			const point1 = [padding, padding]
 			const point2 = [padding, padding + scale(d.maxHeightFront)]
@@ -141,12 +144,19 @@ d3.selection.prototype.fitChart = function init(options) {
 			]
 		}
 			const joined = path.join(" ")
+			return joined
+
+		}
+
+		function drawPocket(d){
+			let g = d3.select(this)
+			// let joined = pocketShape(g, d)
 
 			const drawnPocket = g
 				.append('path.outline')
-				.attr('d', joined)
+				//.attr('d', joined)
 
-			const largestRectHand = d.rectangleHand
+			//const largestRectHand = d.rectangleHand
 
 				// g
 				// 	.append('path.largestRect')
@@ -278,24 +288,44 @@ d3.selection.prototype.fitChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
-				width = display.node().offsetWidth - marginLeft - marginRight;
-				height = display.node().offsetHeight - marginTop - marginBottom;
+				const innerWidth = window.innerWidth
+				let chartWidth = null
+				if (innerWidth >= 900) chartWidth = 225
+				else if (innerWidth < 900) chartWidth = Math.max(innerWidth / 4, 150)
+				console.log({$sel})
+
+				const blocks = $sel.selectAll('.fit-brand')
+					.st('width', chartWidth)
+					.st('height', chartWidth * 1.5)
+
+				blocks.selectAll('.display, .tooltip')
+					.st('width', chartWidth)
+					.st('height', chartWidth * 1.5)
+
+				width = blocks.node().offsetWidth - marginLeft - marginRight;
+				height = (width) - marginTop - marginBottom//$sel.node().offsetHeight - marginTop - marginBottom;
+
 				$svg.at({
 					width: width + marginLeft + marginRight,
-					height: 300
+					height: height + marginTop + marginBottom
 				});
 
+				scale
+					.domain([0, 29])
+					.range([0, height])
 
-        scale
-          .domain([0, 29])
-          .range([0, 225])
+				// if pockets are drawn on page resize, resize them too
+				const outlines = $sel.selectAll('.outline')
+
+				if (outlines.size() > 0){
+					Chart.update()
+				}
 
 				return Chart;
 			},
 			// update scales and render chart
 			render() {
-        const padding = 10
-        const inch = 0.393 // conversion factor for cm -> inches
+
 
         // Draw front pocket
         const frontGroup = $svg.select('.g-vis')
@@ -310,6 +340,8 @@ d3.selection.prototype.fitChart = function init(options) {
           .append('g')
 					.each(drawPocket)
 
+					console.log({frontGroup})
+
           frontGroup
             .selectAll('.measure measure-maxHeight')
             .data(d => [d])
@@ -318,7 +350,6 @@ d3.selection.prototype.fitChart = function init(options) {
             .text(d => `${d3.round(d.maxHeightFront * inch, 1)}"`)
             .attr('alignment-baseline', 'hanging')
             .attr('text-anchor', 'end')
-            .attr('transform', d => `translate(${padding/2}, ${scale(d.maxHeightFront / 2)})`)
             .attr('class', 'tk-atlas measure measure-maxHeight')
 
             frontGroup
@@ -329,8 +360,8 @@ d3.selection.prototype.fitChart = function init(options) {
               .text(d => `${d3.round(d.minHeightFront * inch, 1)}"`)
               .attr('alignment-baseline', 'hanging')
               .attr('text-anchor', 'start')
-              .attr('transform', d => `translate(${scale(d.maxWidthFront) + (padding * 1.5)}, ${scale(d.rivetHeightFront + ((d.minHeightFront - d.rivetHeightFront ) / 2))})`)
               .attr('class', 'tk-atlas measure measure-minHeight')
+
             frontGroup
               .selectAll('.measure measure-maxWidth')
               .data(d => [d])
@@ -339,7 +370,6 @@ d3.selection.prototype.fitChart = function init(options) {
               .text(d => `${d3.round(d.maxWidthFront * inch, 1)}"`)
               .attr('alignment-baseline', 'hanging')
               .attr('text-anchor', 'middle')
-              .attr('transform', d => `translate(${scale(d.maxWidthFront / 2) + padding}, ${scale(d.maxHeightFront) + (padding * 2.5)})`)
               .attr('class', 'tk-atlas measure measure-maxWidth')
 
             frontGroup
@@ -350,21 +380,48 @@ d3.selection.prototype.fitChart = function init(options) {
               .text(d => `${d3.round(d.minWidthFront * inch, 1)}"`)
               .attr('alignment-baseline', 'hanging')
               .attr('text-anchor', 'middle')
-              .attr('transform', d => `translate(${scale((d.maxWidthFront - d.minWidthFront) + (d.minWidthFront / 2)) + padding}, ${scale(d.rivetHeightFront / 2)})`)
               .attr('class', 'tk-atlas measure measure-minWidth')
 
-            const groupWidth = frontGroup.node().getBBox().width
-
-            frontGroup
-              .attr('transform', function(d){
-                const boxWidth = this.getBBox().width
-                const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
-                const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)
-
-                return `translate(${difWidth}, 0)`
-              })
+					Chart.update()
 
 				return Chart;
+			},
+			update(){
+				$svg.selectAll('.outline')
+					.attr('d', function(d){
+						let g = d3.select(this)
+						let joined = pocketShape(g, d)
+						return joined
+					})
+
+				const frontGroup = $svg.selectAll('.g-vis')
+
+				frontGroup.selectAll('.measure-maxHeight')
+				  .attr('transform', d => `translate(${padding/2}, ${scale(d.maxHeightFront / 2)})`)
+
+				frontGroup.selectAll('.measure-minHeight')
+					.attr('transform', d => `translate(${scale(d.maxWidthFront) + (padding * 1.5)}, ${scale(d.rivetHeightFront + ((d.minHeightFront - d.rivetHeightFront ) / 2))})`)
+
+				frontGroup.selectAll('.measure-maxWidth')
+					.attr('transform', d => `translate(${scale(d.maxWidthFront / 2) + padding}, ${scale(d.maxHeightFront) + (padding * 2.5)})`)
+
+				frontGroup.selectAll('.measure-minWidth')
+					.attr('transform', d => `translate(${scale((d.maxWidthFront - d.minWidthFront) + (d.minWidthFront / 2)) + padding}, ${scale(d.rivetHeightFront / 2)})`)
+
+				const groupWidth = frontGroup.node().getBBox().width
+
+				console.log({frontGroup})
+
+				frontGroup
+					.attr('transform', function(d){
+						const boxWidth = this.getBBox().width
+						const leftBBox = frontGroup.selectAll('.measure-maxHeight').node().getBBox().width
+						const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2)
+
+						return `translate(${difWidth}, 0)`
+					})
+
+				return Chart
 			},
 			// get / set data
 			data(val) {

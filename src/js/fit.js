@@ -35,6 +35,7 @@ let animateW = null
 let animateM = null
 
 let allAnimation = []
+let allBrands = []
 
 // for nav
 let dragPosX = 0
@@ -46,6 +47,10 @@ const dragOffset = 0
 
 function resize(){
   allAnimation.forEach( chart => {
+    chart.resize()
+  })
+
+  allBrands.forEach(chart => {
     chart.resize()
   })
 }
@@ -108,6 +113,8 @@ function setupFitChart(){
     .append('div.chart')
     //.at('data-object', selectedObject)
     .fitChart()
+
+  allBrands = allBrands.concat(charts).filter(d => d)
 
   toggleW = charts[0].toggle
   toggleM = charts[1].toggle
