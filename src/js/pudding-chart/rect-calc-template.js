@@ -266,17 +266,26 @@ d3.selection.prototype.rectChart = function init(options) {
 			// on resize, update new dimensions
 			resize() {
 				// defaults to grabbing dimensions from container element
-				width = display.node().offsetWidth - marginLeft - marginRight;
-				height = display.node().offsetHeight - marginTop - marginBottom;
+				const chartWidth = 225
+				const blocks = $sel.selectAll('.fit-brand')
+					.st('width', chartWidth)
+					.st('height', d3.round(chartWidth * 1.33, 0))
+
+				blocks.selectAll('.display, .tooltip')
+					.st('width', chartWidth)
+					.st('height', d3.round(chartWidth * 1.33, 0))
+
+				width = 225//blocks.node().offsetWidth - marginLeft - marginRight;
+				height = 175//(width) - marginTop - marginBottom//$sel.node().offsetHeight - marginTop - marginBottom;
+
 				$svg.at({
 					width: width + marginLeft + marginRight,
-					height: 300
+					height: height + marginTop + marginBottom
 				});
 
-
-        scale
-          .domain([0, 29])
-          .range([0, 225])
+				scale
+					.domain([0, 29])
+					.range([0, height])
 
 				return Chart;
 			},

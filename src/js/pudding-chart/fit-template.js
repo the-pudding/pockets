@@ -24,6 +24,18 @@ d3.selection.prototype.fitChart = function init(options) {
 		const scale = d3.scaleLinear()
 		const padding = 10
 		const inch = 0.393 // conversion factor for cm -> inches
+		function multRectX(val, newWidth){
+			const conv = (newWidth * val) / 225
+			return conv
+		}
+		function multRectY(val, newWidth){
+			const conv = (newWidth * val) / 175
+			return conv
+		}
+		// function multRectY(val, newWidth){
+		// 	const conv = newWidth * val / 300
+		// 	return conv
+		// }
 		//const scaleY = null;
 
 		// dom elements
@@ -78,8 +90,6 @@ d3.selection.prototype.fitChart = function init(options) {
 			fingerHeight: 17.2,
 			fingerWidth: 8.9
 		}]
-
-		const rectData = []
 
 		function pocketShape(sel, newData){
 			let d = newData
@@ -180,6 +190,7 @@ d3.selection.prototype.fitChart = function init(options) {
       //   .duration(300)
       //   .opacity(0)
       //   .remove()
+			console.log({d})
 
       const g = group
 
@@ -194,19 +205,21 @@ d3.selection.prototype.fitChart = function init(options) {
       let objectWidth =  scale(objectMap.get(id).width)
       let objectHeight = scale(objectMap.get(id).height)
 
+
+			let firstPointX = multRectX(d[rectArea].points[0][0], width)
+			let firstPointY = multRectY(d[rectArea].points[0][1], height)
+
       // const drawnObject = display
       //   .append('rect.object')
-			// 	.attr('width', scale(objectMap.get(id).fingerWidth))
-			// 	.attr('height', scale(objectMap.get(id).fingerHeight))
+			// 	.attr('width', scale(objectMap.get(id).width))
+			// 	.attr('height', scale(objectMap.get(id).height))
       //   .attr('transform-origin', `top left`)
-      //   .attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+      //   .attr('transform', `translate(${firstPointX}, ${firstPointY})rotate(${d[rectArea].angle})`)
       //   // .attr('transform', `rotate(${d[rectArea].angle})`)
-      //   .attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
+      //   //.attr('transform-origin', `${d[rectArea].cx} ${d[rectArea.cy]}`)
       //   .style('fill', 'none')
       //   .style('stroke', '#fff')
       //   .style('stroke-width', '1px')
-
-        const objectID = id
 
 				if (selObject != 'hand'){
 					display
@@ -217,7 +230,7 @@ d3.selection.prototype.fitChart = function init(options) {
 						.attr('height', objectHeight)
 						.attr("xlink:href", `assets/images/${id}.png`)
 						.attr('transform-origin', `top left`)
-						.attr('transform', `translate(${d[rectArea].points[0][0]}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+						.attr('transform', `translate(${firstPointX}, ${firstPointY})rotate(${d[rectArea].angle})`)
 						.attr('class', 'pocket-object')
 				}
 
@@ -230,7 +243,7 @@ d3.selection.prototype.fitChart = function init(options) {
 						.attr('height', scale(objectMap.get(id).fingerHeight))
 						.attr("xlink:href", `assets/images/${id}.png`)
 						.attr('transform-origin', `top left`)
-						.attr('transform', `translate(${d[rectArea].points[0][0] + ((scale(objectMap.get(id).fingerWidth) - objectWidth) / 2)}, ${d[rectArea].points[0][1]})rotate(${d[rectArea].angle})`)
+						.attr('transform', `translate(${firstPointX + ((scale(objectMap.get(id).fingerWidth) - objectWidth) / 2)}, ${firstPointY})rotate(${d[rectArea].angle})`)
 						.attr('class', 'pocket-object')
 				}
 
@@ -292,19 +305,19 @@ d3.selection.prototype.fitChart = function init(options) {
 				let chartWidth = null
 				if (innerWidth >= 900) chartWidth = 225
 				else if (innerWidth < 900) chartWidth = Math.max(innerWidth / 4, 150)
-				console.log({$sel})
 
 				const blocks = $sel.selectAll('.fit-brand')
 					.st('width', chartWidth)
-					.st('height', chartWidth * 1.5)
+					.st('height', d3.round(chartWidth * 1.33, 0))
 
 				blocks.selectAll('.display, .tooltip')
 					.st('width', chartWidth)
-					.st('height', chartWidth * 1.5)
+					.st('height', d3.round(chartWidth * 1.33, 0))
 
 				width = blocks.node().offsetWidth - marginLeft - marginRight;
 				height = (width) - marginTop - marginBottom//$sel.node().offsetHeight - marginTop - marginBottom;
 
+				console.log({width, height})
 				$svg.at({
 					width: width + marginLeft + marginRight,
 					height: height + marginTop + marginBottom
@@ -410,8 +423,6 @@ d3.selection.prototype.fitChart = function init(options) {
 
 				const groupWidth = frontGroup.node().getBBox().width
 
-				console.log({frontGroup})
-
 				frontGroup
 					.attr('transform', function(d){
 						const boxWidth = this.getBBox().width
@@ -420,6 +431,8 @@ d3.selection.prototype.fitChart = function init(options) {
 
 						return `translate(${difWidth}, 0)`
 					})
+
+				$svg.selectAll('.pocket-object').remove()
 
 				return Chart
 			},
@@ -456,11 +469,11 @@ d3.selection.prototype.fitChart = function init(options) {
             let objectHeight = scale(objectMap.get(id).height)
 
             const largestRect = d[rectArea]
-            const rectWidth = largestRect.width
+            const rectWidth = multRectX(largestRect.width, width)
             const opening = scale(d.minWidthFront)
-            const rectHeight = largestRect.height
+            const rectHeight = multRectY(largestRect.height, height)
 
-            if (objectWidth > scale(d.minWidthFront) || objectWidth > largestRect.width || objectHeight > largestRect.height){
+            if (objectWidth > scale(d.minWidthFront) || objectWidth > rectWidth || objectHeight > rectHeight){
               const opening = d.minWidthFront
               return true
             }

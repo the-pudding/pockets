@@ -46,6 +46,7 @@ const dragMax = totalW - navSize
 const dragOffset = 0
 
 function resize(){
+  $navLi.classed('is-active', false)
   allAnimation.forEach( chart => {
     chart.resize()
   })
@@ -178,11 +179,8 @@ function handleObjectClick(){
     statSentence.classed('is-visible', true)
   }
 
-
   $navLi.classed('is-active', false)
   const item = d3.select(this)
-
-
 
   item.classed('is-active', true)
   const name = item.at('data-type')
