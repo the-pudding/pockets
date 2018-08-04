@@ -31,6 +31,21 @@ d3.selection.prototype.debunkingChart = function init(options) {
 		const padding = 10
 
 		// helper functions
+		const extentFront = [data].map(d => {
+			const val = d.values
+			const max = val.map(e => {
+				return e.maxHeightFront * e.maxWidthFront
+			})
+			return d3.extent(max)
+		})
+
+		const extentBack = [data].map(d => {
+			const val = d.values
+			const max = val.map(e => {
+				return e.maxHeightBack * e.minWidthBack
+			})
+			return d3.extent(max)
+		})
 
 		const Chart = {
 			// called once at start
@@ -95,7 +110,12 @@ d3.selection.prototype.debunkingChart = function init(options) {
               return d.values})
             .enter()
             .append('path')
-            .attr('class', 'outline')
+            .attr('class', d => {
+							const max = extentBack[0][0]
+							if ((d.maxHeightFront * d.maxWidthFront) == extentFront[0][1]) return `outline outline-biggest`
+							else if ((d.maxHeightFront * d.maxWidthFront) == extentFront[0][0]) return `outline outline-smallest`
+							else return `outline`
+						})
         }
 
         else if(location == 'back'){
@@ -107,7 +127,12 @@ d3.selection.prototype.debunkingChart = function init(options) {
               .data(d => d.values)
               .enter()
               .append('path')
-              .attr('class', 'outline')
+							.attr('class', d => {
+								const max = extentBack[0][0]
+								if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `outline outline-biggest`
+								else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `outline outline-smallest`
+								else return `outline`
+							})
 
         }
 				Chart.update()
