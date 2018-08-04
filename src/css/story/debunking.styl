@@ -16,11 +16,17 @@
       margin 0 0.5rem
       background-color rgba($light-denim, .2)
       border 1px dashed $mid-denim
+      transition 300ms
 
       &.is-active
         background-color rgba($light-denim, .8)
         border 1px dashed $dark-denim
         font-weight 600
+
+      &:hover
+        background-color rgba($light-denim, .6)
+        border 1px dashed $mid-denim
+        transition 300ms
 
   &-graphic
     display flex

@@ -193,7 +193,6 @@ d3.selection.prototype.animateChart = function init(options) {
 		let g = d3.select(this)
 		let joined = pocketShape(g, d)
 
-		console.log({d})
 		const drawnPocket = g
 			.append('path.outline')
 			.attr('class', d => `outline outline-${d.key}`)
@@ -412,7 +411,6 @@ d3.selection.prototype.animateChart = function init(options) {
 					.attr('d', function(d) {
 						let g = d3.select(this)
 						let joined = pocketShape(g, d)
-						console.log({joined})
 						return joined
 					})
 

@@ -185,13 +185,6 @@ d3.selection.prototype.fitChart = function init(options) {
 		}
 
     function drawObject(d, selObject, group, id){
-      // d3.selectAll('rect')
-      //   .transition()
-      //   .duration(300)
-      //   .opacity(0)
-      //   .remove()
-			console.log({d})
-
       const g = group
 
       let rectArea = null
@@ -317,7 +310,6 @@ d3.selection.prototype.fitChart = function init(options) {
 				width = blocks.node().offsetWidth - marginLeft - marginRight;
 				height = (width) - marginTop - marginBottom//$sel.node().offsetHeight - marginTop - marginBottom;
 
-				console.log({width, height})
 				$svg.at({
 					width: width + marginLeft + marginRight,
 					height: height + marginTop + marginBottom
@@ -352,8 +344,6 @@ d3.selection.prototype.fitChart = function init(options) {
           .enter()
           .append('g')
 					.each(drawPocket)
-
-					console.log({frontGroup})
 
           frontGroup
             .selectAll('.measure measure-maxHeight')
