@@ -11,6 +11,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum()
+		console.log({data})
     let location = $sel.at('data-location')
 		// dimension stuff
 		let width = 0;
@@ -30,22 +31,36 @@ d3.selection.prototype.debunkingChart = function init(options) {
 		let $vis = null;
 		const padding = 10
 
+		const calcArea = d3.selectAll('.outline')
+		console.log({calcArea})
+
 		// helper functions
-		const extentFront = [data].map(d => {
-			const val = d.values
-			const max = val.map(e => {
-				return e.maxHeightFront * e.maxWidthFront
+		const val = data.value
+		val.pop()
+
+		console.log({data})
+
+		const extentFront = [val]
+			.map(d => {
+			const max = d.map(e => {
+				//return e.rectangleWallet.area
+				return e.pocketArea
 			})
 			return d3.extent(max)
 		})
 
-		const extentBack = [data].map(d => {
-			const val = d.values
-			const max = val.map(e => {
-				return e.maxHeightBack * e.minWidthBack
+		console.log({extentFront})
+
+		const extentBack = [val]
+			.map(d => {
+				const max = d.map(e => {
+					//return e.rectangleWallet.area
+					return e.maxHeightBack * e.minWidthBack
+				})
+				return d3.extent(max)
 			})
-			return d3.extent(max)
-		})
+
+		console.log({extentFront, extentBack})
 
 		const Chart = {
 			// called once at start
@@ -97,8 +112,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
 			},
 			// update scales and render chart
 			render() {
-
-
         if(location == 'front'){
           //Draw front pocket
           const frontGroup = $svg.select('.g-vis')
@@ -107,13 +120,13 @@ d3.selection.prototype.debunkingChart = function init(options) {
           frontGroup
             .selectAll('.outline')
             .data(d => {
-              return d.values})
+              return d.value})
             .enter()
             .append('path')
             .attr('class', d => {
-							const max = extentBack[0][0]
-							if ((d.maxHeightFront * d.maxWidthFront) == extentFront[0][1]) return `outline outline-biggest`
-							else if ((d.maxHeightFront * d.maxWidthFront) == extentFront[0][0]) return `outline outline-smallest`
+							if (d.brand == 'average') return 'outline outline-average'
+							else if ((d.pocketArea) == extentFront[0][1]) return `outline outline-biggest`
+							else if ((d.pocketArea) == extentFront[0][0]) return `outline outline-smallest`
 							else return `outline`
 						})
         }
@@ -124,12 +137,13 @@ d3.selection.prototype.debunkingChart = function init(options) {
 
             backGroup
               .selectAll('.outline')
-              .data(d => d.values)
+              .data(d => d.value)
               .enter()
               .append('path')
 							.attr('class', d => {
-								const max = extentBack[0][0]
-								if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `outline outline-biggest`
+								console.log({d})
+								if (d.brand == 'average') return `outline outline-average`
+								else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `outline outline-biggest`
 								else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `outline outline-smallest`
 								else return `outline`
 							})
@@ -141,7 +155,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 			// update drawings on resize
 			update(){
 				const drawings = $svg.selectAll('.outline')
-
+				console.log("making it to update")
 				if (location == 'front'){
 					drawings
 						.attr('d', function(d){

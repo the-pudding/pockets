@@ -161,11 +161,13 @@ d3.selection.prototype.rectChart = function init(options) {
 			const largestRectPen = d3plus.largestRect(fullPath, {nTries: 100, aspectRatio: 0.1, cache: false})
 			const largestRectWallet = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.8, cache: false})
 			const largestRectHand = d3plus.largestRect(fullPath, {nTries:100, aspectRatio: 0.57, cache: false, angle: handAngles})
+			const pocketArea = d3.polygonArea(fullPath)
 
 			const thisData = d
 			const withRect = [thisData].map(d => {
 				return{
 					...d,
+					pocketArea: pocketArea,
 					rectanglePhone: largestRectPhone,
 					rectanglePen: largestRectPen,
 					rectangleWallet: largestRectWallet,
