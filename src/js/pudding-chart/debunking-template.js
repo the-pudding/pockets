@@ -11,7 +11,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum()
-		console.log({data})
     let location = $sel.at('data-location')
 		// dimension stuff
 		let width = 0;
@@ -32,13 +31,9 @@ d3.selection.prototype.debunkingChart = function init(options) {
 		const padding = 10
 
 		const calcArea = d3.selectAll('.outline')
-		console.log({calcArea})
 
 		// helper functions
 		const val = data.value
-		//val.pop()
-
-		console.log({data})
 
 		const extentFront = [val]
 			.map(d => {
@@ -49,8 +44,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
 			return d3.extent(max)
 		})
 
-		console.log({extentFront})
-
 		const extentBack = [val]
 			.map(d => {
 				const max = d.map(e => {
@@ -59,8 +52,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
 				})
 				return d3.extent(max)
 			})
-
-		console.log({extentFront, extentBack})
 
 		const Chart = {
 			// called once at start
@@ -141,7 +132,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
               .enter()
               .append('path')
 							.attr('class', d => {
-								console.log({d})
 								if (d.brand == 'average') return `outline outline-average`
 								else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `outline outline-biggest`
 								else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `outline outline-smallest`
@@ -155,7 +145,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
 			// update drawings on resize
 			update(){
 				const drawings = $svg.selectAll('.outline')
-				console.log("making it to update")
 				if (location == 'front'){
 					drawings
 						.attr('d', function(d){
@@ -197,6 +186,20 @@ d3.selection.prototype.debunkingChart = function init(options) {
 							return joined
 						})
 				}
+
+				return Chart
+			},
+			highlight(sel, loc){
+				if (loc == location){
+
+					$svg
+						.selectAll('.outline')
+						.classed('is-active', false)
+
+					const highlightPath = $svg.select(`.outline-${sel}`)
+					highlightPath.classed('is-active', true)
+				}
+
 
 				return Chart
 			},

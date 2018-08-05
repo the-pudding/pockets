@@ -5,12 +5,32 @@ import loadMeasurements from './load-data'
 let data = null
 let allCharts = []
 
+
 // selections
 const $debunk = d3.selectAll('.debunk-graphic')
+const ui = d3.selectAll('.debunk-ui')
+let allButtons = ui.selectAll('.btn')
 
 function resize(){
   allCharts.forEach( chart => {
     chart.resize()
+  })
+}
+
+function handleHighlight(){
+  const sel = d3.select(this)
+
+  const loc = sel.at('data-location')
+  const buttons = ui.selectAll(`[data-location=${loc}]`)
+
+  buttons.classed('is-active', false)
+
+
+  sel.classed('is-active', true)
+  const text = sel.text().toLowerCase()
+
+  allCharts.forEach(chart => {
+    chart.highlight(text, loc)
   })
 }
 
@@ -40,12 +60,9 @@ function setupChart(){
           minWidthBack: d3.round(d3.mean(leaves, d => d.minWidthBack), 1),
         }
         leaves.push(average)
-        console.log({leaves})
         return leaves
       })
       .entries(data)
-
-      console.log({nest2})
 
   const charts = $sel
     .selectAll('.chart')
@@ -57,6 +74,9 @@ function setupChart(){
 
   allCharts = allCharts.concat(charts).filter(d => d)
   resize()
+
+  allButtons
+    .on('click', handleHighlight)
 }
 
 function init(){

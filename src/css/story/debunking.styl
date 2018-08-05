@@ -47,20 +47,14 @@
 
       svg
         stroke-width 2px
-        stroke $dark-denim
-        stroke-opacity 0.1
+        stroke $mid-denim
+        stroke-opacity 0.15
         fill none
 
         .outline
+          transition 300ms
 
-          &-biggest
-            stroke $tag-red !important
-            stroke-opacity 1 !important
-
-          &-smallest
-            stroke $gold-stitch !important
-            stroke-opacity 1  !important
-
-          &-average
-            stroke blue !important
-            stroke-opacity 1 !important
+          &.is-active
+            stroke-opacity 1
+            stroke $dark-denim
+            transition 300ms
