@@ -39,11 +39,8 @@ function setupChart(){
           maxWidthBack: d3.round(d3.mean(leaves, d => d.maxWidthBack), 1),
           minWidthBack: d3.round(d3.mean(leaves, d => d.minWidthBack), 1),
         }
-
-        const length = leaves.length
-        leaves[length] = average
-        const test = leaves[length]
-        console.log({leaves, test})
+        leaves.push(average)
+        console.log({leaves})
         return leaves
       })
       .entries(data)

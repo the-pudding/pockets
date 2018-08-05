@@ -36,7 +36,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 
 		// helper functions
 		const val = data.value
-		val.pop()
+		//val.pop()
 
 		console.log({data})
 
