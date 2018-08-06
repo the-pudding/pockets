@@ -35,26 +35,63 @@
     margin 4rem auto
     justify-content: space-around;
 
+    .chart
+      display flex
+      flex-direction column
+
     .chart-label
       text-transform uppercase
       font-family $sans
       font-weight 600
+
+    .selected-brand
+      order 2
+      text-transform uppercase
+      text-align: center;
+      opacity 0
+      transition 300ms
+
+      &.is-active
+        opacity 1
+        transition 300ms
 
     .container
       //max-width 225px
       height 300px
       min-width 125px
 
-      svg
-        stroke-width 2px
-        stroke $mid-denim
-        stroke-opacity 0.15
-        fill none
+      .g-vis
 
         .outline
           transition 300ms
+          stroke-width 2px
+          stroke $mid-denim
+          stroke-opacity 0.15
+          fill none
 
           &.is-active
             stroke-opacity 1
             stroke $dark-denim
+            transition 300ms
+
+        .measure
+          fill $mid-denim
+          set-type-size('x-small')
+          opacity 0
+          transition 300ms
+
+          &.is-active
+            opacity 1
+            transition 300ms
+
+        .measure-bg
+          fill none
+          stroke $bg-denim
+          stroke-width 6px
+          stroke-opacity 0
+          set-type-size('x-small')
+          transition 300ms
+
+          &.is-active
+            stroke-opacity 1
             transition 300ms

@@ -17,11 +17,12 @@ d3.selection.prototype.debunkingChart = function init(options) {
 		let height = 0;
 		const marginTop = 5;
 		const marginBottom = 5;
-		const marginLeft = 0;
+		const marginLeft = 25;
 		const marginRight = 0;
 
 		// scales
 		const scale = d3.scaleLinear()
+		const inch = 0.393 // conversion factor for cm -> inches
 		//const scaleY = null;
 
 		// dom elements
@@ -59,6 +60,9 @@ d3.selection.prototype.debunkingChart = function init(options) {
         // Add label
         $sel.append('text')
           .text(d => `${d.key}`.split(' ')[0] + `'s ` + `${d.key}`.split(' ')[2]).attr('class', 'chart-label')
+
+				$sel.append('text')
+					.attr('class', 'tk-atlas selected-brand')
 
         const container = $sel.append('div.container')
 
@@ -110,8 +114,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
           let areaMeasure = null
           frontGroup
             .selectAll('.outline')
-            .data(d => {
-              return d.value})
+						.data(d => d.value)
             .enter()
             .append('path')
             .attr('class', d => {
@@ -120,6 +123,167 @@ d3.selection.prototype.debunkingChart = function init(options) {
 							else if ((d.pocketArea) == extentFront[0][0]) return `outline outline-smallest`
 							else return `outline`
 						})
+
+						frontGroup
+	            .selectAll('.measure-maxHeight')
+							.data(d => {
+								const val = d.value
+								const filt = val.filter(d => {
+									return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+								})
+	              return filt})
+	            .enter()
+	            .append('text')
+	            .text(d => `${d3.round(d.maxHeightFront * inch, 1)}"`)
+	            .attr('alignment-baseline', 'hanging')
+	            .attr('text-anchor', 'end')
+	            //.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+							.attr('class', d => {
+								if (d.brand == 'average') return 'tk-atlas measure-bg measure-maxHeight-average'
+								else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure-bg measure-maxHeight-biggest`
+								else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure-bg measure-maxHeight-smallest`
+								else return `mystery-text`
+							})
+
+	            frontGroup
+	              .selectAll('.measure-minHeight')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+									})
+		              return filt})
+	              .enter()
+	              .append('text')
+	              .text(d => `${d3.round(d.minHeightFront * inch, 1)}"`)
+	              .attr('alignment-baseline', 'hanging')
+	              .attr('text-anchor', 'start')
+	              .attr('class', 'tk-atlas measure-bg measure-minHeight-bg')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-minHeight-average'
+									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure-bg measure-minHeight-biggest`
+									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure-bg measure-minHeight-smallest`
+									else return `mystery-text`
+								})
+
+	            frontGroup
+	              .selectAll('.measure-maxWidth')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+									})
+		              return filt})
+	              .enter()
+	              .append('text')
+	              .text(d => `${d3.round(d.maxWidthFront * inch, 1)}"`)
+	              .attr('alignment-baseline', 'hanging')
+	              .attr('text-anchor', 'middle')
+	              //.attr('class', 'tk-atlas measure-bg measure-maxWidth-bg')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-maxWidth-average'
+									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure-bg measure-maxWidth-biggest`
+									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure-bg measure-maxWidth-smallest`
+								})
+
+	            frontGroup
+	              .selectAll('.measure-minWidth')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+									})
+		              return filt})
+	              .enter()
+	              .append('text')
+	              .text(d => `${d3.round(d.minWidthFront * inch, 1)}"`)
+	              .attr('alignment-baseline', 'hanging')
+	              .attr('text-anchor', 'middle')
+	              //.attr('class', 'tk-atlas measure-bg measure-minWidth-bg')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-minWidth-average'
+									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure-bg measure-minWidth-biggest`
+									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure-bg measure-minWidth-smallest`
+								})
+
+						frontGroup
+	            .selectAll('.measure-maxHeight')
+							.data(d => {
+								const val = d.value
+								const filt = val.filter(d => {
+									return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+								})
+	              return filt})
+	            .enter()
+	            .append('text')
+	            .text(d => `${d3.round(d.maxHeightFront * inch, 1)}"`)
+	            .attr('alignment-baseline', 'hanging')
+	            .attr('text-anchor', 'end')
+	            //.attr('class', 'tk-atlas measure measure-maxHeight')
+							.attr('class', d => {
+								if (d.brand == 'average') return 'tk-atlas measure measure-maxHeight-average'
+								else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure measure-maxHeight-biggest`
+								else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure measure-maxHeight-smallest`
+							})
+
+	            frontGroup
+	              .selectAll('.measure-minHeight')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+									})
+		              return filt})
+	              .enter()
+	              .append('text')
+	              .text(d => `${d3.round(d.minHeightFront * inch, 1)}"`)
+	              .attr('alignment-baseline', 'hanging')
+	              .attr('text-anchor', 'start')
+	              //.attr('class', 'tk-atlas measure measure-minHeight')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure measure-minHeight-average'
+									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure measure-minHeight-biggest`
+									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure measure-minHeight-smallest`
+								})
+
+	            frontGroup
+	              .selectAll('.measure-maxWidth')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+									})
+		              return filt})
+	              .enter()
+	              .append('text')
+	              .text(d => `${d3.round(d.maxWidthFront * inch, 1)}"`)
+	              .attr('alignment-baseline', 'hanging')
+	              .attr('text-anchor', 'middle')
+	              //.attr('class', 'tk-atlas measure measure-maxWidth')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure measure-maxWidth-average'
+									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure measure-maxWidth-biggest`
+									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure measure-maxWidth-smallest`
+								})
+
+	            frontGroup
+	              .selectAll('.measure-minWidth')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || d.pocketArea == extentFront[0][1] || d.pocketArea == extentFront[0][0]
+									})
+									return filt})
+	              .enter()
+	              .append('text')
+	              .text(d => `${d3.round(d.minWidthFront * inch, 1)}"`)
+	              .attr('alignment-baseline', 'hanging')
+	              .attr('text-anchor', 'middle')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure measure-minWidth-average'
+									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure measure-minWidth-biggest`
+									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure measure-minWidth-smallest`
+								})
         }
 
         else if(location == 'back'){
@@ -148,24 +312,6 @@ d3.selection.prototype.debunkingChart = function init(options) {
 				if (location == 'front'){
 					drawings
 						.attr('d', function(d){
-							//const path = [
-							// 	// move to the right padding amount and down padding amount
-							// 	"M", [padding, padding],
-							// 	// draw a line from initial point straight down the length of the maxHeight
-							// 	"l", [0, scale(d.maxHeightFront)],
-							// 	////  "l", [scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)],
-							// 	// Add a curve to the other side
-							// 	"q", [scale(d.maxWidthFront / 2), scale(0.1 * d.maxHeightFront)], // control point for curve
-							// 		[scale(d.maxWidthFront), scale(d.minHeightFront - d.maxHeightFront)], // end point
-							// 	// Draw a line straight up to the min height - rivet height
-							// 	"l", [0, -scale(d.minHeightFront - d.rivetHeightFront)],
-							// 	// Add a curve to the line between rivets
-							// 	"q", [-scale(d.minWidthFront * 2 / 3), scale(0.1 * d.maxHeightFront)],
-							// 		[-scale(d.minWidthFront), -scale(d.rivetHeightFront)],
-							// 	"l", [-scale(d.maxWidthFront - d.minWidthFront), 0]
-							// 	////"L", [padding, padding]
-							// ]
-							// const joined = path.join(" ")
 							const padding = 10
 							const point1 = [padding, padding]
 							const point2 = [padding, padding + scale(d.maxHeightFront)]
@@ -228,6 +374,32 @@ d3.selection.prototype.debunkingChart = function init(options) {
 							const joined = path.join(" ")
 							return joined
 						})
+
+						const frontGroup = $svg.selectAll('.g-vis')
+
+						frontGroup.selectAll('.measure-maxHeight-average, .measure-maxHeight-smallest, .measure-maxHeight-biggest')
+						  .attr('transform', d => `translate(${padding/2}, ${scale(d.maxHeightFront / 2)})`)
+
+						frontGroup.selectAll('.measure-minHeight-average, .measure-minHeight-smallest, .measure-minHeight-biggest')
+							.attr('transform', d => `translate(${scale(d.maxWidthFront) + (padding * 1.5)}, ${scale(d.rivetHeightFront + ((d.minHeightFront - d.rivetHeightFront ) / 2))})`)
+
+						frontGroup.selectAll('.measure-maxWidth-average, .measure-maxWidth-smallest, .measure-maxWidth-biggest')
+							.attr('transform', d => `translate(${scale(d.maxWidthFront / 2) + padding}, ${scale(d.maxHeightFront) + (padding * 2.5)})`)
+
+						frontGroup.selectAll('.measure-minWidth-average, .measure-minWidth-smallest, .measure-minWidth-biggest')
+							.attr('transform', d => `translate(${scale((d.maxWidthFront - d.minWidthFront) + (d.minWidthFront / 2)) + padding}, ${scale(d.rivetHeightFront / 2)})`)
+
+						const groupWidth = frontGroup.node().getBBox().width
+
+						frontGroup
+							.attr('transform', function(d){
+								const check = this
+								const boxWidth = this.getBBox().width
+								const leftBBox = frontGroup.selectAll('.measure-maxHeight-biggest').node().getBBox().width
+								const difWidth = ((width - boxWidth) / 2) + (leftBBox / 2) + marginLeft
+
+								return `translate(${difWidth}, 0)`
+							})
 				}
 				else if (location == 'back'){
 					drawings
@@ -258,6 +430,36 @@ d3.selection.prototype.debunkingChart = function init(options) {
 
 					const highlightPath = $svg.select(`.outline-${sel}`)
 					highlightPath.classed('is-active', true)
+
+					$svg.selectAll('.measure, .measure-bg').classed('is-active', false)
+
+					const measurements = $svg.selectAll(`.measure-maxHeight-${sel}, .measure-minHeight-${sel}, .measure-maxWidth-${sel}, .measure-minWidth-${sel}`)
+						.classed('is-active', true)
+
+					const brandDisplay = $sel.selectAll('.selected-brand')
+
+					brandDisplay.classed('is-active', false)
+
+					if (sel == 'biggest'){
+						brandDisplay
+							.text(d => {
+								const val = d.value
+								const filt = val.filter(d => d.pocketArea == extentFront[0][1])
+								const brand = filt[0].brand
+								return brand
+							})
+							.classed('is-active', true)
+					}
+					else if (sel == 'smallest'){
+						brandDisplay
+							.text(d => {
+								const val = d.value
+								const filt = val.filter(d => d.pocketArea == extentFront[0][0])
+								const brand = filt[0].brand
+								return brand
+							})
+							.classed('is-active', true)
+					}
 				}
 
 
