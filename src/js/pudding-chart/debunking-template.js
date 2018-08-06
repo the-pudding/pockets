@@ -421,46 +421,52 @@ d3.selection.prototype.debunkingChart = function init(options) {
 
 				return Chart
 			},
-			highlight(sel, loc){
+			highlight(sel, loc, status){
 				if (loc == location){
-
-					$svg
-						.selectAll('.outline')
+					const outlines = $svg.selectAll('.outline')
 						.classed('is-active', false)
 
 					const highlightPath = $svg.select(`.outline-${sel}`)
-					highlightPath.classed('is-active', true)
+					const measurements = $svg.selectAll('.measure, .measure-bg')
+						.classed('is-active', false)
 
-					$svg.selectAll('.measure, .measure-bg').classed('is-active', false)
-
-					const measurements = $svg.selectAll(`.measure-maxHeight-${sel}, .measure-minHeight-${sel}, .measure-maxWidth-${sel}, .measure-minWidth-${sel}`)
-						.classed('is-active', true)
-
+					const measNum = $svg.selectAll(`.measure-maxHeight-${sel}, .measure-minHeight-${sel}, .measure-maxWidth-${sel}, .measure-minWidth-${sel}`)
 					const brandDisplay = $sel.selectAll('.selected-brand')
+						.classed('is-active', false)
 
-					brandDisplay.classed('is-active', false)
+					if (status == false){
 
-					if (sel == 'biggest'){
-						brandDisplay
-							.text(d => {
-								const val = d.value
-								const filt = val.filter(d => d.pocketArea == extentFront[0][1])
-								const brand = filt[0].brand
-								return brand
-							})
-							.classed('is-active', true)
+							highlightPath.classed('is-active', true)
+
+							measNum.classed('is-active', true)
+
+							brandDisplay.classed('is-active', false)
+
+							if (sel == 'biggest'){
+								brandDisplay
+									.text(d => {
+										const val = d.value
+										const filt = val.filter(d => d.pocketArea == extentFront[0][1])
+										const brand = filt[0].brand
+										return brand
+									})
+									.classed('is-active', true)
+							}
+							else if (sel == 'smallest'){
+								brandDisplay
+									.text(d => {
+										const val = d.value
+										const filt = val.filter(d => d.pocketArea == extentFront[0][0])
+										const brand = filt[0].brand
+										return brand
+									})
+									.classed('is-active', true)
+							}
+						}
+
 					}
-					else if (sel == 'smallest'){
-						brandDisplay
-							.text(d => {
-								const val = d.value
-								const filt = val.filter(d => d.pocketArea == extentFront[0][0])
-								const brand = filt[0].brand
-								return brand
-							})
-							.classed('is-active', true)
-					}
-				}
+
+
 
 
 				return Chart

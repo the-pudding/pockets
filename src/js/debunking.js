@@ -19,18 +19,23 @@ function resize(){
 
 function handleHighlight(){
   const sel = d3.select(this)
+  const selStatus = sel.classed('is-active')
+  const inverse = !selStatus
+  console.log({selStatus, inverse})
+
+
 
   const loc = sel.at('data-location')
   const buttons = ui.selectAll(`[data-location=${loc}]`)
 
   buttons.classed('is-active', false)
 
-
-  sel.classed('is-active', true)
+  sel.classed('is-active', !selStatus)
+  //sel.classed('is-active', true)
   const text = sel.text().toLowerCase()
 
   allCharts.forEach(chart => {
-    chart.highlight(text, loc)
+    chart.highlight(text, loc, selStatus)
   })
 }
 
