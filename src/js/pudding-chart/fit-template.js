@@ -106,7 +106,7 @@ d3.selection.prototype.fitChart = function init(options) {
 
 			const point3Cutout = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
 			const point3 = [padding + scale(d.maxWidthFront), scale(d.rivetHeightFront) + padding]
-			const curve2Control = [padding + scale(d.minWidthFront / 2), scale(0.4 * d.maxWidthFront) + padding]
+			const curve2Control = [padding + scale((d.maxWidthFront - d.minWidthFront) * 1.5), scale(d.rivetHeightFront) + padding]
 			const curve2End = [padding + scale(d.maxWidthFront - d.minWidthFront), padding]
 
 			let path = null
