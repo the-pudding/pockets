@@ -279,9 +279,9 @@ d3.selection.prototype.fitChart = function init(options) {
         let toolText = tooltip.append('div.tooltip-text')
         const dollars = d3.format("$.2f")
 
-        toolText.append('text.tk-atlas').text(d => d.name)
-        toolText.append('text.tk-atlas').text(d => `${dollars(d.price)}`)
-        toolText.append('text.tk-atlas').text(d => d.fabric)
+        toolText.append('text.tt-name.tk-atlas').text(d => d.name)
+        toolText.append('text.tt-price.tk-atlas').text(d => `${dollars(d.price)}`)
+        toolText.append('text.tt-fabric.tk-atlas').text(d => d.fabric)
 
 				const $g = $svg.append('g');
 

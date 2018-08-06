@@ -74,6 +74,7 @@
               padding 0.5rem
               text-transform uppercase
               font-weight 600
+              set-type-size(small)
 
           &.women
             .tag
@@ -82,12 +83,14 @@
               padding 0.5rem
               text-transform uppercase
               font-weight 600
+              set-type-size(small)
 
           .text
             display flex
 
           .leftText
             justify-content space-between
+            margin-right 0.5rem
 
           .rightText
             justify-content space-between
@@ -109,11 +112,18 @@
               flex-direction column
               text
                 color $white
-                margin 1rem
+                margin 0 1rem
                 text-align: center
             &:hover
               opacity 0.9
               transition 300ms
+
+            .tt-name
+              font-weight 600
+
+            .tt-fabric
+              set-type-size(small)
+              margin 3rem 1rem 1rem 1rem
 
           .display
             display flex

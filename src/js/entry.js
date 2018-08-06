@@ -74,6 +74,14 @@ function smallMenuToggle() {
 	});
 }
 
+function poem() {
+	const poemPocket = d3.selectAll('.pocket-wrapper')
+
+	poemPocket.on('click', function(){
+		this.classList.toggle('animation-check')
+	})
+}
+
 function init() {
 	// add mobile class to body tag
 	$body.classed('is-mobile', isMobile.any());
@@ -84,6 +92,7 @@ function init() {
 	smallMenuToggle();
 	// kick off graphic code
 	//area.init();
+	poem();
 	scroll.init()
 	debunk.init()
 	fit.init()
