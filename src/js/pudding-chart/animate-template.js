@@ -14,7 +14,7 @@ d3.selection.prototype.animateChart = function init(options) {
 		// dimension stuff
 		let width = 0;
 		let height = 0;
-		const marginTop = 0;
+		const marginTop = 15;
 		const marginBottom = 0;
 		const marginLeft = 0;
 		const marginRight = 0;
@@ -197,6 +197,13 @@ d3.selection.prototype.animateChart = function init(options) {
 			.append('path.outline')
 			.attr('class', d => `outline outline-${d.key}`)
 			.attr('d', joined)
+
+		const avgLabel = $svg
+				.append('text')
+				.text(d => d.key)
+				.attr('class', 'avglabel tk-atlas')
+				.attr('x', 0)
+				.attr('y', 15)
 
 		// g
 		// 	.append('path.largestRect')

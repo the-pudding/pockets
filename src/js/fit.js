@@ -12,9 +12,9 @@ let toggleM = null
 let dimW = null
 let dimM = null
 
-let selectedBrand = 'All'
-let selectedStyle = 'All'
-let selectedPrice = 'All'
+let selectedBrand = 'All brands'
+let selectedStyle = 'All styles'
+let selectedPrice = 'All prices'
 
 // selections
 const section = d3.select('.fit')
@@ -123,13 +123,13 @@ function setupFitChart(){
   dimW = charts[0].dim
   dimM = charts[1].dim
 
-  setupDropdowns(brand, 'brand')
-  setupDropdowns(style, 'updatedStyle')
-  setupDropdowns(price, 'priceGroup')
+  setupDropdowns(brand, 'brand', 'brands')
+  setupDropdowns(style, 'updatedStyle', 'styles')
+  setupDropdowns(price, 'priceGroup', 'prices')
   setupObjectSelect()
 }
 
-function setupDropdowns(selection, options){
+function setupDropdowns(selection, options, filter){
 
   selection
     .selectAll('option')
@@ -139,7 +139,7 @@ function setupDropdowns(selection, options){
           .entries(sortedData)
           .map(e => e.key)
 
-        nestBrands.unshift('All')
+        nestBrands.unshift('All ' + filter)
 
         return nestBrands
     })
