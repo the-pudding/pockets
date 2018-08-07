@@ -302,6 +302,130 @@ d3.selection.prototype.debunkingChart = function init(options) {
 								else return `outline`
 							})
 
+							// Adding background text elements
+
+							backGroup
+		            .selectAll('.measure-maxHeight')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+									})
+		              return filt})
+		            .enter()
+		            .append('text')
+		            .text(d => `${d3.round(d.maxHeightBack * inch, 1)}"`)
+		            .attr('alignment-baseline', 'hanging')
+		            .attr('text-anchor', 'middle')
+		            //.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-maxHeight-average'
+									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure-bg measure-maxHeight-biggest`
+									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure-bg measure-maxHeight-smallest`
+								})
+
+							backGroup
+								.selectAll('.measure-minHeight')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+									})
+									return filt})
+								.enter()
+								.append('text')
+								.text(d => `${d3.round(d.minHeightBack * inch, 1)}"`)
+								.attr('alignment-baseline', 'hanging')
+								.attr('text-anchor', 'start')
+								//.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-minHeight-average'
+									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure-bg measure-minHeight-biggest`
+									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure-bg measure-minHeight-smallest`
+								})
+
+							backGroup
+								.selectAll('.measure-maxWidth')
+								.data(d => {
+									const val = d.value
+									const filt = val.filter(d => {
+										return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+									})
+									return filt})
+								.enter()
+								.append('text')
+								.text(d => `${d3.round(d.maxWidthBack * inch, 1)}"`)
+								.attr('alignment-baseline', 'hanging')
+								.attr('text-anchor', 'middle')
+								//.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+								.attr('class', d => {
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-minHeight-average'
+									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure-bg measure-maxWidth-biggest`
+									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure-bg measure-maxWidth-smallest`
+								})
+
+								// Adding foreground text elements
+
+								backGroup
+			            .selectAll('.measure-maxHeight')
+									.data(d => {
+										const val = d.value
+										const filt = val.filter(d => {
+											return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+										})
+			              return filt})
+			            .enter()
+			            .append('text')
+			            .text(d => `${d3.round(d.maxHeightBack * inch, 1)}"`)
+			            .attr('alignment-baseline', 'hanging')
+			            .attr('text-anchor', 'middle')
+			            //.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+									.attr('class', d => {
+										if (d.brand == 'average') return 'tk-atlas measure measure-maxHeight-average'
+										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure measure-maxHeight-biggest`
+										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure measure-maxHeight-smallest`
+									})
+
+								backGroup
+									.selectAll('.measure-minHeight')
+									.data(d => {
+										const val = d.value
+										const filt = val.filter(d => {
+											return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+										})
+										return filt})
+									.enter()
+									.append('text')
+									.text(d => `${d3.round(d.minHeightBack * inch, 1)}"`)
+									.attr('alignment-baseline', 'hanging')
+									.attr('text-anchor', 'start')
+									//.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+									.attr('class', d => {
+										if (d.brand == 'average') return 'tk-atlas measure measure-minHeight-average'
+										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure measure-minHeight-biggest`
+										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure measure-minHeight-smallest`
+									})
+
+								backGroup
+									.selectAll('.measure-maxWidth')
+									.data(d => {
+										const val = d.value
+										const filt = val.filter(d => {
+											return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+										})
+										return filt})
+									.enter()
+									.append('text')
+									.text(d => `${d3.round(d.maxWidthBack * inch, 1)}"`)
+									.attr('alignment-baseline', 'hanging')
+									.attr('text-anchor', 'middle')
+									//.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
+									.attr('class', d => {
+										if (d.brand == 'average') return 'tk-atlas measure measure-maxWidth-average'
+										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure measure-maxWidth-biggest`
+										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure measure-maxWidth-smallest`
+									})
+
         }
 				Chart.update()
 				return Chart;
@@ -417,6 +541,19 @@ d3.selection.prototype.debunkingChart = function init(options) {
 							const joined = path.join(" ")
 							return joined
 						})
+
+						const backGroup = $svg.selectAll('.g-vis')
+
+						backGroup.selectAll('.measure-maxHeight-average, .measure-maxHeight-smallest, .measure-maxHeight-biggest')
+						  .attr('transform', d => `translate(${scale(d.maxWidthBack / 2) + padding}, ${scale(d.maxHeightBack / 2)})`)
+
+						backGroup.selectAll('.measure-minHeight-average, .measure-minHeight-smallest, .measure-minHeight-biggest')
+							.attr('transform', d => `translate(${scale(d.maxWidthBack) + (padding * 1.5)}, ${scale(d.minHeightBack / 2)})`)
+
+						backGroup.selectAll('.measure-maxWidth-average, .measure-maxWidth-smallest, .measure-maxWidth-biggest')
+							.attr('transform', d => `translate(${scale(d.maxWidthBack / 2) + padding}, ${scale(d.maxHeightBack) + (padding * 2.5)})`)
+
+
 				}
 
 				return Chart
