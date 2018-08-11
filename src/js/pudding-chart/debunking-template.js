@@ -359,7 +359,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 								.attr('text-anchor', 'middle')
 								//.attr('class', 'tk-atlas measure-bg measure-maxHeight-bg')
 								.attr('class', d => {
-									if (d.brand == 'average') return 'tk-atlas measure-bg measure-minHeight-average'
+									if (d.brand == 'average') return 'tk-atlas measure-bg measure-maxWidth-average'
 									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure-bg measure-maxWidth-biggest`
 									else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure-bg measure-maxWidth-smallest`
 								})
@@ -579,27 +579,58 @@ d3.selection.prototype.debunkingChart = function init(options) {
 
 							brandDisplay.classed('is-active', false)
 
-							if (sel == 'biggest'){
-								brandDisplay
-									.text(d => {
-										const val = d.value
-										const filt = val.filter(d => d.pocketArea == extentFront[0][1])
-										const brand = filt[0].brand
-										return brand
-									})
-									.classed('is-active', true)
+							if (loc == 'front'){
+
+									if (sel == 'biggest'){
+										brandDisplay
+											.text(d => {
+												const val = d.value
+												const filt = val.filter(d => d.pocketArea == extentFront[0][1])
+												const brand = filt[0].brand
+												return brand
+											})
+											.classed('is-active', true)
+									}
+									else if (sel == 'smallest'){
+										brandDisplay
+											.text(d => {
+												const val = d.value
+												const filt = val.filter(d => d.pocketArea == extentFront[0][0])
+												const brand = filt[0].brand
+												return brand
+											})
+											.classed('is-active', true)
+									}
+								}
+
+							if (loc == 'back'){
+
+								if (sel == 'biggest'){
+									brandDisplay
+										.text(d => {
+											const val = d.value
+											const filt = val.filter(d => d.maxHeightBack * d.minWidthBack == extentBack[0][1])
+											const brand = filt[0].brand
+											return brand
+										})
+										.classed('is-active', true)
+								}
+								else if (sel == 'smallest'){
+									brandDisplay
+										.text(d => {
+											const val = d.value
+											const filt = val.filter(d => d.maxHeightBack * d.minWidthBack == extentBack[0][0])
+											const brand = filt[0].brand
+											return brand
+										})
+										.classed('is-active', true)
+								}
+
 							}
-							else if (sel == 'smallest'){
-								brandDisplay
-									.text(d => {
-										const val = d.value
-										const filt = val.filter(d => d.pocketArea == extentFront[0][0])
-										const brand = filt[0].brand
-										return brand
-									})
-									.classed('is-active', true)
+
+
 							}
-						}
+
 
 					}
 
