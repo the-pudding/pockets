@@ -14,6 +14,37 @@
       transition background-color 250ms
       &:hover
       	background-color rgba($mid-denim, 0.2)
+      &.is-disabled
+        background-color transparent
+        color $light-denim
+        border 1px solid $light-denim
+        pointer-events none
+
+  &-container
+    position relative
+
+  .ui-warning
+    position absolute
+    top 15%
+    left 50%
+    max-width 25rem
+    background-color rgba($light-denim, 0.95)
+    border 1px dashed $mid-denim
+    padding 0.25rem 1rem
+    margin 0 auto
+    transform translate(-50%, 0)
+    box-shadow 0 0 3px rgba(40,40,40,.25)
+    z-index(200)
+    opacity 0
+    transition 300ms
+    &-text
+      set-type-size('small', true)
+      color $dark-denim
+      text-align center
+
+    &.is-active
+      opacity 1
+      transition 300ms
 
   .show-more
     position absolute
@@ -38,6 +69,7 @@
   figure
     min-height 320px
     position relative
+    z-index -50
     &.is-truncated
       max-height 46rem
       overflow hidden
