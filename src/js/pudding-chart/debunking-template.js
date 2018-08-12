@@ -92,9 +92,17 @@ d3.selection.prototype.debunkingChart = function init(options) {
 					height: height + marginTop + marginBottom
 				});
 
-        scale
-          .domain([0, 29])
-          .range([0, height])
+				if(location == 'front'){
+	        scale
+	          .domain([0, 29])
+	          .range([0, height])
+				}
+
+				if(location == 'back'){
+					scale
+						.domain([0, 22])
+						.range([0, height])
+				}
 
 				// if pockets are drawn on page resize, resize them too
 				const outlines = $sel.selectAll('.outline')
@@ -284,6 +292,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 									else if ((d.pocketArea) == extentFront[0][1]) return `tk-atlas measure measure-minWidth-biggest`
 									else if ((d.pocketArea) == extentFront[0][0]) return `tk-atlas measure measure-minWidth-smallest`
 								})
+
         }
 
         else if(location == 'back'){
@@ -426,6 +435,23 @@ d3.selection.prototype.debunkingChart = function init(options) {
 										else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure measure-maxWidth-smallest`
 									})
 
+									backGroup
+										.selectAll('.measure-path')
+										.data(d => {
+											const val = d.value
+											const filt = val.filter(d => {
+												return d.brand == 'average' || (d.maxHeightBack * d.minWidthBack) == extentBack[0][1] || (d.maxHeightBack * d.minWidthBack) == extentBack[0][0]
+											})
+											return filt})
+										.enter()
+										.append('path')
+										.attr('class', d => {
+											if (d.brand == 'average') return 'tk-atlas measure-path measure-path-average'
+											else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][1]) return `tk-atlas measure-path measure-path-biggest`
+											else if ((d.maxHeightBack * d.minWidthBack) == extentBack[0][0]) return `tk-atlas measure-path measure-path-smallest`
+										})
+										.lower()
+
         }
 				Chart.update()
 				return Chart;
@@ -553,6 +579,17 @@ d3.selection.prototype.debunkingChart = function init(options) {
 						backGroup.selectAll('.measure-maxWidth-average, .measure-maxWidth-smallest, .measure-maxWidth-biggest')
 							.attr('transform', d => `translate(${scale(d.maxWidthBack / 2) + padding}, ${scale(d.maxHeightBack) + (padding * 2.5)})`)
 
+						backGroup.selectAll('.measure-path')
+						.attr('d', function(d){
+							const path = [
+								// move to the right padding amount and down padding amount
+								"M", [padding + scale(d.maxWidthBack / 2), padding],
+								// draw a line from initial point straight down the length of the maxHeight
+								"l", [0, scale(d.maxHeightBack)],
+							]
+							const joined = path.join(" ")
+							return joined
+						})
 
 				}
 
@@ -569,6 +606,9 @@ d3.selection.prototype.debunkingChart = function init(options) {
 
 					const measNum = $svg.selectAll(`.measure-maxHeight-${sel}, .measure-minHeight-${sel}, .measure-maxWidth-${sel}, .measure-minWidth-${sel}`)
 					const brandDisplay = $sel.selectAll('.selected-brand')
+						.classed('is-active', false)
+
+					$svg.selectAll('.measure-path')
 						.classed('is-active', false)
 
 					if (status == false){
@@ -604,6 +644,9 @@ d3.selection.prototype.debunkingChart = function init(options) {
 								}
 
 							if (loc == 'back'){
+
+								const measurePath = $svg.select(`.measure-path-${sel}`)
+									.classed('is-active', true)
 
 								if (sel == 'biggest'){
 									brandDisplay
