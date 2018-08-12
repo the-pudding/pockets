@@ -435,23 +435,45 @@ d3.selection.prototype.fitChart = function init(options) {
 				return Chart;
 			},
       toggle(brand, price, style){
-				console.log({brand, price, style})
+
         brands
           .classed('visible', d => {
-						const thisBrand = d.brand
-						const thisStyle = d.style
-						const priceGroup = d.priceGroup
-
-						console.log({thisBrand, thisStyle, priceGroup, brand, style, price})
-
             if ((d.brand == brand || brand == 'All brands') && (d.updatedStyle == style || style == 'All styles') && (d.priceGroup == price || price == 'All prices')){
 							console.log({d})
 							return true}
             else return false
           })
 
-				const test = brands.selectAll('.visible')
-				console.log({test, brands})
+				const visible = d3.selectAll('.fit-brand.visible')
+
+				console.log({visible})
+
+				if (visible.size() < 1){
+					d3.select('.ui-warning').classed('is-active', true)
+				}
+
+				if (visible.size() > 1){
+					d3.select('.ui-warning').classed('is-active', false)
+				}
+
+				if (visible.size() < 8){
+					d3.select('.btn')
+						.prop('disabled', true)
+						.classed('is-disabled', true)
+
+					d3.select('.show-more')
+						.classed('is-visible', false)
+				}
+
+				if (visible.size() > 8){
+					d3.select('.btn')
+						.prop('disabled', false)
+						.classed('is-disabled', false)
+
+						d3.select('.show-more')
+							.classed('is-visible', true)
+				}
+
         return Chart
       },
       dim(selObject, id){
