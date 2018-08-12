@@ -435,13 +435,23 @@ d3.selection.prototype.fitChart = function init(options) {
 				return Chart;
 			},
       toggle(brand, price, style){
+				console.log({brand, price, style})
         brands
           .classed('visible', d => {
+						const thisBrand = d.brand
+						const thisStyle = d.style
+						const priceGroup = d.priceGroup
 
+						console.log({thisBrand, thisStyle, priceGroup, brand, style, price})
 
-            if ((d.brand == brand || brand == 'All') && (d.style == style || style == 'All') && (d.priceGroup == price || price == 'All')) return true
+            if ((d.brand == brand || brand == 'All brands') && (d.updatedStyle == style || style == 'All styles') && (d.priceGroup == price || price == 'All prices')){
+							console.log({d})
+							return true}
             else return false
           })
+
+				const test = brands.selectAll('.visible')
+				console.log({test, brands})
         return Chart
       },
       dim(selObject, id){
