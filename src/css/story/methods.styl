@@ -23,14 +23,66 @@
       max-width $column-width
       margin 1rem auto
 
+    .measurement-deets
+      width 100%
+      margin-top 3rem
+      justify-content flex-start
+      display flex
+      flex-wrap wrap
+      +mq('bp-4')
+        justify-content center
+
+      .measurements
+        &:before
+          display inline-block
+          content ''
+          width 14px
+          height 15px
+          border-top 2px solid $tag-red
+          position relative
+          top 10px
+          margin-right 3px
+
+      .straights
+        &:before
+          display inline-block
+          content ''
+          width 14px
+          height 15px
+          border-top 2px solid $dark-denim
+          position relative
+          top 10px
+          margin-right 3px
+
+      .curves
+        &:before
+          display inline-block
+          content ''
+          width 14px
+          height 15px
+          border-top 1px dashed $dark-denim
+          position relative
+          top 10px
+          margin-right 3px
+
+      p
+        font-family $atlas
+        set-type-size('x-small', true)
+        float left
+        margin 0 1rem 0 0
+
     .measurement-diagram
       max-width 25rem
-      margin 1rem auto
+      margin 1rem auto 3rem auto
       display flex
       justify-content center
+      clear both
 
       #g-methods_measures-box
-        display flex
+        display block
+        +mq('bp-4')
+          display flex
+
         .g-artboard
           margin 0 auto
 
@@ -55,16 +107,14 @@
         #g-methods_measures-front, #g-methods_measures-back
           position relative
       		overflow hidden
-          width 30%
+          width 100%
+          +mq('bp-4')
+            width 50%
 
         .g-artboard
-          width 50%
-          float left
-
           p
             set-type-size('xx-small', true)
             font-family $atlas
-            color $mid-denim
 
           .g-pstyle0
             text-align center
