@@ -476,56 +476,67 @@ d3.selection.prototype.fitChart = function init(options) {
 
         return Chart
       },
-      dim(selObject, id){
+      dim(selObject, id, state){
+				const frontGroup = $svg.select('.g-vis')
 
-        brands
-          .select('.display')
-          .classed('dimmed', function(d){
-            let rectArea = null
-            if (selObject == 'phone') rectArea = 'rectanglePhone'
-            if (selObject == 'pen') rectArea = 'rectanglePen'
-            if (selObject == 'wallet') rectArea = 'rectangleWallet'
-						if (selObject == 'hand') rectArea = 'rectangleHand'
+				if (state == false){
+					brands
+	          .select('.display')
+	          .classed('dimmed', function(d){
+	            let rectArea = null
+	            if (selObject == 'phone') rectArea = 'rectanglePhone'
+	            if (selObject == 'pen') rectArea = 'rectanglePen'
+	            if (selObject == 'wallet') rectArea = 'rectangleWallet'
+							if (selObject == 'hand') rectArea = 'rectangleHand'
 
-            let objectWidth =  scale(objectMap.get(id).width)
-            let objectHeight = scale(objectMap.get(id).height)
+	            let objectWidth =  scale(objectMap.get(id).width)
+	            let objectHeight = scale(objectMap.get(id).height)
 
-            const largestRect = d[rectArea]
-            const rectWidth = multRectX(largestRect.width, width)
-            const opening = scale(d.minWidthFront)
-            const rectHeight = multRectY(largestRect.height, height)
+	            const largestRect = d[rectArea]
+	            const rectWidth = multRectX(largestRect.width, width)
+	            const opening = scale(d.minWidthFront)
+	            const rectHeight = multRectY(largestRect.height, height)
 
-            if (objectWidth > scale(d.minWidthFront) || objectWidth > rectWidth || objectHeight > rectHeight){
-              const opening = d.minWidthFront
-              return true
-            }
-            else return false
-          })
+	            if (objectWidth > scale(d.minWidthFront) || objectWidth > rectWidth || objectHeight > rectHeight){
+	              const opening = d.minWidthFront
+	              return true
+	            }
+	            else return false
+	          })
 
-        const allDimmed = $sel.selectAll('.dimmed').size()
-        const allPockets = $sel.selectAll('.display').size()
+	        const allDimmed = $sel.selectAll('.dimmed').size()
+	        const allPockets = $sel.selectAll('.display').size()
 
-        if(data.key == 'women'){
-          d3.select('.stat-women')
-            .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
-        }
-        else if(data.key == 'men'){
-          d3.select('.stat-men')
-            .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
-        }
+	        if(data.key == 'women'){
+	          d3.select('.stat-women')
+	            .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
+	        }
+	        else if(data.key == 'men'){
+	          d3.select('.stat-men')
+	            .text(`${d3.round(100 - ((allDimmed/allPockets) * 100), 0)}%`)
+	        }
 
-        // draw selected object
-        const frontGroup = $svg.select('.g-vis')
-        frontGroup.selectAll('.pocket-object').remove()
+	        // draw selected object
 
-        frontGroup
-          .selectAll('.outline-object')
-          .data(d => [d])
-          .enter()
-          .append('g')
-          .each(function(d){
-            const g = d3.select(this)
-            drawObject(d, selObject, g, id)})
+	        frontGroup.selectAll('.pocket-object').remove()
+
+	        frontGroup
+	          .selectAll('.outline-object')
+	          .data(d => [d])
+	          .enter()
+	          .append('g')
+	          .each(function(d){
+	            const g = d3.select(this)
+	            drawObject(d, selObject, g, id)})
+				}
+
+				else if (state == true) {
+					brands
+						.select('.display')
+						.classed('dimmed', false)
+
+					frontGroup.selectAll('.pocket-object').remove()
+				}
 
 
 

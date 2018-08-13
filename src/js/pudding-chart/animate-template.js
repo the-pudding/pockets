@@ -394,20 +394,28 @@ d3.selection.prototype.animateChart = function init(options) {
 				Chart.render();
 				return Chart;
 			},
-			animate(selObject, id){
-				userObject = selObject
-				userID = id
+			animate(selObject, id, state){
 				const frontGroup = $svg.select('.g-vis')
-        frontGroup.selectAll('.pocket-object').remove()
 
-        frontGroup
-          .selectAll('.outline-object')
-          .data(d => [d])
-          .enter()
-          .append('g')
-          .each(function(d){
-            const g = d3.select(this)
-            drawObject(d, selObject, g, id)})
+				if (state == false){
+					userObject = selObject
+					userID = id
+
+	        frontGroup.selectAll('.pocket-object').remove()
+
+	        frontGroup
+	          .selectAll('.outline-object')
+	          .data(d => [d])
+	          .enter()
+	          .append('g')
+	          .each(function(d){
+	            const g = d3.select(this)
+	            drawObject(d, selObject, g, id)})
+				}
+
+				if (state == true){
+					frontGroup.selectAll('.pocket-object').remove()
+				}
 
 				return Chart
 
