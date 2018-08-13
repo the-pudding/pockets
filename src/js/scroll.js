@@ -18,6 +18,16 @@ const graphic = container.select('.scroll-graphic')
 const chart = graphic.select('.scroll-svg')
 const text = container.select('.scroll-text')
 const step = text.selectAll('.step')
+let skip = false
+
+function setupSkip(){
+  d3.select('.skip-button')
+    .on('click', () => {
+      skip = !skip
+      toggle(2, skip)
+    })
+
+}
 
 function setupChart(){
   const $sel = $scroll
@@ -58,6 +68,7 @@ function setupChart(){
 
     resize()
     setupScroll(chart)
+    setupSkip()
 }
 
 function resize(){
@@ -78,7 +89,7 @@ function resize(){
 
 function handleStepEnter(response){
   const index = response.index
-  toggle(index)
+  toggle(index, skip)
 }
 
 function setupScroll(){

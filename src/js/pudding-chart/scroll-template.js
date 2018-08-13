@@ -385,11 +385,13 @@ d3.selection.prototype.scrollChart = function init(options) {
 				return Chart;
 			},
       // toggle steps
-      toggle(step){
+      toggle(step, skip){
+				console.log({skip})
         const women = $svgFront.select('.group-women')
         const men = $svgFront.select('.group-men')
 				const label = $svgFront.selectAll('.label')
 				const measurements = $svgFront.selectAll('.g-measurements')
+
 
         function step0(){
           women
@@ -542,10 +544,42 @@ d3.selection.prototype.scrollChart = function init(options) {
 							.attr('opacity', 1)
         }
 
-        // Run specific function based on step
-        if (step == 0) step0()
-        if (step == 1) step1()
-        if (step == 2) step2()
+				if (skip == false){
+	        // Run specific function based on step
+	        if (step == 0) step0()
+	        if (step == 1) step1()
+	        if (step == 2) step2()
+				}
+				else if (skip == true){
+					women
+            .attr('transform', `translate(${(fullWidth - scaledMaxWidth) / 2}, ${marginTop})`)
+
+          men
+						.attr('transform', `translate(${(fullWidth - scaledMaxWidth) / 2}, ${marginTop})`)
+
+
+            women.selectAll('.outline')
+              .style('stroke-opacity', 0)
+
+            men.selectAll('.outline')
+              .style('stroke-opacity', 0)
+
+						women.selectAll('.outline-average')
+							.attr('opacity', 1)
+							.style('stroke-opacity', 1)
+							.style('fill', red)
+
+						men.selectAll('.outline-average')
+							.attr('opacity', 1)
+							.style('stroke-opacity', 1)
+							.style('fill', gold)
+
+						label
+							.attr('opacity', 0)
+
+						measurements
+							.attr('opacity', 1)
+				}
 
       }
 		};
