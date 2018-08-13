@@ -22,3 +22,52 @@
       set-type-size('small', true)
       max-width $column-width
       margin 1rem auto
+
+    .measurement-diagram
+      max-width 25rem
+      margin 1rem auto
+      display flex
+      justify-content center
+
+      #g-methods_measures-box
+        display flex
+        .g-artboard
+          margin 0 auto
+
+          p
+            margin 0
+
+        .g-aiAbs
+          position absolute
+
+        .g-aiImg
+          display block
+      		width 100% !important
+
+        .g-aiSymbol
+          position absolute
+      		box-sizing border-box
+
+        .g-aiPointText
+          p
+            white-space nowrap
+
+        #g-methods_measures-front, #g-methods_measures-back
+          position relative
+      		overflow hidden
+          width 30%
+
+        .g-artboard
+          width 50%
+          float left
+
+          p
+            set-type-size('xx-small', true)
+            font-family $atlas
+            color $mid-denim
+
+          .g-pstyle0
+            text-align center
+
+          .g-pstyle1
+            text-align left
