@@ -16,9 +16,9 @@ d3.selection.prototype.debunkingChart = function init(options) {
 		let width = 0;
 		let height = 0;
 		const marginTop = 5;
-		const marginBottom = 5;
+		const marginBottom = 25;
 		const marginLeft = 25;
-		const marginRight = 0;
+		const marginRight = 10;
 
 		// scales
 		const scale = d3.scaleLinear()
@@ -86,7 +86,7 @@ d3.selection.prototype.debunkingChart = function init(options) {
 				$sel.st('width', chartWidth).st('height', chartWidth * 1.5)
 				// defaults to grabbing dimensions from container element
 				width = $sel.node().offsetWidth - marginLeft - marginRight;
-				height = (width * 1.25) - marginTop - marginBottom
+				height = (width * 1.5) - marginTop - marginBottom
 				$svg.at({
 					width: width + marginLeft + marginRight,
 					height: height + marginTop + marginBottom

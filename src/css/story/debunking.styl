@@ -1,6 +1,13 @@
+.debunk-wrapper
+  margin-top 3rem
+
+  .section-hed
+    margin-bottom -1rem
+
 .debunk
   &-ui
     display flex
+    flex-wrap wrap
     flex-direction row
     justify-content flex-start
     align-items: baseline;
@@ -8,15 +15,21 @@
     margin 0 auto
     padding 0 1rem
     span
+      width 100%
+      margin-bottom 0.5rem
       set-type-size('small', true)
       color $mid-denim
+      +mq('bp-3')
+        width 6rem
 
     .btn
       padding 0.5rem
-      margin 0 0.5rem
+      margin 0 1rem 0 0
       background-color rgba($light-denim, .2)
       border 1px dashed $mid-denim
       transition 300ms
+      +mq('bp-3')
+        margin 0 0.5rem
 
       &.is-active
         background-color rgba($light-denim, .8)
@@ -32,7 +45,7 @@
     display flex
     flex-wrap wrap
     max-width 900px
-    margin 4rem auto
+    margin 4rem auto 0 auto
     justify-content: space-around;
 
     .chart
@@ -46,8 +59,8 @@
 
     .selected-brand
       order 2
-      text-transform uppercase
-      text-align: center;
+      //text-transform uppercase
+      //text-align center
       opacity 0
       transition 300ms
 
@@ -57,7 +70,7 @@
 
     .container
       //max-width 225px
-      height 300px
+      //height 220px
       min-width 125px
 
       .g-vis

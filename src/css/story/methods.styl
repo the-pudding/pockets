@@ -10,11 +10,13 @@
 
   .stitching
     border 1px dashed $dark-denim
-    padding 2rem 4rem
+    padding 2rem
     width 100%
     height 100%
     align-items center
     justify-content center
+    +mq('bp-3')
+      padding 2rem 4rem
 
     .methods-prose
       set-type-size('small', true)
