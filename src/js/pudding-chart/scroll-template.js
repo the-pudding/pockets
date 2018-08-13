@@ -110,6 +110,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             return this.getTotalLength()
           })
 					.style('fill', 'none')
+					.style('stroke-opacity', 0)
 
 					const label = $gFront
 						.selectAll('.label')
@@ -397,11 +398,19 @@ d3.selection.prototype.scrollChart = function init(options) {
 						.attr('transform', `translate(${marginLeft}, ${marginTop})`)
 
           women.selectAll('.outline')
-            .style('stroke-opacity', 0.1)
+						.style('stroke-opacity', 0.1)
+						.attr('stroke-dasharray', function(d){
+	            return this.getTotalLength()
+	          })
+	          .attr('stroke-dashoffset', function(d){
+	            return this.getTotalLength()
+	          })
             .transition()
             .duration(500)
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
+						//.style('stroke-opacity, 0.1')
+
 
           men
             .transition()
@@ -409,7 +418,13 @@ d3.selection.prototype.scrollChart = function init(options) {
 						.attr('transform', `translate(${fullWidth - scaledMaxWidth - marginLeft}, ${marginTop})`)
 
           men.selectAll('.outline')
-            .style('stroke-opacity', 0.1)
+						.attr('stroke-dasharray', function(d){
+							return this.getTotalLength()
+						})
+						.attr('stroke-dashoffset', function(d){
+							return this.getTotalLength()
+						})
+						.style('stroke-opacity', 0.1)
             .transition()
             .duration(500)
             .delay((d, i) => i * 100)
@@ -454,6 +469,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
 						.attr('opacity', 1)
+						.style('stroke-opacity', 1)
 						.style('fill', red)
 
           men.selectAll('.outline-average')
@@ -462,6 +478,7 @@ d3.selection.prototype.scrollChart = function init(options) {
             .duration(500)
             .delay((d, i) => i * 100)
             .attr('stroke-dashoffset', 0)
+						.style('stroke-opacity', 1)
 						.attr('opacity', 1)
 						.style('fill', gold)
 

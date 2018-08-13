@@ -43,6 +43,7 @@ const navCount = $navLi.size()
 const navSize = $navLi.node().offsetWidth
 const totalW = navCount * navSize
 const dragMax = totalW - navSize
+console.log({navCount, navSize, totalW, dragMax})
 const dragOffset = 0
 
 function resize(){
@@ -178,19 +179,33 @@ function handleObjectClick(){
     clickSentence.classed('is-visible', false)
     statSentence.classed('is-visible', true)
   }
+  const item = d3.select(this)
+  const activeState = item.classed('is-active')
+
+  if (activeState == true){
+    clickSentence.classed('is-visible', true)
+    statSentence.classed('is-visible', false)
+  }
+  else if (activeState == false){
+    clickSentence.classed('is-visible', false)
+    statSentence.classed('is-visible', true)
+  }
+
 
   $navLi.classed('is-active', false)
-  const item = d3.select(this)
 
-  item.classed('is-active', true)
+
+  item.classed('is-active', !activeState)
   const name = item.at('data-type')
   selectedObject = name
   const id = item.at('data-id')
+
+
   // This needs to be connected to drag & drop
-  dimW(selectedObject, id)
-  dimM(selectedObject, id)
-  animateW(selectedObject, id)
-  animateM(selectedObject, id)
+  dimW(selectedObject, id, activeState)
+  dimM(selectedObject, id, activeState)
+  animateW(selectedObject, id, activeState)
+  animateM(selectedObject, id, activeState)
 }
 
 function prefix(prop) {

@@ -73,7 +73,8 @@ function setupChart(){
     .selectAll('.chart')
     .data(nest2)
     .enter()
-    .append('div.chart')
+    .append('div')
+    .attr('class', d => `chart chart-${(d.key).replace(/\s/g,'')}`)
     .attr('data-location', location)
     .debunkingChart()
 
