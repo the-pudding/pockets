@@ -30,9 +30,14 @@
 		{{> story/intro }}
 		{{> story/scroll-pockets }}
 		{{> story/fit }}
-		{{> story/why }}
+
 		<!-- {{> story/history }} -->
 		{{> story/debunking }}
+		{{> story/why }}
+
+		{{#each copy.ending}}
+			<p class='prose'>{{{value}}}</p>
+		{{/each}}
 		{{> story/methods }}
 		<!-- {{> story/area }} -->
 		<!-- PUT ALL YOUR HTML HERE-->
