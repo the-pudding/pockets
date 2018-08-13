@@ -17,6 +17,8 @@ nav
     background linear-gradient(to right, rgba($bg-denim,0) 0%,rgba($bg-denim,1) 50%,rgba($bg-denim,1) 100%)
     +mq('bp-4')
     	right -70%
+    +mq('bp-6')
+      background none
     &:before
       position absolute
       bottom 0
@@ -30,6 +32,8 @@ nav
       +mq('bp-4')
       	right -50%
         background linear-gradient(to left, rgba($bg,0) 0%,rgba($bg,1) 50%,rgba($bg,1) 100%)
+      +mq('bp-6')
+        background none
   ul
     display flex
     flex-direction row
