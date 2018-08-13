@@ -33,10 +33,11 @@
 
   .stat-sentence
     opacity 0
+    font-weight 300
     margin 0 auto
     position absolute
     transition 300ms
-    padding 0 1rem
+    padding 0 1.5rem
     line-height 1
     text-align center
     width 100%
@@ -45,17 +46,17 @@
       line-height 1.5
 
     .stat-women
-      background-color $tag-red
+      background-color $tag-red + 70%
       padding 0.125rem 0.25rem
-      color $bg-denim
-      //border 1px dashed $gold-stitch
+      border 2px solid $tag-red
       set-type-size('medium', true)
+      font-weight 600
     .stat-men
-      background-color $gold-stitch
+      background-color $gold-stitch + 70%
       padding 0.125rem 0.25rem
-      color $bg-denim
-      //border 1px dashed $gold-stitch
+      border 2px solid $gold-stitch
       set-type-size('medium', true)
+      font-weight 600
 
     &.is-visible
       opacity 1
