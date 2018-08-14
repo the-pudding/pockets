@@ -39,7 +39,7 @@ function setupStickyHeader() {
 }
 function smallMenuToggle() {
 	enterView({
-		selector: '.scroll',
+		selector: '.intro-prose',
 		offset: 0.5,
 		enter: function(el) {
 			let logo = d3.select('.logo');
