@@ -320,6 +320,39 @@ d3.selection.prototype.fitChart = function init(options) {
 					.domain([0, 29])
 					.range([0, height])
 
+					// For preparing code for sharing - converting largest rectangle measurements from pixels to cm
+
+				// 	function exportRectangles(rect){
+				// 		const val = [rect].map(d => {
+				// 			return {
+				// 				...d,
+				// 				heightCM: scale.invert(d.height),
+				// 				widthCM: scale.invert(d.width)
+				// 			}
+				// 		})
+				// 		return val[0]
+				// 	}
+				//
+				// const shareableData = [data].map(d => {
+				// 	const val = d.values
+				// 	const updated = val.map(e => {
+				// 		return {
+				// 			...e,
+				// 			rectangleHand: exportRectangles(e.rectangleHand),
+				// 			rectanglePen: exportRectangles(e.rectanglePen),
+				// 			rectangeWallet: exportRectangles(e.rectangleWallet),
+				// 			rectanglePhone: exportRectangles(e.rectanglePhone)
+				// 		}
+				// 	})
+				// 	return updated
+				// })
+				//
+				// if(data.key == 'women') window.shareW = JSON.stringify(shareableData)
+				// if(data.key == 'men') window.shareM = JSON.stringify(shareableData)
+
+
+
+
 				// if pockets are drawn on page resize, resize them too
 				const outlines = $sel.selectAll('.outline')
 
