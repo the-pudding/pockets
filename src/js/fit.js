@@ -43,7 +43,6 @@ const navCount = $navLi.size()
 const navSize = $navLi.node().offsetWidth
 const totalW = navCount * navSize
 const dragMax = totalW - navSize
-console.log({navCount, navSize, totalW, dragMax})
 const dragOffset = 0
 
 function resize(){

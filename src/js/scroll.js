@@ -2,6 +2,8 @@ import loadMeasurements from './load-data'
 import './pudding-chart/scroll-template'
 import scrollama from 'scrollama'
 import intersectionObserver from 'intersection-observer'
+import tracker from './utils/tracker.js'
+import enterView from 'enter-view';
 
 let data = null
 
@@ -21,10 +23,31 @@ const step = text.selectAll('.step')
 let skip = false
 
 function setupSkip(){
-  d3.select('.skip-button')
+
+  const skipButton = d3.select('.skip-button')
+  // Check if the skip option has entered the view
+  enterView({
+		selector: '.intro-warning',
+		offset: 0.1,
+		enter: function(el) {
+      tracker.send({
+        category: 'enter skip option',
+        action: 'enter',
+        once: 'true'
+      })
+    }
+
+	})
+
+  skipButton
     .on('click', () => {
       skip = !skip
       toggle(2, skip)
+      tracker.send({
+        category: 'skip scrollytelling',
+        action: 'click',
+        once: true
+      })
     })
 
 }

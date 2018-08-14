@@ -12,7 +12,6 @@ d3.selection.prototype.fitChart = function init(options) {
 	function createChart(el) {
 		const $sel = d3.select(el);
 		let data = $sel.datum();
-		console.log({data})
 		// dimension stuff
 		let width = 0;
 		let height = 0;
@@ -473,14 +472,11 @@ d3.selection.prototype.fitChart = function init(options) {
         brands
           .classed('visible', d => {
             if ((d.brand == brand || brand == 'All brands') && (d.updatedStyle == style || style == 'All styles') && (d.priceGroup == price || price == 'All prices')){
-							console.log({d})
 							return true}
             else return false
           })
 
 				const visible = d3.selectAll('.fit-brand.visible')
-
-				console.log({visible})
 
 				if (visible.size() < 1){
 					d3.select('.ui-warning').classed('is-active', true)

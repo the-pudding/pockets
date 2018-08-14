@@ -386,7 +386,6 @@ d3.selection.prototype.scrollChart = function init(options) {
 			},
       // toggle steps
       toggle(step, skip){
-				console.log({skip})
         const women = $svgFront.select('.group-women')
         const men = $svgFront.select('.group-men')
 				const label = $svgFront.selectAll('.label')
