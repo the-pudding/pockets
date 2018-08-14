@@ -22,6 +22,18 @@
 
   &-container
     position relative
+    pointer-events none
+    max-width 1020px
+    margin 0 auto
+
+    .ui
+      margin 0 0 20px 18px
+      pointer-events all
+
+      .ui-style, .ui-brand, .ui-price
+        min-width 80px
+        height 1.5rem
+        //margin-right 0.25rem
 
   .ui-warning
     position absolute
@@ -37,6 +49,7 @@
     z-index(200)
     opacity 0
     transition 300ms
+    pointer-events: none
     &-text
       set-type-size('small', true)
       color $dark-denim
@@ -56,27 +69,15 @@
     pointer-events none
     &.is-visible
     	visibility visible
-  &-container
-    max-width 1020px
-    margin 0 auto
 
-    .ui
-      margin 0 0 20px 18px
-
-      .ui-style, .ui-brand, .ui-price
-        min-width 80px
-        height 1.5rem
-        //margin-right 0.25rem
 
   figure
     min-height 320px
     position relative
-    z-index -50
+    //z-index -50
     &.is-truncated
       max-height 46rem
       overflow hidden
-
-
 
   .fit-table
     display flex
@@ -104,6 +105,7 @@
           // height 325px
           margin 0.5rem
           display none
+          cursor: pointer
 
           &.visible
             display block
@@ -151,6 +153,8 @@
             display flex
             align-items: center
             justify-content: center
+            pointer-events all
+            cursor pointer
 
             &-text
               display flex
@@ -159,6 +163,7 @@
                 color $white
                 margin 0 1rem
                 text-align: center
+
             &:hover
               opacity 0.9
               transition 300ms
