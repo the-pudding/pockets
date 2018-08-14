@@ -38,25 +38,29 @@
     position absolute
     transition 300ms
     padding 0 1.5rem
-    line-height 1
+    line-height 2
     text-align center
     width 100%
-    set-type-size('medium')
+    set-type-size('small')
     +mq('bp-4')
-      line-height 1.5
+      set-type-size('medium')
 
     .stat-women
       background-color $tag-red + 70%
       padding 0.125rem 0.25rem
       border 2px solid $tag-red
-      set-type-size('medium', true)
+      set-type-size('small', true)
       font-weight 600
+      +mq('bp-4')
+        set-type-size('medium')
     .stat-men
       background-color $gold-stitch + 70%
       padding 0.125rem 0.25rem
       border 2px solid $gold-stitch
-      set-type-size('medium', true)
+      set-type-size('small', true)
       font-weight 600
+      +mq('bp-4')
+        set-type-size('medium')
 
     &.is-visible
       opacity 1
