@@ -90,6 +90,12 @@
       flex-direction column
       margin 0 10px
 
+      &-women
+        order 0
+
+      &-men
+        order 1
+
       .text-menWomen
         text-transform uppercase
         font-weight 600
@@ -100,7 +106,6 @@
         flex-wrap wrap
         +mq('bp-6')
           min-width 490px
-
 
         .fit-brand
           // width 225px
@@ -113,6 +118,7 @@
             display block
 
           &.men
+            order 1
             .tag
               background-color $gold-stitch
               color $bg-denim
@@ -124,6 +130,7 @@
                 set-type-size('small', true)
 
           &.women
+            order 0
             .tag
               background-color $tag-red
               color $bg-denim

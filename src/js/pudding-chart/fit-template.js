@@ -250,6 +250,8 @@ d3.selection.prototype.fitChart = function init(options) {
 		const Chart = {
 			// called once at start
 			init() {
+				$sel.attr('class', d => `chart chart-${d.key}`)
+
         // Add label
         $sel.append('text.tk-atlas.text-menWomen')
           .text(d => `${d.key}'s`)
