@@ -21,7 +21,7 @@ function handleHighlight(){
   const sel = d3.select(this)
   const selStatus = sel.classed('is-active')
   const inverse = !selStatus
-  console.log({selStatus, inverse})
+  //console.log({selStatus, inverse})
 
 
 
