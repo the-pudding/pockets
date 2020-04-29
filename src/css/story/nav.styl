@@ -14,7 +14,6 @@ nav
     z-index 100
     pointer-events none
     right -80%
-    background linear-gradient(to right, rgba($bg-denim,0) 0%,rgba($bg-denim,1) 50%,rgba($bg-denim,1) 100%)
     +mq('bp-4')
     	right -70%
     +mq('bp-6')
@@ -31,7 +30,6 @@ nav
       left -80%
       +mq('bp-4')
       	right -50%
-        background linear-gradient(to left, rgba($bg,0) 0%,rgba($bg,1) 50%,rgba($bg,1) 100%)
       +mq('bp-6')
         background none
   ul
@@ -46,15 +44,15 @@ nav
       height auto
       align-items: center
       //margin 0 0.25rem
-      background-color $bg-denim
-      border 1px solid $bg-denim
+      background-color black
+      border 1px solid black
       transition 300ms
       min-width 5rem
       cursor: pointer
 
       &.is-active
-        background-color rgba($light-denim, .4)
-        border 1px dashed $dark-denim
+        background-color rgba(black, .4)
+        border 1px dashed black
         transition 300ms
 
 
